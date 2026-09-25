@@ -247,6 +247,67 @@ pre.out { white-space: pre; overflow: auto; background: var(--wash); padding: .8
 .preview-h { color: var(--muted); font-size: .85rem; font-weight: 600; margin-top: .5rem; }
 .sticky-actions { position: sticky; bottom: 0; padding: .7rem 0 calc(.7rem + env(safe-area-inset-bottom, 0px)); background: var(--paper); display: flex; gap: .5rem; flex-wrap: wrap; border-top: 1.5px solid var(--rule); }
 
+/* ---------- Editor visual ---------- */
+.ed-top .btn.primary { margin-left: auto; }
+.ed-title input { font: 700 1.2rem var(--lyric-font); }
+.ed-tabs { display: flex; gap: .2rem; border-bottom: 1.5px solid var(--rule); margin: .2rem 0 .9rem; overflow-x: auto; scrollbar-width: none; }
+.ed-tabs::-webkit-scrollbar { display: none; }
+.ed-tabs button { flex: none; border: 0; background: transparent; padding: .7rem .95rem; font-weight: 700; font-size: 1rem; color: var(--muted);
+  border-bottom: 3px solid transparent; margin-bottom: -1.5px; }
+.ed-tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--chord); }
+.ed-ins { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .7rem; }
+.ed-ins .btn { min-height: 40px; padding: 0 .75rem; }
+.field textarea.ed-letra { font: 17px/1.55 var(--lyric-font); min-height: 18rem; }
+.ed-lead { margin: 0 0 .4rem; }
+.ed-song { font-size: max(var(--fs), 21px); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; padding-top: .6rem; }
+.ed-song .c { cursor: pointer; border-radius: 4px; }
+.ed-song .c:hover { background: var(--wash-2); }
+.ed-song .c.sel { background: var(--chord-hl); box-shadow: inset 0 -3px 0 var(--chord); }
+.ed-song .c.end { color: var(--muted); opacity: .45; padding: 0 .22em; }
+.ed-song .c.end.sel { opacity: 1; }
+.ed-song .ch { cursor: pointer; }
+.ed-song .ch.sel { background: var(--chord); color: var(--paper); }
+.ed-song .lbl, .ed-song .note { cursor: default; }
+.ed-instr { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .3rem; margin: .55rem 0; padding: .35rem .4rem;
+  border: 1.5px dashed var(--rule); border-radius: 12px; font-size: 1rem; }
+.ed-instr-l { font: 600 .75rem var(--ui-font); color: var(--muted); margin-right: .15rem; }
+.itxt { font: 600 .85rem var(--ui-font); color: var(--muted); }
+.chip { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 42px; padding: 0 .6rem; border-radius: 10px;
+  border: 1.5px solid var(--rule); background: var(--paper); font: 700 1.1rem/1 var(--chord-font); color: var(--chord); flex: none; }
+.chip:hover { background: var(--wash); }
+.chip.sel { background: var(--chord); border-color: var(--chord); color: var(--paper); }
+.chip.add, .chip.other { color: var(--muted); border-style: dashed; font: 700 .95rem/1 var(--ui-font); }
+.chip.keychip { color: var(--ink); background: var(--wash-2); font: 700 .85rem/1 var(--ui-font); }
+.chip.x { color: var(--muted); }
+.edpanel { position: fixed; left: 0; right: 0; bottom: 0; z-index: 8; margin: 0 auto; max-width: 46rem; background: var(--paper);
+  border-top: 1.5px solid var(--rule); box-shadow: 0 -8px 24px rgba(30, 36, 71, .14); border-radius: 16px 16px 0 0;
+  padding: .45rem .6rem calc(.55rem + env(safe-area-inset-bottom, 0px)); }
+.ep-bar { display: flex; align-items: center; gap: .25rem; }
+.epb { flex: none; min-width: 40px; height: 42px; border: 1.5px solid var(--rule); border-radius: 10px; background: var(--paper);
+  font: 700 1.3rem/1 var(--ui-font); color: var(--ink); display: grid; place-items: center; padding: 0 .3rem; }
+.epb[disabled] { opacity: .35; }
+.epb svg.i { width: 20px; height: 20px; }
+.ep-strip { flex: 1; min-width: 0; display: flex; gap: .2rem; overflow-x: auto; scrollbar-width: none; align-items: center; min-height: 42px; scroll-behavior: smooth; }
+.ep-strip::-webkit-scrollbar { display: none; }
+.ep-hint1 { font-size: .85rem; color: var(--muted); line-height: 1.25; padding: 0 .25rem; }
+.lt { flex: none; min-width: 34px; height: 40px; border-radius: 8px; border: 1.5px solid var(--rule); background: var(--paper);
+  font: 700 1.15rem/1 var(--lyric-font); color: var(--ink); padding: 0 .3rem; }
+.lt.on { background: var(--chord); color: var(--paper); border-color: var(--chord); }
+.lt.end { font: 600 .8rem/1 var(--ui-font); color: var(--muted); }
+.ep-hint { margin: .3rem .1rem .1rem; font-size: .82rem; color: var(--muted); line-height: 1.3; }
+.ep-row { display: flex; gap: .3rem; overflow-x: auto; scrollbar-width: none; padding: .35rem 0 .05rem; }
+.ep-foot { display: flex; align-items: flex-end; gap: .4rem; }
+.ep-foot .ep-row { flex: 1; min-width: 0; }
+.ep-acts { flex: none; display: flex; gap: .25rem; padding-top: .35rem; }
+.ep-row::-webkit-scrollbar { display: none; }
+.cb-h { margin: .6rem 0 .3rem; font-weight: 700; font-size: .9rem; }
+.cb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: .35rem; }
+.cb-grid button { min-height: 42px; border-radius: 10px; border: 1.5px solid var(--rule); background: var(--paper); font: 700 1rem var(--chord-font); color: var(--ink); }
+.cb-grid button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.cb-alt { display: flex; align-items: center; gap: .5rem; margin-top: .8rem; font-weight: 600; }
+.cb-alt input { width: 22px; height: 22px; }
+body.ed-chords #toast { bottom: calc(14.5rem + env(safe-area-inset-bottom, 0px)); }
+
 /* ---------- Repertorios ---------- */
 .page { max-width: 44rem; margin: 0 auto; padding: 0 1rem 6rem; }
 .page-h { display: flex; align-items: center; gap: .4rem; padding: .6rem 0; position: sticky; top: env(safe-area-inset-top, 0px); background: var(--paper); z-index: 5; }
@@ -559,7 +620,7 @@ pre.out { white-space: pre; overflow: auto; background: var(--wash); padding: .8
   /* ---------------- Importar texto pegado ----------------
      Acepta: formato propio con [acordes], ChordPro básico, o acordes encima de la letra. */
   var REPEAT_RE = /^\(?[xX]\s?\d+\)?[,.]?$/;
-  var LABEL_RE = /^\s*[\[({]?\s*(coro|estribillo|verso|estrofa|puente|pre-?coro|precoro|intro|introducci[oó]n|final|outro|interludio|instrumental|secci[oó]n|solo|bridge|chorus|verse)\b[^\]\)}]*[\])}]?\s*:?\s*$/i;
+  var LABEL_RE = /^\s*[\[({]?\s*(coro|estribillo|verso|estrofa|puente|pre-?coro|precoro|intro|introducci[oó]n|final|outro|interludio|instrumental|secci[oó]n|solo|bridge|chorus|verse)(\s*\d+|\s+[ivx]+)?\s*[\])}]?\s*:?\s*$/i;
 
   function chordLineInfo(line) {
     var toks = [], re = /\S+/g, m, chords = 0, other = 0;
@@ -673,12 +734,231 @@ pre.out { white-space: pre; overflow: auto; background: var(--wash); padding: .8
     return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
+  /* ================= Editor visual: modelo de la canción =================
+     Línea de letra:     { type: 'lyric', text, chords: [{ i, c }] }   (i = letra donde cae el acorde)
+     Línea de acordes:   { type: 'instr', segs: [{ c, t }] }
+     Sección / nota:     { type: 'label' | 'note', text }
+     Espacio:            { type: 'blank' } */
+  function lineToModel(l) {
+    if (l.type === 'lyric') {
+      var text = '', chords = [];
+      l.segs.forEach(function (s) { if (s.c !== null) chords.push({ i: text.length, c: s.c }); text += s.t; });
+      return { type: 'lyric', text: text, chords: chords };
+    }
+    if (l.type === 'instr') return { type: 'instr', segs: l.segs.map(function (s) { return { c: s.c, t: s.t }; }) };
+    if (l.type === 'blank') return { type: 'blank' };
+    return { type: l.type, text: l.text };
+  }
+  function normalizeModel(lines) {
+    var out = [];
+    lines.forEach(function (l) { if (l.type === 'blank' && (!out.length || out[out.length - 1].type === 'blank')) return; out.push(l); });
+    while (out.length && out[out.length - 1].type === 'blank') out.pop();
+    return out;
+  }
+  function srcToModel(src) { return normalizeModel(parseSong(src).map(lineToModel)); }
+  function sortChords(chords) {
+    return chords.map(function (c, k) { return { c: c, k: k }; })
+      .sort(function (a, b) { return a.c.i - b.c.i || a.k - b.k; }).map(function (x) { return x.c; });
+  }
+  function lyricToSrc(text, chords) {
+    var out = '', last = 0;
+    sortChords(chords).forEach(function (c) {
+      var i = Math.max(0, Math.min(text.length, c.i));
+      out += text.slice(last, i) + '[' + c.c + ']'; last = i;
+    });
+    return out + text.slice(last);
+  }
+  function instrToSrc(segs) { return segs.map(function (s) { return (s.c !== null ? '[' + s.c + ']' : '') + s.t; }).join(''); }
+  function modelLineToSrc(l) {
+    if (l.type === 'blank') return '';
+    if (l.type === 'label') return '# ' + l.text;
+    if (l.type === 'note') return '> ' + l.text;
+    if (l.type === 'instr') return '! ' + instrToSrc(l.segs);
+    return lyricToSrc(l.text, l.chords);
+  }
+  function modelToSrc(lines) { return normalizeModel(lines).map(modelLineToSrc).join('\n'); }
+
+  /* ---------- Pestaña «Letra»: texto normal ---------- */
+  function instrPlain(l) { return l.segs.map(function (s) { return (s.c !== null ? s.c : '') + s.t; }).join(''); }
+  function modelToLetra(lines) {
+    return normalizeModel(lines).map(function (l) {
+      if (l.type === 'blank') return '';
+      if (l.type === 'label') return '[' + l.text + ']';
+      if (l.type === 'note') return '> ' + l.text;
+      if (l.type === 'instr') return '! ' + instrPlain(l);
+      return l.text;
+    }).join('\n');
+  }
+  function instrFromText(t) { return { type: 'instr', segs: segsOf(bracketInline(t)).map(function (s) { return { c: s.c, t: s.t }; }) }; }
+  /* Lee lo escrito en «Letra»: [Coro] es sección, «> » nota, «! » línea de acordes;
+     también entiende canciones pegadas con los acordes en la línea de arriba. */
+  function parseLetra(text) {
+    var raw = String(text || '').replace(/\r/g, '').replace(/\t/g, '    ').split('\n'), out = [], m;
+    for (var i = 0; i < raw.length; i++) {
+      var line = raw[i], t = line.trim();
+      if (!t) { if (out.length && out[out.length - 1].type !== 'blank') out.push({ type: 'blank' }); continue; }
+      if ((m = /^\[([^\]]+)\]$/.exec(t)) && !isChordTok(m[1].trim())) { out.push({ type: 'label', text: m[1].trim() }); continue; }
+      if (t[0] === '>') { out.push({ type: 'note', text: t.replace(/^>\s?/, '') }); continue; }
+      if (t[0] === '!') { out.push(instrFromText(t.replace(/^!\s?/, ''))); continue; }
+      if (/\[[^\]]+\]/.test(line)) {
+        var lm = lineToModel(parseLine(line.replace(/\s+$/, '')));
+        if (lm.type === 'lyric' && lm.chords.some(function (c) { return isChordTok(c.c); })) { out.push(lm); continue; }
+      }
+      var info = chordLineInfo(line);
+      if (info.chords > 0 && info.other === 0) {
+        var next = raw[i + 1] !== undefined ? raw[i + 1] : '', nt = next.trim(), ni = nt ? chordLineInfo(next) : null;
+        var nextIsLyric = nt && !(ni.chords > 0 && ni.other === 0) && !LABEL_RE.test(next) && !/^[\[>!]/.test(nt);
+        if (nextIsLyric) {
+          var lyr = next.replace(/\s+$/, '');
+          out.push({ type: 'lyric', text: lyr, chords: info.toks.map(function (tk) { return { i: Math.min(tk.col, lyr.length), c: tk.t }; }) });
+          i++;
+        } else {
+          out.push({ type: 'instr', segs: segsOf(info.toks.map(function (tk) { return tk.chord ? '[' + tk.t + ']' : tk.t; }).join(' ')).map(function (s) { return { c: s.c, t: s.t }; }) });
+        }
+        continue;
+      }
+      if (LABEL_RE.test(line) && info.chords === 0) { out.push({ type: 'label', text: t.replace(/^[\[({]\s*|\s*[\])}]?\s*:?\s*$/g, '') }); continue; }
+      if (/:\s/.test(line) && info.chords >= 2 && info.chords >= info.other) { out.push(instrFromText(t)); continue; }
+      out.push({ type: 'lyric', text: line, chords: [] });
+    }
+    return normalizeModel(out);
+  }
+
+  /* ---------- Reubicar acordes cuando cambia la letra ---------- */
+  function lcsPairs(a, b, eq) {
+    var n = a.length, m = b.length, dp = [], i, j;
+    for (i = 0; i <= n; i++) dp.push(new Int32Array(m + 1));
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) dp[i][j] = eq(a[i], b[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    var pairs = []; i = 0; j = 0;
+    while (i < n && j < m) {
+      if (eq(a[i], b[j])) { pairs.push([i, j]); i++; j++; }
+      else if (dp[i + 1][j] >= dp[i][j + 1]) i++; else j++;
+    }
+    return pairs;
+  }
+  function same(x, y) { return x === y; }
+  function lineKey(l) {
+    if (l.type === 'blank') return 'B';
+    if (l.type === 'label') return 'H:' + l.text;
+    if (l.type === 'note') return 'N:' + l.text;
+    if (l.type === 'instr') return 'I:' + instrPlain(l);
+    return 'L:' + l.text;
+  }
+  /* Cada acorde sigue a su letra. Si esa letra se borró o se reemplazó, el acorde va al inicio del texto nuevo:
+     justo después de la última letra que se conservó antes de él. */
+  function transferChords(oldLine, newText) {
+    var a = oldLine.text, pairs = lcsPairs(a.split(''), newText.split(''), same), map = [], k;
+    for (k = 0; k <= a.length; k++) map.push(-1);
+    pairs.forEach(function (p) { map[p[0]] = p[1]; });
+    return oldLine.chords.map(function (c) {
+      var i = Math.max(0, Math.min(a.length, c.i));
+      if (i >= a.length) return { i: newText.length, c: c.c };
+      if (map[i] >= 0) return { i: map[i], c: c.c };
+      var p = i - 1; while (p >= 0 && map[p] < 0) p--;
+      return { i: p < 0 ? 0 : Math.min(newText.length, map[p] + 1), c: c.c };
+    });
+  }
+  function similarity(a, b) {
+    a = normalize(a); b = normalize(b);
+    if (!a.length && !b.length) return 1;
+    return 2 * lcsPairs(a.split(''), b.split(''), same).length / (a.length + b.length);
+  }
+  function cloneLine(l) { return JSON.parse(JSON.stringify(l)); }
+  /* Une lo que había (con acordes) con lo nuevo escrito en «Letra». */
+  function reconcile(oldL, newL) {
+    var pairs = lcsPairs(oldL.map(lineKey), newL.map(lineKey), same), out = [], oi = 0, ni = 0;
+    pairs.push([oldL.length, newL.length]);
+    pairs.forEach(function (p) {
+      var olds = [], k;
+      for (k = oi; k < p[0]; k++) if (oldL[k].type === 'lyric' && oldL[k].chords.length) olds.push(oldL[k]);
+      for (k = ni; k < p[1]; k++) {
+        var nl = newL[k];
+        if (nl.type === 'lyric' && !nl.chords.length && olds.length) {
+          var best = -1, bs = 0.5;
+          olds.forEach(function (o, q) { var sc = similarity(o.text, nl.text); if (sc >= bs) { bs = sc; best = q; } });
+          if (best >= 0) { out.push({ type: 'lyric', text: nl.text, chords: transferChords(olds[best], nl.text) }); olds.splice(best, 1); continue; }
+        }
+        out.push(cloneLine(nl));
+      }
+      if (p[0] < oldL.length) {
+        var n = newL[p[1]];
+        out.push(n.type === 'lyric' && n.chords.length ? cloneLine(n) : cloneLine(oldL[p[0]]));
+      }
+      oi = p[0] + 1; ni = p[1] + 1;
+    });
+    return normalizeModel(out);
+  }
+
+  /* ---------- Sílabas en español (para copiar acordes de una estrofa a otra) ---------- */
+  var VOWELS = 'aeiouáéíóúü', STRONG = 'aeoáéó', ACC_WEAK = 'íú';
+  var INSEP = { pr: 1, br: 1, tr: 1, dr: 1, cr: 1, gr: 1, fr: 1, kr: 1, pl: 1, bl: 1, cl: 1, gl: 1, fl: 1, kl: 1 };
+  function hiatus(x, y) {
+    if (ACC_WEAK.indexOf(x) >= 0 || ACC_WEAK.indexOf(y) >= 0) return true;
+    return STRONG.indexOf(x) >= 0 && STRONG.indexOf(y) >= 0;
+  }
+  function wordSyllableStarts(w) {
+    var units = [], i = 0;
+    while (i < w.length) {
+      var ch = w[i], nx = w[i + 1] || '', nn = w[i + 2] || '';
+      if ((ch === 'c' && nx === 'h') || (ch === 'l' && nx === 'l') || (ch === 'r' && nx === 'r')) { units.push({ s: i, v: false, t: ch + nx }); i += 2; continue; }
+      if ((ch === 'q' || ch === 'g') && nx === 'u' && 'eiéí'.indexOf(nn) >= 0 && nn) { units.push({ s: i, v: false, t: ch + 'u' }); i += 2; continue; }
+      if (ch === 'y') { units.push({ s: i, v: i > 0 && (!nx || VOWELS.indexOf(nx) < 0), t: 'i' }); i++; continue; }
+      units.push({ s: i, v: VOWELS.indexOf(ch) >= 0, t: ch }); i++;
+    }
+    var nuclei = [], cur = null;
+    units.forEach(function (u, k) {
+      if (!u.v) return;
+      if (cur && cur.end === k - 1 && !hiatus(units[k - 1].t, u.t)) cur.end = k;
+      else { cur = { start: k, end: k }; nuclei.push(cur); }
+    });
+    var starts = [0];
+    for (var n = 1; n < nuclei.length; n++) {
+      var a = nuclei[n - 1].end + 1, b = nuclei[n].start, cons = b - a, st;
+      if (cons <= 0) st = b;
+      else if (cons === 1) st = a;
+      else if (cons === 2) st = INSEP[units[a].t + units[a + 1].t] ? a : a + 1;
+      else st = INSEP[units[b - 2].t + units[b - 1].t] ? b - 2 : b - 1;
+      starts.push(units[st].s);
+    }
+    return starts;
+  }
+  function syllableStarts(text) {
+    var out = [], re = /[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g, m;
+    while ((m = re.exec(text))) {
+      var base = m.index;
+      wordSyllableStarts(m[0].toLowerCase()).forEach(function (s) { out.push(base + s); });
+    }
+    return out;
+  }
+  /* El acorde de la sílaba N de una línea pasa a la sílaba N de la otra. */
+  function copyChordsBySyllable(src, dstText) {
+    var ss = syllableStarts(src.text), ds = syllableStarts(dstText);
+    return src.chords.map(function (c) {
+      if (c.i >= src.text.length) return { i: dstText.length, c: c.c };
+      if (!ds.length) return { i: Math.min(c.i, dstText.length), c: c.c };
+      var k = -1;
+      for (var q = 0; q < ss.length; q++) if (ss[q] <= c.i) k = q;
+      return { i: k < 0 ? 0 : ds[Math.min(k, ds.length - 1)], c: c.c };
+    });
+  }
+
+  /* ---------- Acordes del tono (paleta) ---------- */
+  function diatonic(key, spell) {
+    var list = key.minor
+      ? [[0, 'm'], [3, ''], [5, 'm'], [7, ''], [7, '7'], [8, ''], [10, '']]
+      : [[0, ''], [2, 'm'], [4, 'm'], [5, ''], [7, ''], [7, '7'], [9, 'm']];
+    return list.map(function (x) { return noteName(key.pc + x[0], spell || spellForKey(key.pc, key.minor), 'en') + x[1]; });
+  }
+
   var api = {
     SHARP: SHARP, FLAT: FLAT, LATIN: LATIN, mod12: mod12, splitTok: splitTok, isChordTok: isChordTok, isChordCore: isChordCore,
     parseChord: parseChord, isMinorQual: isMinorQual, noteName: noteName, spellForKey: spellForKey, transposeTok: transposeTok,
     parseSong: parseSong, parseLine: parseLine, segsOf: segsOf, chordsInSong: chordsInSong, detectKey: detectKey, keyName: keyName,
     suggestCapo: suggestCapo, pianoVoicing: pianoVoicing, chordIntervals: chordIntervals, songToText: songToText,
-    importText: importText, bracketInline: bracketInline, sentenceCase: sentenceCase, nameCase: nameCase, normalize: normalize
+    importText: importText, bracketInline: bracketInline, sentenceCase: sentenceCase, nameCase: nameCase, normalize: normalize,
+    srcToModel: srcToModel, modelToSrc: modelToSrc, modelLineToSrc: modelLineToSrc, normalizeModel: normalizeModel, sortChords: sortChords,
+    modelToLetra: modelToLetra, parseLetra: parseLetra, reconcile: reconcile, transferChords: transferChords, lineKey: lineKey,
+    syllableStarts: syllableStarts, copyChordsBySyllable: copyChordsBySyllable, diatonic: diatonic, chordLineInfo: chordLineInfo
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Core = api;
@@ -1967,126 +2247,6 @@ function openSetMenu() {
   ]);
 }
 
-/* ---------- editor ---------- */
-var editorState = null, pendingImport = null;
-var KEY_OPTS = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'Bbm', 'Bm'];
-var MOMENTOS = ['Entrada', 'Perdón', 'Gloria', 'Aleluya', 'Ofertorio', 'Santo', 'Cordero', 'Paz', 'Comunión', 'Acción de gracias', 'Final', 'Alabanza', 'Adoración'];
-function val(id) { var el = document.getElementById(id); return el ? el.value : ''; }
-function renderEditor(id) {
-  leaveSong();
-  var isNew = id === 'nueva', orig = isNew ? null : getSong(id);
-  if (!isNew && !orig) { location.hash = '#/'; return; }
-  var s = isNew ? { id: newId('u'), title: '', group: 'nuevas', src: '' } : clone(orig);
-  if (isNew && pendingImport) { Object.keys(pendingImport).forEach(function (k) { if (pendingImport[k]) s[k] = pendingImport[k]; }); pendingImport = null; }
-  var keys = KEY_OPTS.slice(); if (s.key && keys.indexOf(s.key) < 0) keys.unshift(s.key);
-  var keyOpts = '<option value="">Detectar</option>' + keys.map(function (k) { return '<option' + (s.key === k ? ' selected' : '') + '>' + esc(k) + '</option>'; }).join('');
-  var groupOpts = groupOptionsHTML(groupOf(s));
-  var edited = !isNew && local.songs[s.id] && baseSong(s.id);
-  app.innerHTML = '<div class="ed"><div class="page-h">' + btnIcon('back', 'Volver sin guardar', 'data-act="edcancel"') + '<h1>' + (isNew ? 'Nueva canción' : 'Editar canción') + '</h1></div>' +
-    '<div class="field"><label for="f-title">Título</label><input id="f-title" value="' + esc(s.title) + '" autocomplete="off"></div>' +
-    '<div class="grid2"><div class="field"><label for="f-num">Número</label><input id="f-num" inputmode="numeric" value="' + esc(s.num || '') + '"></div>' +
-    '<div class="field"><label for="f-group">Sección</label><select id="f-group">' + groupOpts + '</select></div></div>' +
-    '<div class="field"><label for="f-author">Autor o fuente</label><input id="f-author" value="' + esc(s.author || '') + '" autocomplete="off"></div>' +
-    '<div class="grid2"><div class="field"><label for="f-key">Tono original</label><select id="f-key">' + keyOpts + '</select></div>' +
-    '<div class="field"><label for="f-momento">Momento de la misa</label><input id="f-momento" list="momentos" value="' + esc(s.momento || '') + '" autocomplete="off"></div></div>' +
-    '<datalist id="momentos">' + MOMENTOS.map(function (m) { return '<option value="' + m + '">'; }).join('') + '</datalist>' +
-    '<div class="grid2"><div class="field"><label for="f-style">Ritmo o estilo</label><input id="f-style" value="' + esc(s.style || '') + '" placeholder="Twist, rock and roll, cumbia…" autocomplete="off"></div>' +
-    '<div class="field"><label for="f-bpm">Tempo (bpm)</label><input id="f-bpm" inputmode="numeric" value="' + esc(s.bpm || '') + '"></div></div>' +
-    '<div class="guide">Escribe cada acorde entre corchetes justo antes de la sílaba donde cae: <code>Yo le al[D]abo de coraz[A]ón</code>. ' +
-    'Líneas especiales: <code># Coro 1</code> para una sección, <code>&gt; (De nuevo coro)</code> para una indicación y <code>! Intro: [C] [G] [Am]</code> para acordes sin letra. ' +
-    'Deja una línea vacía entre estrofas. Si copiaste la canción de internet con los acordes encima de la letra, usa «Pegar con acordes encima».</div>' +
-    '<div class="btnrow" style="margin-bottom:.7rem"><button type="button" class="btn" data-act="edpaste">' + icon('copy') + 'Pegar con acordes encima</button></div>' +
-    '<div class="field"><label for="f-src">Letra y acordes</label><textarea id="f-src" spellcheck="false" autocapitalize="off" autocomplete="off" rows="16">' + esc(s.src) + '</textarea></div>' +
-    '<p class="preview-h">Vista previa, en el tono original</p><div class="preview"><div class="song" id="ed-prev"></div></div>' +
-    '<div class="sticky-actions"><button type="button" class="btn primary" data-act="edsave">Guardar</button><button type="button" class="btn" data-act="edcancel">Cancelar</button>' +
-    (edited ? '<button type="button" class="btn" data-act="edrestore">Restaurar original</button>' : '') +
-    (!isNew ? '<button type="button" class="btn danger" data-act="eddelete">' + icon('trash') + 'Eliminar</button>' : '') + '</div></div>';
-  editorState = { s: s, isNew: isNew, start: '' };
-  editorState.start = JSON.stringify(readEditor());
-  var gsel = document.getElementById('f-group'); gsel.setAttribute('data-prev', gsel.value);
-  gsel.addEventListener('change', function () {
-    if (gsel.value !== '__new') { gsel.setAttribute('data-prev', gsel.value); return; }
-    gsel.value = gsel.getAttribute('data-prev') || 'nuevas';
-    promptSheet('Nueva sección', 'Nombre de la sección', '', 'Crear', function (name) {
-      var id = 'g' + Date.now().toString(36);
-      local.groups[id] = { id: id, name: name, color: PALETTE[(GROUPS.length) % PALETTE.length] };
-      saveLocal(); rebuildGroups();
-      gsel.innerHTML = groupOptionsHTML(id); gsel.value = id; gsel.setAttribute('data-prev', id);
-    });
-  });
-  var upd = debounce(updatePreview, 180);
-  document.getElementById('f-src').addEventListener('input', upd);
-  document.getElementById('f-key').addEventListener('change', upd);
-  updatePreview();
-}
-function groupOptionsHTML(sel) {
-  return GROUPS.map(function (g) { return '<option value="' + esc(g.id) + '"' + (sel === g.id ? ' selected' : '') + '>' + esc(g.name) + '</option>'; }).join('') +
-    '<option value="__new">+ Nueva sección…</option>';
-}
-function readEditor() {
-  var s = clone(editorState.s), num = val('f-num').trim(), bpm = val('f-bpm').trim();
-  s.title = val('f-title').trim(); s.author = val('f-author').trim(); s.group = val('f-group') === '__new' ? 'nuevas' : val('f-group'); s.momento = val('f-momento').trim();
-  s.key = val('f-key'); s.style = val('f-style').trim(); s.src = val('f-src').replace(/\r/g, '').replace(/\s+$/, '');
-  s.num = /^\d+$/.test(num) ? +num : (num || undefined);
-  s.bpm = /^\d{2,3}$/.test(bpm) ? +bpm : undefined;
-  return s;
-}
-function updatePreview() {
-  if (!editorState) return;
-  var s = readEditor(); s.id = '__preview';
-  var inf = info(s), el = document.getElementById('ed-prev'); if (!el) return;
-  el.innerHTML = s.src.trim() ? bodyHTML(s, fmtFor(inf.key, 0)) : '<p class="empty">Aquí verás la canción mientras escribes.</p>';
-  fixCollisions(el);
-  var sel = document.getElementById('f-key');
-  if (sel) sel.options[0].textContent = 'Detectar' + (s.src.trim() ? ' (' + C.keyName(inf.detected) + ')' : '');
-}
-function saveEditor() {
-  var s = readEditor();
-  if (!s.title) { toast('Escribe el título de la canción.'); document.getElementById('f-title').focus(); return; }
-  if (!s.src.trim()) { toast('Escribe la letra de la canción.'); document.getElementById('f-src').focus(); return; }
-  s = cleanSong(s);
-  var base = baseSong(s.id);
-  if (base && JSON.stringify(cleanSong(base)) === JSON.stringify(s)) delete local.songs[s.id]; else local.songs[s.id] = s;
-  delete local.deleted[s.id]; saveLocal(); delete infoCache[s.id];
-  editorState = null;
-  location.hash = '#/s/' + enc(s.id);
-  toast(isGroup() ? 'Guardada. Publica los cambios para que todos la vean.' : 'Guardada.', 3500);
-}
-function cancelEditor() {
-  var st = editorState;
-  var go = function () { editorState = null; location.hash = st && !st.isNew && getSong(st.s.id) ? '#/s/' + enc(st.s.id) : '#/'; };
-  if (st && JSON.stringify(readEditor()) !== st.start) confirmSheet('Salir sin guardar', 'Se perderán los cambios que hiciste en esta canción.', 'Salir sin guardar', go, true);
-  else go();
-}
-function deleteSong() {
-  var s = editorState.s;
-  confirmSheet('Eliminar canción', '¿Eliminar «' + esc(C.sentenceCase(s.title)) + '»?' + (baseSong(s.id) ? ' Se quita en este equipo, y para todos cuando publiques.' : ''), 'Eliminar', function () {
-    if (baseSong(s.id)) local.deleted[s.id] = true;
-    delete local.songs[s.id]; saveLocal(); editorState = null; location.hash = '#/'; toast('Canción eliminada.');
-  }, true);
-}
-function restoreSong() {
-  var s = editorState.s;
-  confirmSheet('Restaurar original', 'Se descartan tus cambios en esta canción y vuelve la versión publicada.', 'Restaurar', function () {
-    delete local.songs[s.id]; saveLocal(); delete infoCache[s.id]; editorState = null; location.hash = '#/s/' + enc(s.id);
-  }, true);
-}
-function openPasteSheet() {
-  openSheet('Pegar con acordes encima', '<p class="help">Pega la canción tal como la copiaste, con cada línea de acordes encima de su línea de letra. Se convierte al formato del cancionero sin mover los acordes de su sílaba. Se añade al final de lo que ya escribiste.</p>' +
-    '<div class="field"><textarea id="paste-src" rows="12" spellcheck="false" autocapitalize="off" placeholder="        D           A&#10;Yo le alabo de corazón,"></textarea></div>' +
-    '<div class="btnrow"><button type="button" class="btn primary" data-x="conv">Convertir</button></div>', function (el) {
-    el.querySelector('[data-x="conv"]').addEventListener('click', function () {
-      var imp = C.importText(el.querySelector('#paste-src').value);
-      if (!imp.src.trim()) { toast('No hay texto para convertir.'); return; }
-      var ta = document.getElementById('f-src');
-      ta.value = (ta.value.trim() ? ta.value.replace(/\s+$/, '') + '\n\n' : '') + imp.src;
-      if (imp.meta.title && !val('f-title').trim()) document.getElementById('f-title').value = imp.meta.title;
-      if (imp.meta.author && !val('f-author').trim()) document.getElementById('f-author').value = imp.meta.author;
-      closeSheet(); updatePreview(); toast('Convertida. Revisa la vista previa.');
-    });
-  });
-}
-
 /* ---------- publicar para todos (GitHub Pages) ---------- */
 /* Si la app está en usuario.github.io/repositorio, se arma el enlace directo a la página de subida del repositorio. */
 function githubInfo() {
@@ -2215,6 +2375,542 @@ function openInstall() {
     (location.protocol === 'file:' ? '<div class="note-box">Estás abriendo un archivo guardado en el equipo. Para instalarlo, ábrelo desde su dirección web, por ejemplo la de GitHub Pages.</div>' : ''));
 }
 
+/* parte 4b: editor de canciones (visual) */
+var editorState = null, pendingImport = null;
+var KEY_OPTS = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'Bbm', 'Bm'];
+var MOMENTOS = ['Entrada', 'Perdón', 'Gloria', 'Aleluya', 'Ofertorio', 'Santo', 'Cordero', 'Paz', 'Comunión', 'Acción de gracias', 'Final', 'Alabanza', 'Adoración'];
+var QUALS = [['', 'Mayor'], ['m', 'menor'], ['7', '7'], ['m7', 'm7'], ['maj7', 'maj7'], ['sus4', 'sus4'], ['sus2', 'sus2'], ['6', '6'],
+             ['m6', 'm6'], ['9', '9'], ['add9', 'add9'], ['dim', 'dim'], ['aug', 'aug'], ['m7b5', 'm7b5']];
+var MODES = [['letra', 'Letra'], ['acordes', 'Acordes'], ['texto', 'Texto'], ['datos', 'Datos']];
+function val(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+function $(id) { return document.getElementById(id); }
+function groupOptionsHTML(sel) {
+  return GROUPS.map(function (g) { return '<option value="' + esc(g.id) + '"' + (sel === g.id ? ' selected' : '') + '>' + esc(g.name) + '</option>'; }).join('') +
+    '<option value="__new">+ Nueva sección…</option>';
+}
+function edFmt(c) { return C.transposeTok(c, { shift: 0, keep: true, notation: prefs.notation }); }
+
+/* ---------- abrir el editor ---------- */
+function renderEditor(id) {
+  leaveSong();
+  var isNew = id === 'nueva', orig = isNew ? null : getSong(id);
+  if (!isNew && !orig) { location.hash = '#/'; return; }
+  var s = isNew ? { id: newId('u'), title: '', group: 'nuevas', src: '' } : clone(orig);
+  if (isNew && pendingImport) { Object.keys(pendingImport).forEach(function (k) { if (pendingImport[k]) s[k] = pendingImport[k]; }); pendingImport = null; }
+  var keys = KEY_OPTS.slice(); if (s.key && keys.indexOf(s.key) < 0) keys.unshift(s.key);
+  var edited = !isNew && local.songs[s.id] && baseSong(s.id);
+  app.innerHTML = '<div class="ed">' +
+    '<div class="page-h ed-top">' + btnIcon('back', 'Volver sin guardar', 'data-act="edcancel"') + '<h1>' + (isNew ? 'Nueva canción' : 'Editar canción') + '</h1>' +
+      '<button type="button" class="btn primary" data-act="edsave">Guardar</button></div>' +
+    '<div class="field ed-title"><label for="f-title">Título</label><input id="f-title" value="' + esc(s.title) + '" autocomplete="off" placeholder="Nombre de la canción"></div>' +
+    '<div class="ed-tabs" role="tablist" aria-label="Partes del editor">' + MODES.map(function (m) {
+      return '<button type="button" role="tab" id="tab-' + m[0] + '" data-mode="' + m[0] + '" aria-selected="false">' + m[1] + '</button>'; }).join('') + '</div>' +
+    /* Letra */
+    '<section class="ed-pane" id="pane-letra" hidden>' +
+      '<div class="ed-ins">' +
+        '<button type="button" class="btn" data-ins="[Coro]">+ Coro</button><button type="button" class="btn" data-ins="[Verso]">+ Verso</button>' +
+        '<button type="button" class="btn" data-ins="[Intro]">+ Intro</button><button type="button" class="btn" data-ins="> ">+ Nota</button>' +
+        '<button type="button" class="btn" data-act="edpaste">' + icon('copy') + 'Pegar con acordes encima</button></div>' +
+      '<div class="field"><label for="f-letra">Letra</label><textarea id="f-letra" class="ed-letra" rows="16" spellcheck="true" autocapitalize="sentences" ' +
+        'placeholder="Escribe un verso por línea.&#10;Deja una línea vacía entre estrofas.&#10;&#10;[Coro]&#10;Alabaré, alabaré…"></textarea></div>' +
+      '<p class="help">Escribe un verso por línea y deja una línea vacía entre estrofas. Las secciones van entre corchetes, como <b>[Coro]</b>; los botones de arriba las ponen por ti. Después pasa a <b>Acordes</b> para colocarlos tocando la letra. Si cambias palabras de una línea que ya tiene acordes, cada acorde sigue a su sílaba.</p>' +
+    '</section>' +
+    /* Acordes */
+    '<section class="ed-pane" id="pane-acordes" hidden>' +
+      '<p class="help ed-lead">Toca la sílaba donde va el acorde y elígelo abajo. Toca un acorde para cambiarlo, moverlo o quitarlo. Se escriben en el tono original.</p>' +
+      '<div class="song ed-song" id="ed-song"></div>' +
+    '</section>' +
+    /* Texto */
+    '<section class="ed-pane" id="pane-texto" hidden>' +
+      '<div class="guide">Modo avanzado: cada acorde va entre corchetes justo antes de su sílaba, como <code>Yo le al[D]abo</code>. ' +
+      'Líneas especiales: <code># Coro 1</code> sección, <code>&gt; (De nuevo coro)</code> nota, <code>! Intro: [C] [G]</code> acordes sin letra.</div>' +
+      '<div class="field"><label for="f-src">Letra y acordes</label><textarea id="f-src" spellcheck="false" autocapitalize="off" autocomplete="off" rows="16"></textarea></div>' +
+      '<p class="preview-h">Vista previa</p><div class="preview"><div class="song" id="ed-prev"></div></div>' +
+    '</section>' +
+    /* Datos */
+    '<section class="ed-pane" id="pane-datos" hidden>' +
+      '<div class="grid2"><div class="field"><label for="f-num">Número</label><input id="f-num" inputmode="numeric" value="' + esc(s.num || '') + '"></div>' +
+      '<div class="field"><label for="f-group">Sección del cancionero</label><select id="f-group">' + groupOptionsHTML(groupOf(s)) + '</select></div></div>' +
+      '<div class="field"><label for="f-author">Autor o fuente</label><input id="f-author" value="' + esc(s.author || '') + '" autocomplete="off"></div>' +
+      '<div class="grid2"><div class="field"><label for="f-key">Tono original</label><select id="f-key"><option value="">Detectar</option>' +
+        keys.map(function (k) { return '<option' + (s.key === k ? ' selected' : '') + '>' + esc(k) + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><label for="f-momento">Momento de la misa</label><input id="f-momento" list="momentos" value="' + esc(s.momento || '') + '" autocomplete="off"></div></div>' +
+      '<datalist id="momentos">' + MOMENTOS.map(function (m) { return '<option value="' + m + '">'; }).join('') + '</datalist>' +
+      '<div class="grid2"><div class="field"><label for="f-style">Ritmo o estilo</label><input id="f-style" value="' + esc(s.style || '') + '" placeholder="Twist, rock and roll, cumbia…" autocomplete="off"></div>' +
+      '<div class="field"><label for="f-bpm">Tempo (bpm)</label><input id="f-bpm" inputmode="numeric" value="' + esc(s.bpm || '') + '"></div></div>' +
+      '<div class="btnrow" style="margin-top:1rem">' + (edited ? '<button type="button" class="btn" data-act="edrestore">Restaurar original</button>' : '') +
+      (!isNew ? '<button type="button" class="btn danger" data-act="eddelete">' + icon('trash') + 'Eliminar canción</button>' : '') + '</div>' +
+    '</section>' +
+    '<div class="edpanel" id="edpanel" hidden></div>' +
+  '</div>';
+  editorState = { s: s, isNew: isNew, model: C.srcToModel(s.src || ''), mode: null, undo: [], redo: [], sel: null, clip: null, letraBase: null, used: [], start: '' };
+  wireEditor();
+  setMode(isNew || !editorState.model.length ? 'letra' : 'acordes');
+  editorState.start = JSON.stringify(readEditor());
+}
+function wireEditor() {
+  var ed = app.querySelector('.ed');
+  ed.querySelector('.ed-tabs').addEventListener('click', function (e) { var b = e.target.closest('[data-mode]'); if (b) setMode(b.getAttribute('data-mode')); });
+  ed.querySelector('.ed-ins').addEventListener('click', function (e) { var b = e.target.closest('[data-ins]'); if (b) insertInLetra(b.getAttribute('data-ins')); });
+  $('ed-song').addEventListener('click', onSongTap);
+  $('edpanel').addEventListener('click', onPanelTap);
+  $('f-src').addEventListener('input', debounce(updatePreview, 180));
+  $('f-key').addEventListener('change', function () { if (editorState.mode === 'acordes') renderPanel(); });
+  var gsel = $('f-group'); gsel.setAttribute('data-prev', gsel.value);
+  gsel.addEventListener('change', function () {
+    if (gsel.value !== '__new') { gsel.setAttribute('data-prev', gsel.value); return; }
+    gsel.value = gsel.getAttribute('data-prev') || 'nuevas';
+    promptSheet('Nueva sección', 'Nombre de la sección', '', 'Crear', function (name) {
+      var id = 'g' + Date.now().toString(36);
+      local.groups[id] = { id: id, name: name, color: PALETTE[GROUPS.length % PALETTE.length] };
+      saveLocal(); rebuildGroups();
+      gsel.innerHTML = groupOptionsHTML(id); gsel.value = id; gsel.setAttribute('data-prev', id);
+    });
+  });
+}
+
+/* ---------- pestañas ---------- */
+function setMode(m) {
+  var st = editorState; if (!st || st.mode === m) return;
+  syncFromMode();
+  st.mode = m;
+  MODES.forEach(function (x) {
+    $('tab-' + x[0]).setAttribute('aria-selected', String(x[0] === m));
+    $('pane-' + x[0]).hidden = x[0] !== m;
+  });
+  $('edpanel').hidden = m !== 'acordes';
+  document.body.classList.toggle('ed-chords', m === 'acordes');
+  if (m === 'letra') { st.letraBase = clone(st.model); $('f-letra').value = C.modelToLetra(st.model); }
+  else if (m === 'texto') { $('f-src').value = C.modelToSrc(st.model); updatePreview(); }
+  else if (m === 'acordes') { st.sel = null; renderChordEditor(); }
+}
+/* Pasa lo escrito en Letra o Texto al modelo de la canción. */
+function syncFromMode() {
+  var st = editorState; if (!st) return;
+  var next = null;
+  if (st.mode === 'letra') next = C.reconcile(st.letraBase || st.model, C.parseLetra($('f-letra').value));
+  else if (st.mode === 'texto') next = C.srcToModel($('f-src').value.replace(/\r/g, ''));
+  if (next && JSON.stringify(next) !== JSON.stringify(st.model)) { pushUndo(); st.model = next; }
+  if (st.mode === 'letra') st.letraBase = clone(st.model);
+}
+function insertInLetra(txt) {
+  var ta = $('f-letra'), v = ta.value, pos = ta.selectionStart == null ? v.length : ta.selectionStart;
+  var ls = v.lastIndexOf('\n', pos - 1) + 1, le = v.indexOf('\n', pos); if (le < 0) le = v.length;
+  var out, caret;
+  if (!v.slice(ls, le).trim()) { out = v.slice(0, ls) + txt + v.slice(le); caret = ls + txt.length; }
+  else { out = v.slice(0, le) + '\n' + txt + v.slice(le); caret = le + 1 + txt.length; }
+  ta.value = out; ta.focus(); ta.setSelectionRange(caret, caret);
+}
+
+/* ---------- deshacer ---------- */
+function pushUndo() {
+  var st = editorState; st.undo.push(JSON.stringify(st.model));
+  if (st.undo.length > 120) st.undo.shift();
+  st.redo = [];
+}
+function undoEd() {
+  var st = editorState; if (!st.undo.length) { toast('No hay nada que deshacer.'); return; }
+  st.redo.push(JSON.stringify(st.model)); st.model = JSON.parse(st.undo.pop()); st.sel = null; refreshModeView();
+}
+function redoEd() {
+  var st = editorState; if (!st.redo.length) return;
+  st.undo.push(JSON.stringify(st.model)); st.model = JSON.parse(st.redo.pop()); st.sel = null; refreshModeView();
+}
+function refreshModeView() {
+  var st = editorState;
+  if (st.mode === 'acordes') renderChordEditor();
+  else if (st.mode === 'letra') { st.letraBase = clone(st.model); $('f-letra').value = C.modelToLetra(st.model); }
+  else if (st.mode === 'texto') { $('f-src').value = C.modelToSrc(st.model); updatePreview(); }
+}
+
+/* ---------- pestaña Acordes: dibujo ---------- */
+function selIs(li, kind, k) {
+  var s = editorState.sel;
+  return !!s && s.li === li && s.kind === kind && (k === undefined || (kind === 'pos' ? s.i === k : kind === 'chord' ? s.ci === k : s.k === k));
+}
+function edLyricHTML(l, li) {
+  var byPos = {}, text = l.text, out = '', inWord = false, i;
+  l.chords.forEach(function (c, ci) { var p = Math.max(0, Math.min(text.length, c.i)); (byPos[p] = byPos[p] || []).push(ci); });
+  function anchors(p) {
+    return (byPos[p] || []).map(function (ci) {
+      var c = l.chords[ci];
+      return '<span class="a"><b class="ch' + (C.isChordTok(c.c) ? '' : ' x') + (selIs(li, 'chord', ci) ? ' sel' : '') +
+        '" data-li="' + li + '" data-ci="' + ci + '" role="button" tabindex="-1">' + esc(edFmt(c.c)) + '</b></span>';
+    }).join('');
+  }
+  function charCls(p) { return selIs(li, 'pos', p) ? ' sel' : ''; }
+  for (i = 0; i < text.length; i++) {
+    var ch = text[i], sp = /\s/.test(ch);
+    if (!sp && !inWord) { out += '<span class="w">'; inWord = true; }
+    if (sp && inWord) { out += '</span>'; inWord = false; }
+    out += anchors(i) + '<span class="c' + (sp ? ' sp' : '') + charCls(i) + '" data-li="' + li + '" data-i="' + i + '">' + (sp ? ' ' : esc(ch)) + '</span>';
+  }
+  if (!inWord) out += '<span class="w">';
+  out += anchors(text.length) + '<span class="c end' + charCls(text.length) + '" data-li="' + li + '" data-i="' + text.length + '" title="Final de la línea">·</span></span>';
+  return '<p class="ln hc" data-li="' + li + '">' + out + '</p>';
+}
+function edInstrHTML(l, li) {
+  var h = '';
+  l.segs.forEach(function (s, k) {
+    if (s.c !== null) h += '<button type="button" class="chip' + (C.isChordTok(s.c) ? '' : ' x') + (selIs(li, 'seg', k) ? ' sel' : '') + '" data-li="' + li + '" data-seg="' + k + '">' + esc(edFmt(s.c)) + '</button>';
+    if (s.t && s.t.trim()) h += '<span class="itxt">' + esc(s.t.trim()) + '</span>';
+  });
+  h += '<button type="button" class="chip add' + (selIs(li, 'append') ? ' sel' : '') + '" data-li="' + li + '" data-append="1" aria-label="Agregar un acorde a esta línea">+</button>';
+  return '<div class="ed-instr" data-li="' + li + '"><span class="ed-instr-l">Acordes</span>' + h + '</div>';
+}
+function renderChordEditor() {
+  var st = editorState, box = $('ed-song'); if (!box) return;
+  if (!st.model.length) {
+    box.innerHTML = '<div class="empty"><p>Todavía no hay letra.</p><p><button type="button" class="btn primary" data-edgo="letra">Escribir la letra</button></p>' +
+      '<p><button type="button" class="btn" data-edgo="addinstr">Agregar una línea solo de acordes</button></p></div>';
+  } else {
+    box.innerHTML = st.model.map(function (l, li) {
+      if (l.type === 'blank') return '<div class="gap" data-li="' + li + '"></div>';
+      if (l.type === 'label') return '<h3 class="lbl" data-li="' + li + '">' + esc(C.sentenceCase(l.text)) + '</h3>';
+      if (l.type === 'note') return '<p class="note" data-li="' + li + '">' + esc(C.sentenceCase(l.text)) + '</p>';
+      if (l.type === 'instr') return edInstrHTML(l, li);
+      return edLyricHTML(l, li);
+    }).join('');
+  }
+  fixCollisions(box);
+  renderPanel();
+}
+function updateSelectionUI() {
+  var box = $('ed-song'), st = editorState, s = st.sel;
+  Array.prototype.forEach.call(box.querySelectorAll('.sel'), function (el) { el.classList.remove('sel'); });
+  if (s) {
+    var el = null;
+    if (s.kind === 'pos') el = box.querySelector('.c[data-li="' + s.li + '"][data-i="' + s.i + '"]');
+    else if (s.kind === 'chord') el = box.querySelector('.ch[data-li="' + s.li + '"][data-ci="' + s.ci + '"]');
+    else if (s.kind === 'seg') el = box.querySelector('.chip[data-li="' + s.li + '"][data-seg="' + s.k + '"]');
+    else if (s.kind === 'append') el = box.querySelector('.chip[data-li="' + s.li + '"][data-append]');
+    if (el) el.classList.add('sel');
+  }
+  renderPanel();
+}
+function onSongTap(e) {
+  var t = e.target, st = editorState, g = t.closest('[data-edgo]');
+  if (g) { if (g.getAttribute('data-edgo') === 'letra') setMode('letra'); else addInstrLine(); return; }
+  var ch = t.closest('.ch[data-ci]');
+  if (ch) { st.sel = { li: +ch.getAttribute('data-li'), kind: 'chord', ci: +ch.getAttribute('data-ci') }; updateSelectionUI(); return; }
+  var chip = t.closest('.chip[data-seg]');
+  if (chip) { st.sel = { li: +chip.getAttribute('data-li'), kind: 'seg', k: +chip.getAttribute('data-seg') }; updateSelectionUI(); return; }
+  var add = t.closest('.chip[data-append]');
+  if (add) { st.sel = { li: +add.getAttribute('data-li'), kind: 'append' }; updateSelectionUI(); return; }
+  var c = t.closest('.c[data-i]');
+  if (c) {
+    var li = +c.getAttribute('data-li'), i = +c.getAttribute('data-i'), l = st.model[li], ex = -1;
+    l.chords.forEach(function (x, k) { if (x.i === i) ex = k; });
+    st.sel = ex >= 0 ? { li: li, kind: 'chord', ci: ex } : { li: li, kind: 'pos', i: i };
+    updateSelectionUI();
+  }
+}
+
+/* ---------- panel de acordes ---------- */
+function edKey() {
+  var k = keyFromStr(val('f-key')); if (k) return k;
+  var ch = [];
+  editorState.model.forEach(function (l) {
+    (l.chords || []).forEach(function (c) { var p = C.parseChord(C.splitTok(c.c).core); if (p) ch.push(p); });
+    (l.segs || []).forEach(function (s) { if (s.c !== null) { var p = C.parseChord(C.splitTok(s.c).core); if (p) ch.push(p); } });
+  });
+  return ch.length ? C.detectKey(ch) : { pc: 0, minor: false };
+}
+function edSpell(key) { return prefs.spell === 'sharp' || prefs.spell === 'flat' ? prefs.spell : C.spellForKey(key.pc, key.minor); }
+function usedChords(exclude) {
+  var seen = {}, out = [];
+  editorState.model.forEach(function (l) {
+    (l.chords || []).forEach(function (c) { var x = C.splitTok(c.c).core; if (C.isChordCore(x) && !seen[x]) { seen[x] = 1; out.push(x); } });
+    (l.segs || []).forEach(function (s) { if (s.c !== null) { var x = C.splitTok(s.c).core; if (C.isChordCore(x) && !seen[x]) { seen[x] = 1; out.push(x); } } });
+  });
+  return out.filter(function (x) { return exclude.indexOf(x) < 0; });
+}
+function wordRange(text, i) {
+  var a = Math.min(i, text.length), b;
+  if (a === text.length || /\s/.test(text[a])) { var q = a - 1; while (q >= 0 && /\s/.test(text[q])) q--; if (q >= 0) a = q; else return [0, 0]; }
+  while (a > 0 && !/\s/.test(text[a - 1])) a--;
+  b = a; while (b < text.length && !/\s/.test(text[b])) b++;
+  return [a, b];
+}
+function renderPanel() {
+  var st = editorState, p = $('edpanel'); if (!p || st.mode !== 'acordes') return;
+  var s = st.sel, key = edKey(), spell = edSpell(key), diat = C.diatonic(key, spell), used = usedChords(diat).slice(0, 12);
+  var strip = '', hint;
+  if (s && (s.kind === 'pos' || s.kind === 'chord')) {
+    var l = st.model[s.li], at = s.kind === 'pos' ? s.i : l.chords[s.ci].i, wr = wordRange(l.text, at), word = l.text.slice(wr[0], wr[1]);
+    for (var i = wr[0]; i < wr[1]; i++) strip += '<button type="button" class="lt' + (i === at ? ' on' : '') + '" data-ep="at" data-i="' + i + '" aria-label="Poner en la letra ' + esc(l.text[i]) + '">' + esc(l.text[i]) + '</button>';
+    if (wr[1] === l.text.length || wr[1] === wr[0]) strip += '<button type="button" class="lt end' + (at === l.text.length ? ' on' : '') + '" data-ep="at" data-i="' + l.text.length + '" aria-label="Al final de la línea">fin</button>';
+    hint = s.kind === 'pos' ? 'Elige el acorde para «' + (at < l.text.length ? l.text[at] : 'final') + '» de «' + word + '».'
+      : 'Acorde ' + edFmt(l.chords[s.ci].c) + ': elige otro para cambiarlo, muévelo con ‹ › o quítalo.';
+  } else if (s && s.kind === 'seg') hint = 'Acorde ' + edFmt(st.model[s.li].segs[s.k].c) + ' de la línea de acordes: elige otro, muévelo con ‹ › o quítalo.';
+  else if (s && s.kind === 'append') hint = 'Elige los acordes en orden: se van agregando a la línea.';
+  else hint = 'Toca una sílaba de la letra para poner ahí un acorde.';
+  var chip = function (c) { return '<button type="button" class="chip" data-chord="' + esc(c) + '">' + esc(edFmt(c)) + '</button>'; };
+  p.innerHTML =
+    '<div class="ep-bar">' +
+      '<button type="button" class="epb" data-ep="prev" aria-label="Mover una letra a la izquierda">‹</button>' +
+      '<div class="ep-strip">' + (strip || '<span class="ep-hint1">' + esc(hint) + '</span>') + '</div>' +
+      '<button type="button" class="epb" data-ep="next" aria-label="Mover una letra a la derecha">›</button></div>' +
+    (strip ? '<p class="ep-hint">' + esc(hint) + '</p>' : '') +
+    '<div class="ep-row"><button type="button" class="chip keychip" data-ep="key" aria-label="Cambiar el tono de la paleta">Tono ' + esc(C.keyName(key, spell, prefs.notation)) + ' ▾</button>' + diat.map(chip).join('') + '</div>' +
+    '<div class="ep-foot"><div class="ep-row">' + used.map(chip).join('') + '<button type="button" class="chip other" data-ep="other">Otro…</button></div>' +
+      '<div class="ep-acts">' +
+      '<button type="button" class="epb" data-ep="del" aria-label="Quitar el acorde">' + icon('trash') + '</button>' +
+      '<button type="button" class="epb" data-ep="undo" aria-label="Deshacer"' + (st.undo.length ? '' : ' disabled') + '>↶</button>' +
+      '<button type="button" class="epb" data-ep="more" aria-label="Más acciones">' + icon('more') + '</button></div></div>';
+  var on = p.querySelector('.lt.on'), stp = p.querySelector('.ep-strip');
+  if (on && stp) stp.scrollLeft = Math.max(0, on.offsetLeft - stp.offsetLeft - stp.clientWidth / 2 + on.offsetWidth / 2);
+  var box = $('ed-song'); if (box) box.style.paddingBottom = (p.offsetHeight + 28) + 'px';
+}
+function onPanelTap(e) {
+  var b = e.target.closest('button'); if (!b || b.disabled) return;
+  var ch = b.getAttribute('data-chord');
+  if (ch) { applyChord(ch); return; }
+  switch (b.getAttribute('data-ep')) {
+    case 'prev': nudge(-1); break;
+    case 'next': nudge(1); break;
+    case 'del': deleteSel(); break;
+    case 'undo': undoEd(); break;
+    case 'more': openEdMore(); break;
+    case 'key': openEdKey(); break;
+    case 'other': openChordBuilder(); break;
+    case 'at': moveTo(+b.getAttribute('data-i')); break;
+  }
+}
+
+/* ---------- acciones sobre acordes ---------- */
+function reindexChord(l, obj) { l.chords = C.sortChords(l.chords); return l.chords.indexOf(obj); }
+function applyChord(name) {
+  var st = editorState, s = st.sel;
+  if (!s) { toast('Primero toca la sílaba donde va el acorde.'); return; }
+  var l = st.model[s.li]; pushUndo();
+  if (s.kind === 'chord') l.chords[s.ci].c = name;
+  else if (s.kind === 'pos') {
+    var obj = { i: s.i, c: name }; l.chords.push(obj);
+    st.sel = { li: s.li, kind: 'chord', ci: reindexChord(l, obj) };
+  } else if (s.kind === 'seg') l.segs[s.k].c = name;
+  else if (s.kind === 'append') {
+    var last = l.segs[l.segs.length - 1];
+    if (l.segs.length === 1 && last.c === null && !last.t.trim()) l.segs = [{ c: name, t: ' ' }];
+    else { if (last && last.t && !/\s$/.test(last.t)) last.t += ' '; if (last && !last.t) last.t = ' '; l.segs.push({ c: name, t: ' ' }); }
+  }
+  renderChordEditor();
+}
+function nudge(d) {
+  var st = editorState, s = st.sel; if (!s) return;
+  var l = st.model[s.li];
+  if (s.kind === 'chord') {
+    var c = l.chords[s.ci], ni = Math.max(0, Math.min(l.text.length, c.i + d)); if (ni === c.i) return;
+    pushUndo(); c.i = ni; s.ci = reindexChord(l, c); renderChordEditor();
+  } else if (s.kind === 'pos') { s.i = Math.max(0, Math.min(l.text.length, s.i + d)); updateSelectionUI(); }
+  else if (s.kind === 'seg') {
+    var idx = []; l.segs.forEach(function (x, k) { if (x.c !== null) idx.push(k); });
+    var at = idx.indexOf(s.k), to = idx[at + d]; if (to === undefined) return;
+    pushUndo(); var tmp = l.segs[s.k].c; l.segs[s.k].c = l.segs[to].c; l.segs[to].c = tmp; s.k = to; renderChordEditor();
+  }
+}
+function moveTo(i) {
+  var st = editorState, s = st.sel; if (!s) return;
+  var l = st.model[s.li];
+  if (s.kind === 'chord') { var c = l.chords[s.ci]; if (c.i === i) return; pushUndo(); c.i = i; s.ci = reindexChord(l, c); renderChordEditor(); }
+  else { var ex = -1; l.chords.forEach(function (x, k) { if (x.i === i) ex = k; }); st.sel = ex >= 0 ? { li: s.li, kind: 'chord', ci: ex } : { li: s.li, kind: 'pos', i: i }; updateSelectionUI(); }
+}
+function deleteSel() {
+  var st = editorState, s = st.sel; if (!s) { toast('Toca primero el acorde que quieres quitar.'); return; }
+  var l = st.model[s.li];
+  if (s.kind === 'chord') { pushUndo(); var at = l.chords[s.ci].i; l.chords.splice(s.ci, 1); st.sel = { li: s.li, kind: 'pos', i: at }; renderChordEditor(); }
+  else if (s.kind === 'pos') {
+    var ex = -1; l.chords.forEach(function (x, k) { if (x.i === s.i) ex = k; });
+    if (ex >= 0) { pushUndo(); l.chords.splice(ex, 1); renderChordEditor(); } else toast('Aquí no hay acorde.');
+  } else if (s.kind === 'seg') {
+    pushUndo(); var seg = l.segs[s.k];
+    if (s.k > 0) { l.segs[s.k - 1].t += seg.t; l.segs.splice(s.k, 1); } else { seg.c = null; }
+    st.sel = { li: s.li, kind: 'append' };
+    if (!l.segs.some(function (x) { return x.c !== null || x.t.trim(); })) { st.model.splice(s.li, 1); st.sel = null; }
+    renderChordEditor();
+  }
+}
+function addInstrLine() {
+  var st = editorState, at = st.sel ? st.sel.li + 1 : st.model.length;
+  pushUndo(); st.model.splice(at, 0, { type: 'instr', segs: [{ c: null, t: '' }] });
+  st.sel = { li: at, kind: 'append' }; renderChordEditor();
+}
+function stanzaOf(li) {
+  var m = editorState.model, a = li, b = li, stop = function (l) { return l.type === 'blank' || l.type === 'label'; };
+  if (stop(m[li])) return null;
+  while (a > 0 && !stop(m[a - 1])) a--;
+  while (b < m.length - 1 && !stop(m[b + 1])) b++;
+  return [a, b];
+}
+function stanzaLyrics(r) { var out = []; for (var k = r[0]; k <= r[1]; k++) if (editorState.model[k].type === 'lyric') out.push(k); return out; }
+function openEdMore() {
+  var st = editorState, s = st.sel, r = s ? stanzaOf(s.li) : null, items = [];
+  if (st.redo.length) items.push({ id: 'redo', icon: 'fwd', label: 'Rehacer', run: redoEd });
+  if (r) {
+    items.push({ id: 'copy', icon: 'copy', label: 'Copiar los acordes de esta estrofa', run: function () {
+      st.clip = stanzaLyrics(r).map(function (k) { return clone(st.model[k]); });
+      toast('Acordes copiados. Toca una línea de otra estrofa y elige «Pegar acordes».', 4500);
+    } });
+    if (st.clip) items.push({ id: 'paste', icon: 'add', label: 'Pegar acordes en esta estrofa', sub: 'por sílabas', run: function () {
+      var dst = stanzaLyrics(r); pushUndo();
+      dst.forEach(function (k, j) { if (st.clip[j]) st.model[k].chords = C.copyChordsBySyllable(st.clip[j], st.model[k].text); });
+      renderChordEditor(); toast('Acordes pegados en ' + Math.min(dst.length, st.clip.length) + ' líneas. Revisa y ajusta si hace falta.', 4500);
+    } });
+    items.push({ id: 'clear', icon: 'trash', label: 'Quitar los acordes de esta estrofa', run: function () {
+      pushUndo(); stanzaLyrics(r).forEach(function (k) { st.model[k].chords = []; }); st.sel = null; renderChordEditor();
+    } });
+  }
+  items.push({ id: 'instr', icon: 'add', label: 'Agregar una línea solo de acordes', sub: s ? 'debajo de la seleccionada' : 'al final', run: addInstrLine });
+  if (s && st.model[s.li] && st.model[s.li].type === 'instr') items.push({ id: 'rminstr', icon: 'trash', label: 'Quitar esta línea de acordes', run: function () {
+    pushUndo(); st.model.splice(s.li, 1); st.sel = null; renderChordEditor(); } });
+  items.push({ id: 'help', icon: 'text', label: 'Cómo usar el editor', run: openEdHelp });
+  menuSheet('Editor', items);
+}
+function openEdHelp() {
+  openSheet('Cómo usar el editor', '<div class="help">' +
+    '<p><b>Letra.</b> Escribe o pega la letra: un verso por línea, una línea vacía entre estrofas. Los botones ponen secciones como [Coro]. Si pegas una canción con los acordes en la línea de arriba, se convierten solos.</p>' +
+    '<p><b>Acordes.</b> Toca la sílaba donde va el acorde y elígelo abajo. La fila de letras grandes sirve para afinar la posición. Con ‹ › lo mueves una letra. Toca un acorde puesto para cambiarlo o quitarlo.</p>' +
+    '<p><b>Estrofas iguales.</b> Toca una línea de una estrofa, abre «Más acciones» (⋯) y copia sus acordes. Luego toca otra estrofa y pégalos: se ubican sílaba por sílaba.</p>' +
+    '<p><b>Intro y final.</b> «Agregar una línea solo de acordes» crea una fila donde los acordes se agregan en orden.</p>' +
+    '<p><b>Paleta.</b> Arriba están los acordes del tono de la canción; toca «Tono» para cambiarlo. Abajo, los que ya usaste y «Otro…» para armar cualquiera.</p></div>');
+}
+function openEdKey() {
+  var cur = edKey(), btns = '';
+  KEY_OPTS.forEach(function (k) {
+    var p = keyFromStr(k), on = p.pc === cur.pc && p.minor === cur.minor;
+    btns += '<button type="button" data-k="' + esc(k) + '" aria-pressed="' + on + '"><b>' + esc(C.keyName(p, C.spellForKey(p.pc, p.minor), prefs.notation)) + '</b><small>' + (p.minor ? 'menor' : 'mayor') + '</small></button>';
+  });
+  openSheet('Tono de la canción', '<p class="help">La paleta muestra los acordes de este tono. También queda como tono original de la canción.</p><div class="keys">' + btns + '</div>', function (el) {
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-k]'); if (!b) return;
+      var sel = $('f-key'), k = b.getAttribute('data-k');
+      if (![].some.call(sel.options, function (o) { return o.value === k; })) { var o = document.createElement('option'); o.textContent = k; sel.appendChild(o); }
+      sel.value = k; closeSheet(); renderPanel();
+    });
+  });
+}
+function openChordBuilder() {
+  var st = editorState, key = edKey(), spell = edSpell(key), s = st.sel, init = null;
+  if (s && s.kind === 'chord') init = st.model[s.li].chords[s.ci].c; else if (s && s.kind === 'seg') init = st.model[s.li].segs[s.k].c;
+  var b = { root: key.pc, q: '', bass: null, alt: false };
+  if (init) {
+    var parts = C.splitTok(init), pc = C.parseChord(parts.core);
+    if (pc) { b.root = pc.root; b.q = pc.qual; b.bass = pc.bass; b.alt = parts.pre === '(' && parts.post === ')'; }
+  }
+  function name(notation) {
+    var n = C.noteName(b.root, spell, notation) + b.q + (b.bass !== null ? '/' + C.noteName(b.bass, spell, notation) : '');
+    return b.alt ? '(' + n + ')' : n;
+  }
+  function draw(el) {
+    var roots = '', quals = '', bass = '<button type="button" data-b="-1" aria-pressed="' + (b.bass === null) + '">—</button>';
+    for (var pc = 0; pc < 12; pc++) {
+      roots += '<button type="button" data-r="' + pc + '" aria-pressed="' + (b.root === pc) + '">' + esc(C.noteName(pc, spell, prefs.notation)) + '</button>';
+      bass += '<button type="button" data-b="' + pc + '" aria-pressed="' + (b.bass === pc) + '">' + esc(C.noteName(pc, spell, prefs.notation)) + '</button>';
+    }
+    QUALS.forEach(function (q) { quals += '<button type="button" data-q="' + esc(q[0]) + '" aria-pressed="' + (b.q === q[0]) + '">' + esc(q[1]) + '</button>'; });
+    el.querySelector('#cb-body').innerHTML =
+      '<div class="chordbig" id="cb-prev">' + esc(name(prefs.notation)) + '</div>' +
+      '<p class="cb-h">Nota</p><div class="cb-grid">' + roots + '</div>' +
+      '<p class="cb-h">Tipo</p><div class="cb-grid">' + quals + '</div>' +
+      '<p class="cb-h">Bajo (opcional)</p><div class="cb-grid">' + bass + '</div>' +
+      '<label class="cb-alt"><input type="checkbox" id="cb-alt"' + (b.alt ? ' checked' : '') + '> Alternativo, entre paréntesis</label>';
+  }
+  openSheet('Armar un acorde', '<div id="cb-body"></div><div class="btnrow" style="margin-top:.8rem"><button type="button" class="btn primary" data-x="use">Usar este acorde</button><button type="button" class="btn" data-close="1">Cancelar</button></div>', function (el) {
+    draw(el);
+    el.addEventListener('click', function (e) {
+      var t = e.target.closest('button');
+      if (t && t.hasAttribute('data-r')) { b.root = +t.getAttribute('data-r'); draw(el); }
+      else if (t && t.hasAttribute('data-q')) { b.q = t.getAttribute('data-q'); draw(el); }
+      else if (t && t.hasAttribute('data-b')) { var v = +t.getAttribute('data-b'); b.bass = v < 0 ? null : v; draw(el); }
+      else if (t && t.getAttribute('data-x') === 'use') {
+        var n = name('en'); if (!C.isChordTok(n)) { toast('Ese acorde no se puede escribir así.'); return; }
+        closeSheet(); if (!editorState.sel) toast('Primero toca la sílaba donde va el acorde.'); else applyChord(n);
+      }
+    });
+    el.addEventListener('change', function (e) { if (e.target.id === 'cb-alt') { b.alt = e.target.checked; el.querySelector('#cb-prev').textContent = name(prefs.notation); } });
+  });
+}
+document.addEventListener('keydown', function (e) {
+  var st = editorState;
+  if (!st || route.name !== 'edit' || st.mode !== 'acordes' || sheetRoot.firstChild) return;
+  var tag = (e.target && e.target.tagName || '').toLowerCase(); if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z')) { e.preventDefault(); if (e.shiftKey) redoEd(); else undoEd(); }
+  else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || e.key === 'Y')) { e.preventDefault(); redoEd(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); nudge(-1); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); nudge(1); }
+  else if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteSel(); }
+  else if (e.key === 'Escape') { st.sel = null; updateSelectionUI(); }
+});
+
+/* ---------- guardar ---------- */
+function readEditor() {
+  var st = editorState, s = clone(st.s), num = val('f-num').trim(), bpm = val('f-bpm').trim();
+  s.title = val('f-title').trim(); s.author = val('f-author').trim(); s.group = val('f-group') === '__new' ? 'nuevas' : val('f-group');
+  s.momento = val('f-momento').trim(); s.key = val('f-key'); s.style = val('f-style').trim();
+  var model = st.model;
+  if (st.mode === 'letra') model = C.reconcile(st.letraBase || st.model, C.parseLetra($('f-letra').value));
+  else if (st.mode === 'texto') model = C.srcToModel($('f-src').value.replace(/\r/g, ''));
+  s.src = C.modelToSrc(model);
+  s.num = /^\d+$/.test(num) ? +num : (num || undefined);
+  s.bpm = /^\d{2,3}$/.test(bpm) ? +bpm : undefined;
+  return s;
+}
+function updatePreview() {
+  if (!editorState) return;
+  var src = $('f-src').value.replace(/\r/g, ''), s = { id: '__preview', src: src, key: val('f-key') };
+  var inf = info(s), el = $('ed-prev'); if (!el) return;
+  el.innerHTML = src.trim() ? bodyHTML(s, fmtFor(inf.key, 0)) : '<p class="empty">Aquí verás la canción mientras escribes.</p>';
+  fixCollisions(el);
+}
+function saveEditor() {
+  syncFromMode();
+  var s = readEditor();
+  if (!s.title) { toast('Escribe el título de la canción.'); $('f-title').focus(); return; }
+  if (!s.src.trim()) { toast('La canción todavía no tiene letra.'); setMode('letra'); return; }
+  s = cleanSong(s);
+  var base = baseSong(s.id);
+  if (base && JSON.stringify(cleanSong(base)) === JSON.stringify(s)) delete local.songs[s.id]; else local.songs[s.id] = s;
+  delete local.deleted[s.id]; saveLocal(); delete infoCache[s.id];
+  editorState = null; document.body.classList.remove('ed-chords');
+  location.hash = '#/s/' + enc(s.id);
+  toast(isGroup() ? 'Guardada. Publica los cambios para que todos la vean.' : 'Guardada.', 3500);
+}
+function cancelEditor() {
+  var st = editorState;
+  var go = function () { editorState = null; document.body.classList.remove('ed-chords'); location.hash = st && !st.isNew && getSong(st.s.id) ? '#/s/' + enc(st.s.id) : '#/'; };
+  if (st && JSON.stringify(readEditor()) !== st.start) confirmSheet('Salir sin guardar', 'Se perderán los cambios que hiciste en esta canción.', 'Salir sin guardar', go, true);
+  else go();
+}
+function deleteSong() {
+  var s = editorState.s;
+  confirmSheet('Eliminar canción', '¿Eliminar «' + esc(C.sentenceCase(s.title)) + '»?' + (baseSong(s.id) && isGroup() ? ' Se quita en este equipo, y para todos cuando publiques.' : ''), 'Eliminar', function () {
+    if (baseSong(s.id)) local.deleted[s.id] = true;
+    delete local.songs[s.id]; saveLocal(); editorState = null; document.body.classList.remove('ed-chords'); location.hash = '#/'; toast('Canción eliminada.');
+  }, true);
+}
+function restoreSong() {
+  var s = editorState.s;
+  confirmSheet('Restaurar original', 'Se descartan tus cambios en esta canción y vuelve la versión publicada.', 'Restaurar', function () {
+    delete local.songs[s.id]; saveLocal(); delete infoCache[s.id]; editorState = null; document.body.classList.remove('ed-chords'); location.hash = '#/s/' + enc(s.id);
+  }, true);
+}
+function openPasteSheet() {
+  openSheet('Pegar con acordes encima', '<p class="help">Pega la canción tal como la copiaste de internet, con cada línea de acordes encima de su línea de letra. Se convierte sin mover los acordes de su sílaba y se agrega al final de lo que ya tienes.</p>' +
+    '<div class="field"><textarea id="paste-src" rows="12" spellcheck="false" autocapitalize="off" placeholder="        D           A&#10;Yo le alabo de corazón,"></textarea></div>' +
+    '<div class="btnrow"><button type="button" class="btn primary" data-x="conv">Convertir</button></div>', function (el) {
+    el.querySelector('[data-x="conv"]').addEventListener('click', function () {
+      var lines = C.parseLetra(el.querySelector('#paste-src').value);
+      if (!lines.length) { toast('No hay texto para convertir.'); return; }
+      var st = editorState; syncFromMode(); pushUndo();
+      st.model = C.normalizeModel(st.model.concat(st.model.length ? [{ type: 'blank' }] : [], lines));
+      closeSheet(true);
+      refreshModeView();                       // la pestaña abierta muestra lo nuevo antes de cambiar
+      if (st.mode !== 'acordes') setMode('acordes');
+      toast('Convertida. Revisa los acordes y ajusta lo que haga falta.', 4000);
+    });
+  });
+}
+
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var h = location.hash.replace(/^#\/?/, '');
@@ -2232,7 +2928,7 @@ function render() {
   if (route.name === 'home') homeState.scroll = window.scrollY;
   if (sheetState) sheetState.onClose = null;
   closeSheet(true);
-  if (r.name !== 'edit') editorState = null;
+  if (r.name !== 'edit') { editorState = null; document.body.classList.remove('ed-chords'); }
   route = r;
   if (r.name === 'home') { renderHome(); return; }
   if (r.name === 'song') renderSong(r.id);
@@ -2323,6 +3019,7 @@ document.addEventListener('keydown', function (e) {
 var refit = debounce(function () {
   fixCollisions(document.getElementById('song-body'));
   fixCollisions(document.getElementById('ed-prev'));
+  var eds = document.getElementById('ed-song'); if (eds && editorState && editorState.mode === 'acordes') { fixCollisions(eds); renderPanel(); }
 }, 150);
 window.addEventListener('resize', refit);
 try {
@@ -2357,7 +3054,7 @@ if (window.matchMedia) {
 openBookData();
 render();
 fetchRemote().then(function (res) { if (res === 'nuevo') afterRemoteUpdate(); else refreshChrome(); });
-window.__cancionero = { fixCollisions: fixCollisions, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
+window.__cancionero = { fixCollisions: fixCollisions, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
 })();
 
 
