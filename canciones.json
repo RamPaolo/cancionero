@@ -1,0 +1,944 @@
+{
+ "app": "cancionero-fdp",
+ "type": "cancionero",
+ "name": "Fuego de Pentecostés",
+ "subtitle": "Renovación Carismática Católica",
+ "version": "2026-09-25T21:11:31.000Z",
+ "groups": [
+  {
+   "id": "aviv",
+   "name": "Avivamiento",
+   "color": "#e8474f"
+  },
+  {
+   "id": "gozo",
+   "name": "Popurrí de gozo",
+   "color": "#6f77e0"
+  },
+  {
+   "id": "horah",
+   "name": "Horah, hebreas y mesiánicas",
+   "color": "#b7800a"
+  },
+  {
+   "id": "teruah",
+   "name": "Teruah",
+   "color": "#d9558f"
+  },
+  {
+   "id": "alabanza",
+   "name": "Popurrí de alabanza",
+   "color": "#d8680f"
+  },
+  {
+   "id": "espiritu",
+   "name": "Espíritu Santo",
+   "color": "#22897f"
+  },
+  {
+   "id": "misa1502",
+   "name": "Misa del 15 de febrero",
+   "color": "#4a78d8"
+  },
+  {
+   "id": "misa1802",
+   "name": "Misa del 18 de febrero",
+   "color": "#2f8553"
+  },
+  {
+   "id": "nuevas",
+   "name": "Canciones nuevas",
+   "color": "#737892"
+  }
+ ],
+ "songs": [
+  {
+   "id": "s01",
+   "num": 1,
+   "title": "YO VINE A ALABAR A DIOS",
+   "group": "aviv",
+   "page": 1,
+   "src": "Yo no [D]sé[(A)] a lo que tu has ven[A]id[(D)]o\npero yo [E]vine a alabar a Di[A]os. (x2)\n# CORO 1\nAlelu[D]ya, alel[A]uya,\nyo v[E]ine a alabar a Di[A]os. (x2)\n\nYo no [D]sé[(A)] a lo que tu has ven[A]id[(D)]o\npero yo [E]vine a alabar a Di[A]os. (x2)\n> (DE NUEVO SECCIÓN 1)\n[A]Y el Cristo que se alaba aqu[E]í[(E7)]\nes un Cristo v[A]ivo. (x2)\nAunque no lo v[E]emos,\npero lo sent[A]imos (x2)\n# CORO 2\nYo v[D]ine, yo v[A]ine,\nyo v[E]ine a alabar a Di[A]os. (x2)\n\nQue lo d[D]igan las muj[A7]eres\nMujeres: ¡Yo vine a alabar a[D] Dios!\nMás fue[D]rte que no se [A]oye\nque se esc[D]uche haya en el cie[A]lo.\nQue lo d[D]igan los hom[A7]bres\nHombres: ¡Yo vine a alabar [D]a Dios!\nMás fue[D]rte que no se [A]oye\nque se esc[D]uche haya en el cie[A]lo.",
+   "refs": [
+    "https://youtu.be/Q8nRMQeXSug?list=RDQ8nRMQeXSug"
+   ],
+   "refText": "1, 2, 3 Y 4 - ANIMANDO TU MISA"
+  },
+  {
+   "id": "s02",
+   "num": 2,
+   "title": "HAY UNA PROMESA EN LA BIBLIA",
+   "group": "aviv",
+   "page": 1,
+   "src": "# CORO 2\nH[G]ay una promesa en la [D]biblia\nQue e[C]s para t[D]i y para m[G]i. (x2)\nCie[G]lo nuevo y tierra nue[D]va,\nd[C]onde i[D]remos a vivi[G]r. (x2)\n\nSere[G]mos levantados con pod[D]er\nSeremos levant[C]ados c[D]on pod[G]er\nSeremos levantados con pod[D]er\na la nu[C]eva Jer[D]usal[G]én.\n[G]A que tu te vas, a que yo tambi[D]én,\na la nu[C]eva Jer[D]usal[G]én. (x2)\nSalt[G]ando, hermano, sal[D]tando,\nsalt[C]ando, herm[D]ano, salt[G]ando,\nsaltando, hermano, salt[D]ando,\nc[C]omo cord[D]eros en el redi[G]l.\n# CORO 2\n[G]Así, así, así[D], así se alaba a Di[G]os. (x2)\n[G]Pero que lindo se [D]vé, el pueblo de D[G]ios.\n[G]Maravilloso se [D]vé el pueblo de D[G]ios.\n[G]Pero que chevere se [D]vé el pueblo de Di[G]os.\n\nY [G]dando media vuel[D]tita,\ny d[C]ando una m[D]edia vuelti[G]ta,\ny dando una media vuel[D]tita,\nla vuelti[C]ta de l[D]a victo[G]ria. (x2)",
+   "refs": [
+    "https://youtu.be/Q8nRMQeXSug?list=RDQ8nRMQeXSug"
+   ],
+   "refText": "1, 2, 3 Y 4 - ANIMANDO TU MISA"
+  },
+  {
+   "id": "s03",
+   "num": 3,
+   "title": "YO LE ALABO",
+   "author": "PBRO. EDGAR LARREA",
+   "group": "aviv",
+   "page": 2,
+   "src": "Yo le al[D]abo de coraz[A]ón,\nyo le alabo con mi voz.[D] (x2)\nY [D7]si me falta la v[G]oz,\nyo le alabo con las man[D]os.\nY si me faltan las ma[A]nos\nyo le alabo con los pi[D]es. (x2)\nY[D7] si me faltan los pi[G]es,\nyo le alabo con el a[D]lma.\nY si me faltara el al[A]ma,\nes que ya me fuí con É[D]l.\n\nOh gloria a Di[D]os, oh alel[A]uya,\nsigue alab[G]ando que [A]la victoria es t[D]uya. (x2)",
+   "refs": [
+    "https://youtu.be/Q8nRMQeXSug?list=RDQ8nRMQeXSug"
+   ],
+   "refText": "1, 2, 3 Y 4 - ANIMANDO TU MISA"
+  },
+  {
+   "id": "s04",
+   "num": 4,
+   "title": "YA LLEGÓ, YA LLEGÓ",
+   "author": "MARTÍN VALVERDE",
+   "group": "aviv",
+   "page": 2,
+   "src": "Ya lleg[G]ó, ya lle[D]gó, El Espíritu Santo ya lle[G]gó. (x2)\nlo siento en las manos, lo siento en los pi[D]es,\nlo siento en mi alma y en todo mi s[G]er. (x2)\nAquel que caminó[D] sobre las agua[G]s. (x2)\nestá aquí[D], está a mi l[G]ado. (x2)\nComo un ray[D]o cayendo sobre [G]mí (x2)\nQue quema, que quema, que quema (a[D]ah),\nque quema, que quema, que quema. ([G]aah) (x2)",
+   "refs": [
+    "https://youtu.be/Q8nRMQeXSug?list=RDQ8nRMQeXSug"
+   ],
+   "refText": "1, 2, 3 Y 4 - ANIMANDO TU MISA"
+  },
+  {
+   "id": "s05",
+   "num": 5,
+   "title": "ALABARÉ",
+   "author": "ANIMANDO TU MISA",
+   "group": "gozo",
+   "page": 3,
+   "src": "[(A][B7][E)][x2][E]Alabaré, alabaré\nAlabaré,[C#m] alabaré\nAl[F#m]abaré[B7] a mi Señ[E]or. (x[(A]2)[B7)][(A)]\n# VERSO 1\nJ[E]uan vio el número de los redimidos\nY todos alababan al Señ[B7]or\nUnos cantaban, otros oraban\nY todos alababan al Seño[E]r.[(A][E)]\n# VERSO 2\nT[E]odos unidos, alegres cantamos\nGlorias y alabanzas al Se[B7]ñor\nGloria al Padre, gloria al Hijo\nY gloria al Espíritu de Amo[E]r.[(A][E)]\n[E]Alabaré, alabaré\nAlabaré,[C#m] alabaré\nAl[F#m]abaré[B7] a mi Señ[E]or. (x2[(A])[B7)][(E)]\n! Final: ([A] [B7] [E])",
+   "refs": [
+    "https://youtu.be/Q8nRMQeXSug?list=RDQ8nRMQeXSug"
+   ],
+   "refText": "1, 2, 3 Y 4 - ANIMANDO TU MISA"
+  },
+  {
+   "id": "s06",
+   "num": 6,
+   "title": "GOZO",
+   "author": "ANIMANDO TU MISA",
+   "group": "gozo",
+   "page": 3,
+   "src": "[E]Este gozo no va a pa[B7]sar (no va a pasar),\neste gozo no va a pa[E]sar (no va a pasar),\neste gozo no va a pas[A]ar [Am](no va a pasar),\nporq[X]ue está [E]dentro de mi [B7]coraz[E]ón[A].[E]\n\nEl fuego c[B7]ae, cae, los males salen, s[E]alen,\ny los crey[B7]entes alaban al Seño[E]r. (x2)",
+   "refs": [
+    "https://youtu.be/Q8nRMQeXSug?list=RDQ8nRMQeXSug"
+   ],
+   "refText": "1, 2, 3 Y 4 - ANIMANDO TU MISA"
+  },
+  {
+   "id": "s07",
+   "num": 7,
+   "title": "NO HAY DIOS TAN GRANDE COMO TÚ",
+   "author": "ANIMANDO TU MISA",
+   "group": "gozo",
+   "page": 3,
+   "src": "No hay D[E]ios tan grande como tú\nno lo h[B7]ay, no lo h[E]ay. (x2)\nNo hay Di[A]os que haga maravi[E]llas\ncomo l[B7]as que haces [E]tú. (x2[(E)])[(A][E)]\nNo con esp[E]adas, ni con ejércitos\nmas con su Sa[A]nto Espí[B7]rit[E]u. (x2)\nY esos mo[A]nte[B7]s se mover[E]án\n[C#m]Y esos m[F#m]ontes[B7] se mover[E]án\nY esos mo[A]nte[B7]s se mover[E]án\n[C#m]más con tu S[F#m]anto Esp[B7]íri[E]tu[X][E]\n> (DE NUEVO 2. GOZO...)",
+   "refs": [
+    "https://youtu.be/Q8nRMQeXSug?list=RDQ8nRMQeXSug"
+   ],
+   "refText": "1, 2, 3 Y 4 - ANIMANDO TU MISA"
+  },
+  {
+   "id": "s08",
+   "num": 8,
+   "title": "EL AMOR DE DIOS ES MARAVILLOSO",
+   "author": "ANIMANDO TU MISA",
+   "group": "gozo",
+   "page": 3,
+   "src": "El amo[E]r de Dios es maravill[B7]oso,\nEl amor de Dios es maravill[E]oso,\nEl amor de Dios es maravill[A]os[Am]o[X]\nGran[E]de es el amor[B7] de Dio[E]s. ([A]x2[E])\nTan a[E]lto que no puedo estar más alto que [B7]El,\nTan bajo que no puedo estar abajo de [E]El,\nTan ancho que no puedo estar afu[A]era de [Am]El,[X]\n! [E] [B7] ([E] [A] B7)x2\nGrande es el amor de Dios.\n> (DE NUEVO 1. ALABARÉ VERSO 2)\n> FIN :)",
+   "refs": [
+    "https://youtu.be/Q8nRMQeXSug?list=RDQ8nRMQeXSug"
+   ],
+   "refText": "1, 2, 3 Y 4 - ANIMANDO TU MISA"
+  },
+  {
+   "id": "s09",
+   "num": 9,
+   "title": "SOMOS SOLDADOS DE CRISTO",
+   "author": "RICHAR DE JESÚS - RCC PERÚ",
+   "group": "gozo",
+   "page": 4,
+   "src": "[Dm]Somos sold[A#]ados de Cr[A]isto Jesús,\nsomos soldados de Cr[Dm]isto Jesús. (x2)\n# VERSO 1\nNo nos imp[Gm]orta el mal,\nno nos imp[Dm]orta el mal,\nsolo que[A7]remos serv[A]irte Seño[Dm]r. ([(D)]x2)[(Dm)]\n[Dm]Somos sold[(A#)]ado[(Dm)]s de Cr[A]isto Jesús,\nsomos soldados de C[Dm]risto Jesús. ([(Dm)]x2)[(D)]\n# VERSO 2\nNo nos im[Gm]porta el mal[C],\nno nos imp[F]orta el mal[A#],\nsolo que[A7]remos serv[A]irte Seño[Dm]r. ([(D)]x2)[(Dm)]",
+   "refs": [
+    "https://youtu.be/e4eHmmmVcEA?list=RDe4eHmmmVcEA"
+   ],
+   "refText": "5, 6 Y 7 - RCC PERÚ"
+  },
+  {
+   "id": "s10",
+   "num": 10,
+   "title": "VALIENTE",
+   "author": "RICHAR DE JESÚS - RCC PERÚ",
+   "group": "gozo",
+   "page": 4,
+   "src": "Va[Dm]liente, val[A#]iente ser[A]é,\nno me importa el camino de la mu[Dm]erte[(Dm)]. (x2)[(D)]\nPorque el R[Gm]eino d[C]e los [F]Cielos,\nporque el [A#]Reino de los Ci[A]elos\nlo arrebatan los vali[Dm]ente[(D)]s. (x[(Dm)]2)\nSeñor Jes[A]ús, Tú eres mi [Dm]vida\nSeñor Jes[A]ús, Tú eres mi am[Dm]or[D]\nSalv[Gm]aste[C] mi alma perd[F]ida[A#]\nPor eso te al[A]abo con el cora[Dm]zón[D]\nSalv[Gm]aste[C] mi alma perd[F]ida[A#]\nPor eso te [A]alabo con el cora[Dm]zón,\ncon el coraz[A]ón, con el corazó[Dm]n,\n! [A] [Dm]\nS[Dm]anidad divina, mi[A#]lagros y Pod[A]er,\nJesús está haciendo al Diablo estre[(Dm)]mecer[(Dm]. (x2[D)])\nY ahora clama[Gm]ré a la s[C]angre de Jes[F]ús,\ny s[A#]al demonio, s[A]al, en el nombre de Je[(Dm]sús.[D)] (x[(Dm)]2)\n# CORO 1\n[Dm]En el nombre de Jes[A]ús,\nen el nombre de Jes[Dm]ús. (x2)\n[Dm]Sanito, s[A]ano, en el nombre de Jes[Dm]ús. (x2)\nLas enfermedades ya se v[A]an,\nen el nombre de Jesú[Dm]s.\nQue ya se van, que ya se v[A]an,\nen el nombre de Jes[Dm]ús.\n[Dm]Sanito, s[A]ano, en el nombre de Jes[Dm]ús. (x2)\nLos problemas ya se van[A],\nen el nombre de Jesú[Dm]s.\nQue ya se van, no vuelven [A]más,\nen el nombre de Jes[Dm]ús.\n[Dm]Sanito, [A]sano, en el nombre de Jes[Dm]ús. (x2)\n> (DE NUEVO CORO 1)",
+   "refs": [
+    "https://youtu.be/e4eHmmmVcEA?list=RDe4eHmmmVcEA"
+   ],
+   "refText": "5, 6 Y 7 - RCC PERÚ"
+  },
+  {
+   "id": "s11",
+   "num": 11,
+   "title": "YO TENGO UN CRISTO",
+   "author": "RICHAR DE JESÚS - RCC PERÚ",
+   "group": "gozo",
+   "page": 4,
+   "src": "[Dm]Yo tengo un cristo que camina por el ma[A]r,\nyo tengo un cristo que calma la temp[Dm]estad. (x2)\nCuando le alabo de todo coraz[A]ón\nme quita la tristeza, me llena de emoc[Dm]ión. (x2)\nAlaba al Seño[A]r, alaba al Se[Dm]ñor,\nalaba al Señ[A]or mi hermano[G], ala[A]ba al Señ[Dm]or. (x2)\n> (DE NUEVO 7. YO TENGO UN CRISTO)\n> FIN :)",
+   "refs": [
+    "https://youtu.be/e4eHmmmVcEA?list=RDe4eHmmmVcEA"
+   ],
+   "refText": "5, 6 Y 7 - RCC PERÚ"
+  },
+  {
+   "id": "s12",
+   "num": 12,
+   "title": "JESÚS ES MI SEÑOR",
+   "author": "ECCE - RCC SILOÉ",
+   "group": "gozo",
+   "page": 5,
+   "src": "Jes[D]ús es el Señor, a[A]lábalo que v[D]ive. (x2)\nAl[G]ábalo, alá[D]balo, al[A]ábalo que v[D]ive. (x2)\nJes[D]ús es salvador, al[A]ábalo que v[D]ive. (x2)\nAlá[G]balo, alá[D]balo, al[A]ábalo que v[D]ive. (x2)\nLa s[D]angre de Cristo tiene poder,\ntie[A]ne poder, tiene pode[D]r.\nLa sangre de Cristo tiene p[D]oder\np[A]ara liber[D]ar. (x2)\n> (OPCIONAL: CORO 1 - 12.MI DIOS ESTÁ VIVO) X1 Y SEGUIR",
+   "refs": [
+    "https://youtu.be/P_kGGmN3FMM?list=RDP_kGGmN3FMM",
+    "https://youtu.be/P_kGGmN3FMM?list=RDP_kGGmN3FMM"
+   ],
+   "refText": "8 - 9  10"
+  },
+  {
+   "id": "s13",
+   "num": 13,
+   "title": "VA BAJANDO YA",
+   "author": "ECCE - RCC SILOÉ",
+   "group": "gozo",
+   "page": 5,
+   "src": "! Intro: [G] AF#m [Bm] [Em] [A] [D] [G]\n[D]Va bajando ya, [G]va baj[D]ando ya,\nv[G]a baj[D]ando ya el Espíritu de Di[A]os.\nSi su p[G]ueblo empieza a orar\ny d[F#m]eja al Señor ob[Bm]rar,\nva ba[Em]jando el Espí[A]ritu de Di[D]os.[G][A]\nV[D]en a conocer a mi salvad[Em]or,\na mi salvad[A]or, ven a conoc[D]er.\nVen a conocer a mi salvado[G]r.\nY j[G]untos ala[D]bemos la Glo[A]ria del Seño[D]r. (x2)\n\nPasa po[D]r aqui Señor, p[G]asa por aqu[D]í. (x2)\n[G]Oh, Señ[D]or, pa[A]sa por aqu[D]í.\nEspí[D]ritu Santo p[G]asa por aqu[D]í. (x2)\n[G]Oh, Señ[D]or, pa[A]sa por aqu[D]i.",
+   "refs": [
+    "https://youtu.be/P_kGGmN3FMM?list=RDP_kGGmN3FMM",
+    "https://youtu.be/P_kGGmN3FMM?list=RDP_kGGmN3FMM"
+   ],
+   "refText": "8 - 9  10"
+  },
+  {
+   "id": "s14",
+   "num": 14,
+   "title": "SU AMOR ESTA CORRIENDO YA",
+   "author": "JUANA ÁLAVA FERNANDEZ",
+   "group": "gozo",
+   "page": 5,
+   "src": "[D][G][D][A][D]Su amo[D]r, su amor, su amor\nestá corr[A7]iendo ya.\nSu amor, su amor, su amor\nestá corr[D]iendo ya.\nSu amor, su amor, su amor\nestá corr[A7]iendo ya.\n\nPor t[G]odo el m[D]undo es[A7]tá corriendo [D]ya.\nY t[D]ú, y tú, y tú eres\nquien lo har[A]á correr.\nY tú, y tú, y tú eres\nquien lo har[D]á correr.\nY tú, y tú, y tú eres\nquien lo har[A7]á correr.\nPor t[G]odo el m[D]undo [A7]tú lo harás corr[D]er.\nY a [D]todo aquel que encuentres\ndale de e[A7]se amor.\nY a todo aquel que encuentres\ndale de e[D]se amor.\nY a todo aquel que encuentres\ndale de e[A7]se amor.\nA tod[G]o el mun[D]do dal[A]e de ese amor[D]. (X2)\n> FIN :)",
+   "refs": [
+    "https://youtu.be/P_kGGmN3FMM?list=RDP_kGGmN3FMM",
+    "https://youtu.be/P_kGGmN3FMM?list=RDP_kGGmN3FMM"
+   ],
+   "refText": "8 - 9  10"
+  },
+  {
+   "id": "s15",
+   "num": 15,
+   "title": "VIVA LA FE, VIVA LA ESPERANZA",
+   "author": "ECCE - RCC SILOÉ",
+   "group": "gozo",
+   "page": 6,
+   "src": "# SECCIÓN 1\nViva la fe[D], viva la esperanza, viva el a[A]mor,\nviva la fe[Em], viva la esper[A]anza, viva el am[D]or,\nviva la fe, viva la esper[D7]anza, viva el a[G]mor.\nQue viva Cris[D]to, que viva Cr[A]isto, que viva e[D]l re[A]y.[D]\n\nQue viva Cri[A]sto, que viva, que viva C[D]risto,\nque viva, que viva Cr[A]isto, que viva el[D] rey[(D)]. ([(A]x2[D)])\n\nMir[D]a lo que hizo en mi Jesús,\nmira lo que hizo en mi Je[A]sús.\nMe [G]levantó y m[D]e liberó,\nmir[A]a lo que hizo en mi Je[D]sús.\n\nCa[D]minando por la senda voy,\ncaminando por la senda [A]voy,\nde prueba en[G] prueba, vi[D]ctoria tras victoria,\nca[A]minando por la senda[D] voy.\n\nEl [D]enemigo ya vencido está,\nel enemigo ya vencido es[A]tá,\nJesús lo ve[G]nció muri[D]endo en la cruz,\nel [A]enemigo ya vencido e[D]stá.",
+   "refs": [
+    "https://youtu.be/P_kGGmN3FMM?list=RDP_kGGmN3FMM",
+    "https://youtu.be/nSJ7o0axLNY"
+   ],
+   "refText": "11, 12 - RCC SILOÉ  REF 2"
+  },
+  {
+   "id": "s16",
+   "num": 16,
+   "title": "MI DIOS ESTÁ VIVO",
+   "author": "1° CORINTIOS 13",
+   "group": "gozo",
+   "page": 6,
+   "src": "Mi Di[D]os está vivo, Él no está muerto,\nmi D[A]ios está vivo, en mi cora[D]zón,\nmi Dios está vivo[Bm], ha resucitado.\nLo[G] siento en mis [A]manos,\nlo s[D]iento en mis pi[Bm]es,\nL[G]o siento en mi [A]alma,\nlo siento en todo mi ser[D].\n# CORO 1\n¡Oh, Oh, Oh, [A]Oh,\nhay que nacer del agua[D]!\n¡Oh, Oh, Oh[A], Oh,\nhay q[A]ue nacer del Espí[D]ritu de Dios[D7]!\n¡Oh, Oh, Oh, [G]Oh,\nhay que nac[A]er del[D] agua y del Esp[Bm]íritu de Di[G]os.\nHay que n[A]acer del Seño[D]r. ([(D7)]x2)[(A][D)]\n\nPrep[D]árate para que si[A7]entas,\nPrepárate para que sient[D]as,\nPrepárate para que si[A]entas,\nEl esp[G]írit[A7]u de Di[D]os.\n[D]Déjalo que se m[A7]ueva, déjalo que se mu[D]eva\nDéjalo que se m[A]ueva, dentro d[G]e tu[A] cora[D]zón.\n> CONTINUA SIGUIENTE PÁGINA O\n> FIN :)",
+   "refs": [
+    "https://youtu.be/P_kGGmN3FMM?list=RDP_kGGmN3FMM",
+    "https://youtu.be/nSJ7o0axLNY"
+   ],
+   "refText": "11, 12 - RCC SILOÉ  REF 2"
+  },
+  {
+   "id": "s17",
+   "num": 17,
+   "title": "MI MANO ESTA LLENA",
+   "author": "MMC - ID SOUNDS",
+   "group": "gozo",
+   "page": 7,
+   "src": "Mi mano esta ll[D]ena de su bendici[A]ón,\nmi mano esta[G] llena[A] de su bendi[D]ció[D7]n.\nAl hermano que t[G]oques bendito será,\nal hermano que t[D]oques bendito será,\nmi mano esta ll[A]ena de su bendic[D]ión.\n# CORO 1\nPorque Cr[D]isto ha tomado mi vida\ny no la quiere solta[A]r,\nporque Cr[G]isto ha tomado mi vida\ny no la quiere solt[D]ar,\nesta[Am]ba y[D7]o muy triste[A] más ah[G]ora soy feliz,\nporque Cr[D]isto ha tomado mi v[A]ida\ny no la quiere solt[D]ar.[A][G][D]\nMi ojo está l[D]leno de su bendició[A]n,\nmi ojo está l[G]leno [A]de su bendi[D]ció[D7]n.\nAl hermano que [G]veas bendito será,\nal hermano que [D]veas bendito será,\nmi ojo esta ll[A]eno de su bendici[D]ón.\n> (DE NUEVO - CORO 1)\nMi pie esta l[D]leno de su bendició[A]n,\nmi pie esta l[G]leno [A]de su bendi[D]ció[D7]n.\nAl hermano que [G]pise bendito será,\nal hermano que [D]pise bendito será,\nmi pie está l[A]leno de su bendic[D]ión.\nMi brazo esta l[D]leno de su bendic[A]ión,\nmi brazo esta[G] llen[A]o de su bend[D]ici[D7]ón.\nAl hermano que a[G]brace bendito será,\nal hermano que a[D]brace bendito será,\nmi brazo está [A]lleno de su bendi[D]ción.\n> (DE NUEVO - CORO 1)\n# CORO 2\nY yo me s[D]igo enamorando,\nme sigo enamorando,\nme sigo enamorando de [A]Dios.\nY yo me s[G]igo enamorando,\nme sigo enamorando,\nme sigo enamorando de Dios[D].\nestab[Am]a yo[D7] muy tri[A]ste más ah[G]ora soy f[(Gm)]eliz,\nporque Cr[D]isto ha tomado mi v[A]ida\ny no la quiere sol[D]tar.[A][G][D]\n> (DE NUEVO - CORO 2)\n> CONTINUA SIGUIENTE PÁGINA O\n> FIN :)",
+   "refs": [
+    "https://youtu.be/4BjiQQ4Hy5s?list=RD4BjiQQ4Hy5s",
+    "https://www.youtube.com/watch?v=GnuIiI_c8lQ"
+   ],
+   "refText": "13 - REF1  REF 2"
+  },
+  {
+   "id": "s18",
+   "num": 18,
+   "title": "ES COMO UN RIO",
+   "author": "AGUANUEVA130",
+   "group": "gozo",
+   "page": 8,
+   "src": "Es como un rí[E]o, es la ll[A]uvia,\nes un s[B7]oplo, es el fu[E]ego.\nEs el Esp[F#m]íritu d[A]e D[B7]ios\nque quiere actu[E]ar.[A][E]\n# SECCIÓN 1\n! [E] Alternativo: [A] [E] [F#m] [B7] [E]\nAhí va bajando, va cayendo,\nva sopla[A]ndo, va ardiendo,\nEs el Espí[B7]rit[(B)]u de Dios\nque quiere actu[E]ar. (x2)\nBajando en[E] ti[(A)], cayendo en t[A]i,[(E)]\nsoplando e[B]n [(F#m]ti, ard[B7)]iendo en t[E]i. (x2)\n> (DE NUEVO - SECCIÓN 1)\nSe siente aquí,[E] se siente aquí,\nse siente aquí, (¡Quee se siente!)\nel Espíritu de Dios se siente aqu[B]í.\nSi los ho[E]mbres de la Tierra\nglorif[A]ican al Señ[E]or\nEl Es[E]píritu de Di[B7]os se siente aq[E]uí.\n\nSe mueve aquí,[E] se mueve aquí,\nse mueve aquí,\nel Espíritu de Dios se mueve aqu[B]í.\nSi los ho[E]mbres de la Tierra\nglorif[A]ican al Señ[E]or\nEl Es[E]píritu de Di[B7]os se mueve aq[E]uí.\nPrepá[E]rate para que sien[B7]tas,\nPrepárate para que s[E]ientas,\nPrepárate para que s[B7]ientas,\nEl Esp[A]írit[B7]u de Di[E]os.\n\nDé[E]jalo que se mueva[B7],\ndéjalo que se mue[E]va,\ndéjalo que se mue[B7]va,\ndentro [A]de t[B7]u coraz[E]ón.\n> (DE NUEVO - SECCIÓN 1)\n\nEs el Esp[F#m]íritu d[A]e Di[B]os\nque está aquí[E].\n> FIN :)",
+   "refs": [
+    "https://youtu.be/GnuIiI_c8lQ",
+    "https://youtu.be/o-vLuku3KQ8?list=RDo-vLuku3KQ8"
+   ],
+   "refText": "14 - REF1  REF 2"
+  },
+  {
+   "id": "s19",
+   "num": 19,
+   "title": "REMOLINEANDO",
+   "author": "JULIO CESAR DE LEÓN",
+   "group": "horah",
+   "page": 9,
+   "src": "Vamos a cantar esta noche a aquel que nos ha dado\ncorona y vestido real diciendo…\nHay muchas f[Cm]ormas de alabar tu nombre\ny de exalt[Bb]arte, oh, mi S[Cm]eñor,\nhay muchas [G#]formas [Bb]de glorif[Cm]icarte,\npero a[Bb]hora[Gm] lo har[G]é a[Cm]sí...\nSaco mi[Cm] vida del anonimato,\nme dió co[Bb]rona y vestido[Cm] real.\nAsí es Yah[G#]vé que ex[Bb]alta al peq[Cm]ueño.\nPor causa d[Bb]e él [Gm]yo me haré [Cm]mas vil.\n# SECCIÓN 1\nHay muchas f[Cm]ormas de alabar tu nombre\ny de exalt[Bb]arte, oh, mi S[Cm]eñor,\nhay muchas [G#]formas [Bb]de glorif[Cm]icarte,\npero ah[Bb]ora l[G]o haré [Cm]así...\nSaco mi[Cm] vida del anonimato,\nme dió co[Bb]rona y vestido[Cm] real.\nAsí es Yah[G#]vé que ex[Bb]alta al peq[Cm]ueño.\nPor causa de[Bb] él yo[G] me alegro [Cm]así.\nRemolin[Cm]eando, remolineando,\ncelebr[Bb]aré a mi Seño[Cm]r.\nRemolin[Cm]eando, remolineando,\npor causa de [Bb]él yo m[G]e alegro a[Cm]sí. (x2)\n> (DE NUEVO SECCIÓN 1)\nLa[Cm]la, lara lala lala\nlara, lala l[Bb]ala, lara laa[Cm]laa\nla[Cm]la, lara lala lala\nlara, lala l[Bb]ala, la[G]ra laa[Cm]laa.\nRemolin[Cm]eando, remolineando,\ncelebr[Bb]aré a mi Seño[Cm]r.\nRemolin[Cm]eando, remolineando,\npor causa de [Bb]él yo m[G]e alegro [Cm]así.\n# SECCIÓN 2\nAnte[G#] ti con [D#]gozo, oh, [G#]palmear[D#]é,\ncon a[G#]legres da[D#]nzas c[G#]elebrar[D#]é,\nsal[Fm]taré y me gozar[G]é. (x2)\nMe [Cm]gozaré en tu presencia, oh, Señor,\ncon tod[D#]as mis f[G#]uer[(G)]zas gri[G]ta[(Cm)]ré ¡eh!\n> (X3 SECCIÓN 2)",
+   "refs": [
+    "https://youtu.be/LCyjLrSNeh4?list=RDLCyjLrSNeh4"
+   ],
+   "refText": "18 - JULIO CESAR DE LEÓN",
+   "key": "Cm"
+  },
+  {
+   "id": "s20",
+   "num": 20,
+   "title": "REY DE GLORIA",
+   "author": "PBRO. EDGAR LARREA",
+   "group": "horah",
+   "page": 10,
+   "src": "> tempo inicial: 75bpm\n! Intro:\n! ([Dm] [C] [Dm] [C] [F] [Gm] [Dm] [C] [Bb] [C] [Dm])\n# SECCIÓN 1\nP[Dm]uertas lev[A7]anten sus dint[Dm]eles\nQue va a ent[Bb]rar el Rey de la glor[A7]ia,\n¿Q[Gm]uién es ese re[Dm]y? es el R[A7]ey de la gl[Dm]oria,\n¿Q[Gm]uién es ese re[Dm]y? es Yah[A7]vé Seba[Dm]ot. (x2)\nDios de Jac[A7]ob\nA ti te [Dm]busca\nUn pueblo n[C]uevo\nEn tu prese[F]ncia.\nY[Gm]ahvé es fuerte y es va[Dm]liente,\nes el Re[A7]y de toda la glo[(Dm]ria. [D7)](x2)[(Dm)]\n> tempo final: 145bpm\n> (DE NUEVO SECCIÓN 1)\nDios de Jac[A7]ob\nA ti te [Dm]busca\nUn pueblo n[C]uevo\nEn tu prese[F]ncia.\n\n[Gm]Es valiente, [Dm]victorioso,\n[A7]es el Rey de la glo[Dm]ria.\n[Gm]Es valiente, [Dm]victorioso,\n[A7]Él es Rey,\nEs Yahvé,\nYahvé Seb[Dm]aot.\n! Puente instrumental:\n! ([Gm], [Dm], [A], [Dm] // [Dm], [Gm], [A], [A], [Dm], [Dm]).\nY[Gm]ahvé es fuerte y es va[Dm]liente,\nes el Re[A7]y de toda la glo[(Dm]ria. [D7)](x2)[(Dm)]\n\nDios de Jac[A7]ob\nA ti te [Dm]busca\nUn pueblo n[C]uevo\nEn tu prese[F]ncia.\n\n[Gm]Es valiente, [Dm]victorioso,\n[A7]es el Rey de la glo[Dm]ria.\n[Gm]Es valiente, [Dm]victorioso,\n[A7]Él es Rey,\nEs Yahvé,\nYahvé Seb[Dm]aot.\n! Final:\n! ([Dm], [Gm], [A], [Dm]). ½ tempo",
+   "refs": [
+    "https://rubenparramusicodedios.blogspot.com/2019/09/puertas-levanten-sus-dinteles.html",
+    "https://youtu.be/pCkOi7MuPLo"
+   ],
+   "refText": "18 - REF1  REF 2 https://rubenparramusicodedios.blogspot.com/2019/09/puertas-levanten-sus-dinteles.html"
+  },
+  {
+   "id": "s21",
+   "num": 21,
+   "title": "TERUAH",
+   "author": "PBRO. EDGAR LARREA",
+   "group": "teruah",
+   "page": 11,
+   "src": "! Intro: ([Am] [E] [F] [A#] [E] [Am])\nI[Am]srael levántate,\n[Dm]oye el toque del Shof[E]ar,\n[Am]festejemos la Teruah,\n[Dm]Israel lev[E]ánta[Am]te.\n# SECCIÓN 1\nI[Am]srael levántate,\n[Dm]oye el toque del Shofa[E7]r,\n[Am]festejemos la Teruah,\n[Dm]Israel lev[E]ánta[Am]te.\n[G]Danza alegre, b[C]ate palmas[Dm] a Yahvé tú Di[E]os,\n[G]lanza el grito de [C]alabanza [Dm]por su salva[E7]ció[(E)]n.\n> (DE NUEVO SECCIÓN 1)\nI[Am]srael levántate,\n[Dm]oye el toque del Shof[E]ar[(E7)],\n[Am]festejemos la Teruah,\n[Dm]Israel lev[E]ánta[Am]te.\n[F]Aleluya, alel[C]uya, a[Dm]lelu Ejad on[E]ay.\n[F]Aleluya, alel[C]uya, a[Dm]lelu [E7]Ejad ona[Am]y.\nT[Am]odos los pueblos y naciones\nacla[F]mad el n[G]ombre del Señ[Am]or.\n[Am]Porque su amor dura por siempre,\naclam[F]ad el[G] nombre del Señ[Am]or.\n\n[F]Aleluya, alel[C]uya, a[Dm]lelu Ejad on[E]ay.\n[F]Aleluya, alel[C]uya, a[Dm]lelu [E7]Ejad ona[Am]y.\nPo[Am]rque el Señor es un guerrero\naclam[F]ad el n[G]ombre del Se[Am]ñor\n[Am]Él nos ha dado la victoria\naclam[F]ad el n[G]ombre del Señ[Am]or.\n[F]Aleluya, alel[C]uya, a[Dm]lelu Ejad on[E]ay.\n[F]Aleluya, alel[C]uya, a[Dm]lelu [E7]Ejad ona[Am]y.\n[Am]La la lalala [Dm]lala la lalala\n[Am]la la lalalalala [E7]laaa (¡Hey!)\n[Am]La la lalala [Dm]lala la lalala\n[E7]la la lalalalala [Am]laaa. (x2)\n! Cambio: ([Am] [Dm] [A#] [A#m] [A] [Dm]) ½ tempo\n# 22 CON VOZ DE JÚBILO\n> SILVIA MERTINS\n[Dm]Con voz [C]de j[Dm]úbilo, con voz [C]de j[Dm]úbilo\nproc[Gm]lamar[A]é su salvac[Dm]ión. ([(D7)]x2)\n[D7]Porque el a[Gm]mor del Señ[C]or es tan g[F]ran[Dm]de\nque hasta [Gm]quiso mori[A]r en una c[Dm]ruz por mi. (x2)\n[Dm]Danza [C]de j[Dm]úbilo, danza [C]de jú[Dm]bilo\nproc[Gm]lamar[A]é su salvac[Dm]ión. ([(D7)]x2)\n[D7]Porque el a[Gm]mor del Señ[C]or es tan g[F]ran[Dm]de\nque hasta [Gm]quiso mori[A]r en una c[Dm]ruz por mi. (x2)\n[Dm]Canto [C]de j[Dm]úbilo, canto d[C]e jú[Dm]bilo\nproc[Gm]lamar[A]é su salvac[Dm]ión. ([(D7)]x2)\n[D7]Porque el a[Gm]mor del Señ[C]or es tan g[F]ran[Dm]de\nque hasta [Gm]quiso mor[A]ir en una c[Dm]ruz por mi. (x2)\n> CONTINUA SIGUIENTE PÁGINA\n! Cambio:\n! ([Dm], [Bb], [C], [C]. [Fm], [C#], [D#], [D#], [Csus4], [Csus4], [C], [C]).\n! ½ tempo",
+   "refs": [
+    "https://rubenparramusicodedios.blogspot.com/2019/09/popurri-teruha.html",
+    "https://youtu.be/CVwBoMm-eO8?list=RDCVwBoMm-eO8"
+   ],
+   "refText": "15-17 - REF1  REF 2 https://rubenparramusicodedios.blogspot.com/2019/09/popurri-teruha.html"
+  },
+  {
+   "id": "s22",
+   "num": 23,
+   "title": "FUERZA DE LO ALTO",
+   "author": "PBRO. EDGAR LARREA",
+   "group": "teruah",
+   "page": 12,
+   "src": "Fuerza de lo[Fm] alto, Espíritu S[C#]anto,\nllévanos a [Bbm]amar y a evangeliz[C]ar. (x2)\n\n[Fm]En el nombre del Señor Jesús, amen\n[C#]predicamos su reino de luz, amen\nc[D#]on el fuego de Pentecostés, amen\n[C#]en el carro de Ya[C]hvé.\nFuerza de lo[Fm] alto, Espíritu S[C#]anto,\nllévanos a [Bbm]amar y a evangeliz[C]ar. (x2)\n\n[Fm]Con María y en comunidad, amen\n[C#]valentía para predicar, amen\n[D#]realizar milagros con poder, amen\n[C#]en el carro de Ya[C]hvé.\nFuerza de lo[Fm] alto, Espíritu S[C#]anto,\nllévanos a [Bbm]amar y a evangeliz[C]ar. (x2)\n\nKa[Fm]dosh Ruah Yahvé,\nKa[C#]dosh Ruah Yahvé\nKa[D#]dosh Ruah Yahvé,\nRuaa[C]ah. (x2)\n\nFuerza de lo[Fm] alto, Espíritu S[C#]anto,\nllévanos a [Bbm]amar y a evangeliz[C]ar. (x2)\nKa[Fm]dosh Ruah Yahvé,\nKa[C#]dosh Ruah Yahvé\nKa[D#]dosh Ruah Yahvé,\nRuaa[C]ah. (x2)\n! Cambio:\n! ([Fm], [C#], [Bbm], [C], [Fm]) ½ tempo\nRuah!!!\n> FIN :)",
+   "refs": [
+    "https://rubenparramusicodedios.blogspot.com/2019/09/popurri-teruha.html",
+    "https://youtu.be/CVwBoMm-eO8?list=RDCVwBoMm-eO8"
+   ],
+   "refText": "17 - REF1  17 - REF 2 https://rubenparramusicodedios.blogspot.com/2019/09/popurri-teruha.html"
+  },
+  {
+   "id": "s23",
+   "num": 24,
+   "title": "ESTE ES EL DÍA DE ALABANZA",
+   "author": "MIMIHAIRES (YT)",
+   "group": "alabanza",
+   "page": 13,
+   "src": "> tempo: 83bpm\nE[Dm]ste [D7]es el [Gm]día de ala[Dm]banza [A]y restaura[Dm]ción,\nla Gl[Gm]oria del Señor es con su pu[Dm]eblo\nal[A]aben al Señor de coraz[Dm]ón. (x2)\nEnamo[Dm]rado de Jesús, enamor[A]ado,\nenamorado de Jes[Dm]ús. [(Dm](x2)[D)]\n# SECCIÓN 1\nE[Gm]namorado de él, enamor[A]ado de [Dm]él.\nEn mi corazón tengo escr[A]ito\nJesuc[A7]risto de Naza[Dm]ret[D7].\n> (DE NUEVO SECCIÓN 1)\n! Cambio: [Dm] [C] [Bb] [A7]",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s24",
+   "num": 25,
+   "title": "ALABEN A DIOS",
+   "author": "MINISTERIO: CANTARÉ AL SEÑOR MIENTRAS EXISTA",
+   "group": "alabanza",
+   "page": 13,
+   "src": "T[Dm]odos los pueblos aplaudan con las palmas,\nc[A]antar a Dios con gritos de aleg[Dm]ría. (x2)\n# SECCIÓN 2\nAlábenl[Dm]o, con el toque de los c[A]ornos.\nAlábenlo, con citaras y[Dm] arpas.\nAlabenlo, con danzas y tamb[Gm]ores,\ncon madol[Dm]inas y con f[A]lautas,\nalaben al Señ[Dm]or.\n> (DE NUEVO SECCIÓN 2)\nCon plat[C]illos triun[F]fales,\ncon plati[C]llos y so[F]noros.\nA[Gm]labe al Señor, [Dm]todo lo que vive,\na[A]labe al Señor, [Dm]toda la Tierra.\n[Gm]Alabe al Señor, [Dm]todo el que vive,\n! [A] [Dm]",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s25",
+   "num": 26,
+   "title": "NO HAY NADIE COMO TÚ",
+   "author": "RCCES GDL CASA CORNELIO",
+   "group": "alabanza",
+   "page": 13,
+   "src": "O[Dm]hhh, oh, o[C]h, oh, oh, oh, oh,\nn[Bb]o hay nadie como tú, n[A]adie como tú. (x2)\nA[Dm]plaudan pueblos, al[C]aben al Seño[Bb]oor.\nNo hay nadie como tú, n[A]adie como tú. (x2)\n! Cambio: [Dm] [Gm] [C] [F] [Dm] [Gm] [A] (x2)\nDespi[Dm]erta, despi[C]erta, rev[Bb]isteté de pod[A]er. (x3)",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s26",
+   "num": 27,
+   "title": "NO PUEDE ESTAR TRISTE",
+   "author": "RCCES GDL CASA CORNELIO",
+   "group": "alabanza",
+   "page": 13,
+   "src": "[Dm]No puede estar triste un corazón\nque alaba a Cri[A]sto.\nNo puede estar triste un corazón\nque alaba a D[Dm]ios. (x2)\nPor eso le [Gm]canto, le canto, ale[Dm]luya,\nno puede estar tr[A]iste un corazón\nque alaba a D[Dm]ios (x2)\nLos que es[Dm]peran, los que esperan en Jes[A]ús.\nLos que esperan, los que esperan en Jes[Dm]ús. (x2)\nComo las[Gm] águilas, como las[Dm] águilas,\nsus [A]alas levanta[Dm]rán.[D] (x2)\nCaminar[C]án y no se cansará[F]n,\ny correr[C]án, no se fatigar[F]án.\nNuevas fuer[Gm]zas tendrán,\nnuevas fuer[Dm]zas tendrán,\nlos que espe[A]ran, los que esperan en Jes[Dm]ús. (x2)",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s27",
+   "num": 28,
+   "title": "ELOHIM, SHADDAI",
+   "author": "RCCES GDL CASA CORNELIO",
+   "group": "alabanza",
+   "page": 14,
+   "src": "# SECCIÓN 1\nElo[Dm]him, Elohim, Elohim\nShaddai, el Di[A]os poder[Dm]oso.\nElo[Dm]him, Elohim, Elohim,\nShaddai, el Di[A]os de Isr[Dm]ael.\n> (DE NUEVO SECCIÓN 1)\nDarle G[Dm]loria y al[Gm]abanza a él,\nexalt[C]arle por su gr[F]an poder,\nmarav[Dm]illas ha mostr[Gm]ado, a su pu[A7]eblo Jerusalén.\nPode[Dm]roso Dios de Isra[Gm]el,\nmajest[C]uoso, eterno, gr[F]an Señor.\nTe ala[A#]bamos con el [Gm]corazón\ny con d[A7]anzas celebramos tu po[Dm]der.\n! Cambio: [Dm] [Bb] [F] [C] (x4)",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s28",
+   "num": 29,
+   "title": "GRANDE ES EL SEÑOR",
+   "author": "RCCES GDL CASA CORNELIO",
+   "group": "alabanza",
+   "page": 14,
+   "src": "# SECCIÓN 1\nG[Dm]rande es el Señor, Creador del Universo,\nc[Gm]anta y danza al Rey que viene pronto,\n[Dm]de felicidad el corazón nos llena,\nGr[A7]ande es el Señor.\n> (DE NUEVO SECCIÓN 1)\n# SECCIÓN 2\n[Dm]Oh, oh, oh, Hosanna al Altísimo.\n[C]Oh, oh, oh, Hosanna al Altísimo.\n[Dm]Oh, oh, oh, Hosanna al Altísimo.\nG[A7]rande es [A#]el Señ[A]or.\n! Cambio:\nOh, oh, oh[Dm], Ho[Gm]san[Dm]na a[A]l [(x2)]Altísimo... (long)\n> (DE NUEVO SECCIÓN 1 Y 2)",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s29",
+   "num": 30,
+   "title": "VEN, ESPÍRITU DIVINO",
+   "author": "RCCES GDL CASA CORNELIO",
+   "group": "alabanza",
+   "page": 14,
+   "src": "[Dm]Ven, ven, ven. Espíritu Div[A]ino,\nven, ven, ven, acercate de m[Dm]í. (x2)\nApodéra[Gm]te, apodéra[Dm]te,\napodérat[A]e de todo mi s[Dm]er. (x2)\nAquí se si[A]ente la presencia de D[Dm]ios. (x2)\nSiento el f[Gm]uego del Espíritu S[Dm]anto. (x2)\nSiento gozo, sien[A]to paz,\nsiento el amor que D[Dm]ios me da. (x2)\nAquí se si[A]ente la presencia de D[Dm]ios (x2)",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s30",
+   "num": 31,
+   "title": "ALELUYA, HOY DANZARÉ",
+   "author": "RCCES GDL CASA CORNELIO",
+   "group": "alabanza",
+   "page": 14,
+   "src": "# SECCIÓN 1\nAlel[C]uya, ale[F]luya, ale[Gm]luya, ale[A7]luya.\nPor tu t[Gm]ierno amor, por tu g[Dm]ran poder,\ndanzar[A]é, alegre para[Dm] ti.\n\n[Dm]Me sacaste [Gm]de la esclavitud,\n[Dm]escuchaste mi clam[A]or.\n[Dm]Ante ti, el[Gm] enemigo huyo,\n[Dm]hoy danzar[A]é par[Dm]a ti, h[Gm]oy danza[A]ré par[Dm]a ti.\n> (DE NUEVO SECCIÓN 1)\nDanza[A]ré alegre para[Dm] ti,\ndanzar[A]é alegre para[Dm] ti,\ndanzar[A]é alegre para[Gm] tiiii[Dm].[A][Dm]",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s31",
+   "num": 32,
+   "title": "EL PODEROSO DE ISRAEL",
+   "author": "RCC POPAYÁN",
+   "group": "alabanza",
+   "page": 15,
+   "src": "[Dm]Y de noche cantaremos celebrando su poder,\ncon alegr[D]ía de coraz[A]ón,\ncomo el que va con la flauta\nen el nombre del Señor,\ncelebraremos su pode[D]r.\n! Cambio: [Dm] [C] [Dm] ([D] [G] [G#] [A])\n# CORO 1\n[Dm]El es el poderoso de Israel,\nel poderoso de Isra[A7]el,\nsu voz se oirá, nadie lo detendrá\nal poderoso d[(Gm]e Isr[Am]ael.[A#][C][Dm)][(A#][A)]\n> (DE NUEVO CORO 1)\nY [D]lo[Dm]s ojos de los ciegos\nse abrirán, y ellos verán,\nlos oídos de los sordos oir[A]án,\nel cojo saltará, con el arpa danzará,\nla lengua de los mudos cantar[A#]á.[A]",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s32",
+   "num": 33,
+   "title": "ME GOZARÉ, ME ALEGRARÉ",
+   "author": "RCCES GDL CASA CORNELIO",
+   "group": "alabanza",
+   "page": 15,
+   "src": "# CORO 1\nMe[Dm] go[C]za[Dm]re, me [Dm]aleg[C]r[Dm]aré\ny cantaré al Seño[A]r,\np[Gm]orque h[C]an lle[F]gado la [A#]bodas,[E]\ndel cordero de Di[A]os.\n> (DE NUEVO CORO 1)\nY [D]a [(D)]su [(D7)]esposa se le ha [Gm]concedido,\n[C]que se [C/F#]vista de [F]lino fino,\n[A#]lino limpio y res[Gm]plandeciente,[E]\n! ([A]) ([A#] [A])",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s33",
+   "num": 34,
+   "title": "EL LEÓN DE LA TRIBU DE JUDÁ",
+   "author": "RCCES GDL CASA CORNELIO",
+   "group": "alabanza",
+   "page": 15,
+   "src": "> (SECCIÓN 2 DE ENTRADA)\n# SECCIÓN 1\n[Dm]El León de la tribu de Judá,\nJesús, rompi[C]ó las cadenas y nos liberó\n[A#]él es nuestra antorcha de victor[A]ia.\nNuestra [Dm]fortaleza en tiempos de flaqueza,\nuna to[C]rre en tiempos de guerra,\n[A#]Oh, la esper[A7]anza de Israel[Dm].\nResu[Dm]citó oh, oh, resuci[C]tó oh, oh,\nResucit[A#]ó oh, oh, ¡Alelu[A7]ya! (x2)\nVe[Dm]nció la muerte con poder,\nve[C]nció la muerte con poder,\nVe[A#]nció la muerte con poder, se levan[A7]tó. (x2)\nH[Dm]uyen los demonios cuando canta el pueblo,\n[C]Huyen los demonios cuando cae el fuego,\n[A#]Huyen los demonios por que no soportan\nLa ala[A7]banza al Rey. (x2)\n> (DE NUEVO SECCIÓN 1)\n# SECCIÓN 2\nA C[Dm]risto Rey tres veces Santo,\na Cr[C]isto Rey tres veces Santo,\nmi[A#] vida y canto son solo para É[A7]l.\n! [Dm]\n> (DE NUEVO SECCIÓN 1)\nEl león de la Tribu de Judá. (aaa)\nGrita[Dm], canta, danza alegremente\nen [A#]su presencia,\ngira,[F] salta dando vueltas\npara Cri[C]sto, Él vive, v[A]ive para siempre,\n! [Dm] ([Dm]) ([Dm] [A])",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s34",
+   "num": 35,
+   "title": "DEN GRACIAS AL SEÑOR",
+   "author": "RCC POPAYÁN",
+   "group": "alabanza",
+   "page": 16,
+   "src": "Y que d[Gm]igan los israeli[Dm]tas, su am[A7]or eterno [Dm]es,\ny que d[G]igan los que honran su nom[A]bre,\nsu am[Dm]ooor eterno e[A#]ee[A7]s.\nDen graci[Dm]as a[C]l [Dm]Seño[Gm]r porque es buen[C7]o,\nporq[F]ue su amor es et[A#]erno,\nporqu[Gm]e ha engran[A7]decido sobre [Dm]nosotros\n[D7]su miseri[Gm]cordia y su fi[C7]delidad\nes para si[F]empre, y su gr[A#]an amor\nse esparc[Gm]irá por los s[A7]iglos. Am[Dm]éeen.[B][(x5)]",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s35",
+   "num": 36,
+   "title": "ADONAI",
+   "author": "RCC POPAYÁN",
+   "group": "alabanza",
+   "page": 16,
+   "src": "[Em]Oh Adonai, [B7]Oh Adona[Em]i\nDi[C]os d[D]el Univ[Em]erso, Seño[B]r de la creaci[Em]ón.\n# SECCIÓN 1\nLos ci[D]elos cuentan tu g[G]loria\nTus hi[D]jos hoy te ad[G]oran\nPor t[B]odas tus marav[Em]illas,[(C)] Ad[(Am7)]onai.[B7]\n> (DE NUEVO SECCIÓN 1)\n! Cambio: [Am] ([Am] 0 [Em]) ([Em] 0 [A]) x2 [Am] - x10\nNo, no f[Em]ué el bastón de Moisés,\nno, no fu[Am7]é el manto de Elías,\nni las vue[C]ltas en Jeri[B7]có.\nSolo f[Em]ué la supremacía,\nsolo f[Am7]ué la supremacía,\nde un Di[C]os que todo lo pu[B7]ede.\n! [Em]\nEse[Em] es el poderoso, ese [Am7]es el poderoso,\nese [C]es el poder[B]oso de Israee[Em]eel.[(E)] (x[(A]2)[Em)]\n! Cambio: [Dm] [Dm] [A#] [A] x2",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s36",
+   "num": 37,
+   "title": "BENDIGAN AL SEÑOR",
+   "author": "RCC POPAYÁN",
+   "group": "alabanza",
+   "page": 16,
+   "src": "Alába[Dm]le y gózate, pueblo esco[Gm]gido [A]por Di[Dm]os,\nalá[Dm]bale y gózate, y cree[Gm] firme en [A]tu Señ[Dm]or.\n# SECCIÓN 1\nNación s[C]anta, linaje escogi[F]do por Dios,\npara c[Gm]antar l[A]as v[Dm]irtudes de aquel,\nque nos [C]levantó de tin[F]ieblas a luz,\nNación s[Gm]aaaaant[A#]aaaaaaaa,\np[A]ueblo escogido por Di[Dm]os.\n\nBen[Dm]digan al Señor, honren su n[Gm]ombre,\nglorif[C]iquen al Señor, denle sup[F]rema adoración,\ndele[Dm]iten[A#]se con su Señor,\npueblo escog[Gm]ido por Dios, nación s[A]anta,\npueblo llam[A7]ado y amado por Di[Dm]os.\n> DE NUEVO CON 1 TONO ARRIBA\nAlába[Dm]le y gózate, pueblo esco[Gm]gido [A]por Di[Dm]os,\naláb[Em]ale y gózate, y cree[Am] firme en [B]tu Señ[Em]or.\n# SECCIÓN 2\nNación s[D]anta, linaje escogi[G]do por Dios,\npara c[Am]antar l[B]as vi[Em]rtudes de aquel,\nque nos [D]levantó de tin[G]ieblas a luz,\nNación s[Am]aaaaant[C]aaaaaaaa,\np[B]ueblo escogido por Di[Em]os.\n# SECCIÓN 3\nBen[Em]digan al Señor, honren su n[Am]ombre,\nglorif[D]iquen al Señor, denle sup[G]rema adoración,\ndele[Em]iten[C]se con su Señor,\npueblo escog[Am]ido por Dios, pues en [B]medio\nde su alab[B7]anza, prometió que ve[Em]ndrá.\n\nBen[Em]digan al Señor, honren su n[Am]ombre,\nglorif[D]iquen al Señor, denle sup[G]rema adoración,\ndele[Em]iten[C]se con su Señor,\npueblo escog[Am]ido por Dios, nación s[B]anta,\npueblo llam[B7]ado y amado por Di[Em]os.\nAlába[Em]le y gózate, pueblo esco[Am]gido [B]por Di[Em]os,\naláb[Em]ale y gózate, y cree[Am] firme en [B]tu Señ[Em]or.\n# SECCIÓN 2\nNación s[D]anta, linaje escogi[G]do por Dios,\npara c[Am]antar l[B]as vi[Em]rtudes de aquel,\nque nos [D]levantó de tin[G]ieblas a luz,\nNación s[Am]aaaaant[C]aaaaaaaa,\np[B]ueblo escogido por Di[Em]os.\n> (DE NUEVO SECCIÓN 2 CON VARIACIÓN ↓)\n... [B]pueblo escogido de D[Em]iooo[(Am]os.[B][Em)]\n! Cambio: ([Am] [B] [Em]) x4",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s37",
+   "num": 38,
+   "title": "CANTA Y DANZA PARA ÉL",
+   "author": "RCC POPAYÁN",
+   "group": "alabanza",
+   "page": 17,
+   "src": "C[Em]anta y danza par[Am]a Él,\nglori[C]ficado [B7]sea su [Em]nombre. (x2)\n[E7]Alz[Am]ad las m[D]anos pa[G]ra Él[C],\n! [Am] [B7] [E]\nC[Em]anta y danza par[Am]a Él,\nglori[C]ficado [B7]sea su [Em]nombre. (x2)\n\n[E7]Mo[Am]ved el c[D]uerpo par[G]a Él,[C]\nglo[Am]rific[B7]ad su majest[E]ad. (x2)\nC[Em]anta y danza par[Am]a Él,\nglori[C]ficado [B7]sea su [Em]nombre. (x2)",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s38",
+   "num": 39,
+   "title": "DANZAD, DANZAD",
+   "author": "RCC POPAYÁN",
+   "group": "alabanza",
+   "page": 17,
+   "src": "[Em]Danzad, danzad,[C] pues año de[D] Jubileo [Em]es. (x2)\nDanzad, danzad,\nhijos de Di[C]os v[B7]enid en libe[Em]rtad. (x2)\nHijos de Di[C]os v[B7]enid en libe[Em]rtad. (x3)",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s39",
+   "num": 40,
+   "title": "ESTAMOS BUSCANDO",
+   "author": "RCC POPAYÁN",
+   "group": "alabanza",
+   "page": 18,
+   "src": "! Cambio: ([Gm] [Dm] [A] [Am] [Dm]) x2\n# SECCIÓN 1\nEs[Dm]tamos buscando una fuerza n[Gm]ueva,\nestamos buscando el[A] poder de [Dm]Dios.\n[D7]El poder del Pa[Gm]dre, el poder del [Dm]Hijo,\nel poder del Sa[A]nto Es[A7]píritu de Di[Dm]os. (x2)\n> (DE NUEVO SECCIÓN 1)\n\nM[Dm]anda el fuego Señor, manda el fu[A]ego,\nmanda el fuego de tu Esp[Dm]íritu,\nmanda el fuego Señor, manda el f[A]uego\ny q[Gm]uema m[A]i cora[Dm]zón. (x2)\nHay un pod[Dm]er que cons[Gm]ume en[Dm] mi cor[A]azón,\nfuego d[Dm]ivino que q[Gm]uema y[Dm] no se pu[A]ede\nap[Dm]agar. (x2)\n# SECCIÓN 2\nEl Es[Dm]píritu de Dios se mu[Gm]eve,\nse m[Dm]ueve dentro[(Dm)] de m[(A)]i cora[(A)]zón[(Dm)]. (x2)\n> (DE NUEVO SECCIÓN 2)\n# SECCIÓN 3\nEs el Espi[Dm]ritu de Dios, lo qu[(Gm)]e se[(A)] siente,\ncon s[(A)]u p[(A)]oder[Dm] Él desciende. (x2)\nQue [Dm]venga, que fluya con t[A]odo su poder,\nque venga que fluya con todo su po[Dm]der. (x2)\n> (DE NUEVO SECCIÓN 3)\nVen, ven, [Dm]ven Espiritu S[A7]anto,\nven, ven, ven Espíritu S[Dm]anto,\nven, ven, ven Esp[D7]iritu [Gm]Santo,\nquéda[Dm]te dentr[A]o de mi coraz[Dm]ón. (x2)\n\nAlaba[Dm]ré al Espíritu S[A7]anto.\nAlabaré al Espíritu S[Dm]anto,\nAlabaré al Es[D7]píritu [Gm]Santo\ncon t[Dm]odo mi [A]coraz[Dm]ón (x2)\n\nDanza[Dm]ré al Espíritu [A7]Santo.\ndanzaré al Espíritu [Dm]Santo,\ndanzaré al Es[D7]píritu [Gm]Santo\ncon to[Dm]do mi [A]coraz[Dm]ón. (x2)\n\ncon to[A]do mi coraz[A#]óóón.[Dm]",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s40",
+   "num": 41,
+   "title": "RESUENEN TROMPETAS",
+   "author": "MINISTERIO MEXICALI",
+   "group": "horah",
+   "page": 19,
+   "src": "> tempo inicial: 76bpm\n! Intro:\n! ([C] [D] [Em] [Em] [C] [D] [Em]) ½ tempo\n[G]Aplaudan [D/F#]puebl[Em]os,\n[C]aclamen a D[Am]ios con[D] alegre voz,\n[G]Canten a [D/F#]nuestro gran R[Em]ey\n[C]altísimo Di[Am]os de t[C]oda la tierra[D].\n# SECCIÓN 1\n[G]Aplaudan [D/F#]puebl[Em]os,\n[C]aclamen a D[Am]ios con[D] alegre voz,\n[G]Canten a [D/F#]nuestro gran R[Em]ey\n[C]altísimo Di[Am]os de t[C]oda la tierra[D].\n\nRes[G]uen[D/F#]en tromp[Em]etas,\na[C]lábenle[Am] a una[D] voz,\n[C]a nuestro R[D]ey a qu[G]ien la v[Bm]ida es[Em],\na Di[C]os que r[D]eina con pode[G]r. (x2)\n> (DE NUEVO SECCIÓN 1)\na Di[C]os que r[D]eina con pod[G]er. (x2)\n> FIN :)",
+   "refs": [
+    "https://rubenparramusicodedios.blogspot.com/2019/09/resuenen-trompetas.html",
+    "https://youtu.be/_0kvTsEB2SE?list=RD_0kvTsEB2SE"
+   ],
+   "refText": "19 - REF1  REF 2 https://rubenparramusicodedios.blogspot.com/2019/09/resuenen-trompetas.html"
+  },
+  {
+   "id": "s41",
+   "num": 42,
+   "title": "VEN, VEN ESPÍRITU SANTO",
+   "author": "SILVIA MERTINS",
+   "group": "espiritu",
+   "page": 20,
+   "src": "V[Dm]en, ven, Espíritu Santo,\n[Bb]ven, ven, Espíritu Santo,\n[Gm]ven, ven, Espíritu Santo[A7] ven. (x2)\n[Dm]Lléname, lléname,\n[Bb]Lléname, lléname,\n[Gm]Lléname, lléname de[A7] tí. (x2)\n! Puente: ([Dm] [Bb] [Gm] [A7])\nV[Em]en, ven, Espíritu Santo,\n[C]ven, ven, Espíritu Santo,\n[Am]ven, ven, Espíritu Santo[(B7)] ven.[(C] ([B)]x2)\n\n[Em]Lléname, lléname,\n[C]Lléname, lléname,\n[Am]Lléname, lléname de[(B7)] tí. ([(C]x4[B7)])",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s42",
+   "num": 43,
+   "title": "FLUYE, ESPÍRITU SANTO FLUYE",
+   "author": "RREYMELL - ORLANDO GÁMEZ /",
+   "group": "espiritu",
+   "page": 20,
+   "src": "# SECCIÓN 1\nF[A]luye, Espí[E]ritu fl[A]uye. (x2)\nh[A]az lo que quieras hace[E]r,\naqu[A]i está mi vida p[E]ara que la[(F#m)] uses[(A)]\nFl[A]uye, Espí[E]ritu f[A]luye. (x2)\n> (DE NUEVO SECCIÓN 1)\n# SECCIÓN 2\nSo[A]pla, Espí[E]ritu s[A]opla. (x2)\nh[A]az lo que quieras hace[E]r,\naqu[A]i está mi vida p[E]ara que l[(F#m)]a use[(A)]s\nSo[A]pla, Espí[E]ritu s[A]opla. (x2)\n> (DE NUEVO SECCIÓN 2)\n# SECCIÓN 3\nU[A]nge, Espí[E]ritu [A]úngeme. (x2)\nh[A]az lo que quieras hace[E]r,\naqu[A]i está mi vida pa[E]ra que la[(F#m)] uses[(A)].\n[A]Unge, Espí[E]ritu ú[A]ngeme. (x2)\n> (DE NUEVO SECCIÓN 3)\n# SECCIÓN 4\nS[A]ana, Espí[E]ritu s[A]áname. (x2)\nh[A]az lo que quieras hace[E]r,\naqu[A]i está mi vida p[E]ara que l[(F#m)]a use[(A)]s\nSa[A]na, Esp[E]íritu s[A]áname. (x2)\n> (DE NUEVO SECCIÓN 4)\n# SECCIÓN 1\nFl[C]uye, Espí[G]ritu f[C]luye. (x2)\nh[C]az lo que quieras hac[G]er,\naqu[C]i está mi vida p[G]ara que la[(Am)] use[(C)]s\nFl[C]uye, Espí[G]ritu f[C]luye. (x2)\n\nS[C]opla,[G] Espíritu s[C]opla.\nU[C]nge, E[G]spíritu [C]úngeme.\nS[C]ana, [G]Espíritu s[C]áname.[G]",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s43",
+   "num": 44,
+   "title": "FLUYE, ESPÍRITU SANTO FLUYE",
+   "author": "RREYMELL - ORLANDO GÁMEZ",
+   "group": "espiritu",
+   "page": 21,
+   "src": "> tempo: 120bpm\n! Fingerstyle: ([C], [G], [F], ...) x2 4/4 tempo\nFl[C]uye, Espí[G]ritu Santo[F] fluye,\nh[C]az lo que qui[G]eras hac[F]er\nY[C]o me ofrezco p[G]ara que me[Am] uses como quiera[C]s.\nFl[C]uye, Espí[G]ritu Santo[F] fluye.\n! Cambio (punteo): [C], [B], [A], [G]) Com1, ([G]) Com2\nFl[C]uye, Espí[G]ritu Santo [F]fluye,\nh[C]az lo que qui[G]eras hac[F]er\nYo[C] me ofrezco\np[G]ara que me [Am]uses como quieras.\nFl[C]uye, Espí[G]ritu Santo [C]fluye.[G]\nFl[C]uye, Espí[G]ritu Santo [F]fluye,\nh[C]az lo que qui[G]eras hace[F]r.\nAqu[C]i está mi v[G]ida [Am]para que la uses.\nF[C]luye, Esp[G]íritu Santo f[C]luye.\n! Cambio: ([G], [Am], [F], [C], [G], Am)x2 - 4 Comp x nota\n! ([A#] [F] [G] [A])\nFl[D]uye, Espí[A]ritu Santo f[G]luye,\nh[D]az lo que qui[A]eras hace[G]r.\nY[D]o me ofrezco p[A]ara que me[Bm] uses como quieras.\nFl[D]uye, Espí[A]ritu Santo fl[D]uye.[G]\n\nFl[D]uye, Espí[A]ritu Santo [G]fluye,\nh[D]az lo que qui[A]eras hace[G]r.\nAqu[D]i está mi v[A]ida [Bm]para que la uses.\nF[D]luye, Esp[A]íritu Santo f[D]luye.[G]\n! [D] [A] [D]",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s44",
+   "num": 45,
+   "title": "ESPÍRITU DE DIOS",
+   "author": "PBRO. EDGAR LARREA",
+   "group": "espiritu",
+   "page": 21,
+   "src": "Esp[Gm]íritu de Dios\nLlena mi v[F]ida\nLlena mi[D#] alma\nLlena mi s[D7]er\nY Llénam[Gm]e, (Lléname)\nCon tu Prese[F]ncia (lléname, lléname)\nCon tu pode[D#]r (lléname, lléname)\nCon tu am[D7]or.",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s45",
+   "num": 46,
+   "title": "ESPÍRITU SANTO DE DIOS",
+   "author": "GLADYS GARCETE",
+   "group": "espiritu",
+   "page": 21,
+   "src": "Esp[G#m]íritu, Espí[E]rituuu, E[C#m]spíritu S[D#m]anto de D[G#m]ios. (x2)\n[C#m]Ven a contro[F#]lar todo mi se[B]r,[G#m]\n[C#m]ven a diri[D#]gir mi vi[G#m]vir,\n[C#m]mi pensar[G#m], mi hablar,\n[A#]Mi sentir,[D#] mi actuar.",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s46",
+   "num": 47,
+   "title": "MI REFUGIO ES EL SEÑOR",
+   "author": "PBRO. MARTÍN ÁVALOS - DEI VERBUM",
+   "group": "espiritu",
+   "page": 22,
+   "src": "! Instr.: (E|A|E F#m|B) (E|A|E F#m7|A)\n\nNo [E]tengo que te[F#m7]mer\nsi[B/Eb] tú a m[B]i lado est[E]ás,\nno hay ni una pr[F#m7]ueba\nqu[B/Eb]e me pueda asusta[E]r,\nbajo tus alas me cubr[F#m7]irás\nni una desgra[B]cia me alcanzará[E],\ncon tus ángeles cuid[F#m7]arás mi en[B/Eb]trad[B]a y mi salid[E]a.\n\n[E][(F)]En tus promesas yo q[A]ui[(A#)]ero[C#m][(Dm7)] camin[(C)]a[B]r\naunque la tormenta sea l[E]a[(F)]rg[B/Eb]a,[(F/A)]\nyo [C#m7]sé, qu[(Dm7)]e tu luz bril[F#m7]lará[(Gm7)]\ny el s[A]o[(A#)]l sald[B]r[(C)]á\ny el milagro hará[E]s[(F)].[D][(D#)]\nMi ampa[E]r[(F)]o es e[A]l[(A#)] Señ[C#m7]or,[(Dm)][B][(C)]\nmi refugio, mi Di[E]os[(F)], mi s[B/Eb]alva[(C)]do[C#m7]r.[(Dm7)]\nEn quien confia[F#m7]ré,[(Gm7)]\nÉl me pr[A]o[(A#)]tegerá[B],[(C)]\nsólo tengo que cre[E]er[(F)].\n! Inst.: ([E] [A] [F#m7] [A])\nNo [E]tengo que te[F#m7]mer a l[B7/Eb]a enfermeda[E]d,\nen las [C#m7]manos de mi S[F#m7]eñor\nteng[B]o segurida[E]d.\n[A#]...sólo t[C]engo que cree[F]r. (x2)",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s47",
+   "num": 48,
+   "title": "EL ESPÍRITU DE DIOS ESTÁ EN ESTE LUGAR",
+   "author": "RCC",
+   "group": "espiritu",
+   "page": 22,
+   "src": "El Espí[D]ritu de Dios [G]está en este lu[D]gar,\nel Espíritu de Dios se mu[G]eve en este l[A]ugar.\nEstá a[D]quí para consol[G]ar,\nestá [D]aquí para libe[G]rar,\nestá aq[D]uí para guiar,\nel Espí[A]ritu de Dios está aqu[D]í.[D7]\nMuévete en[G] mí[A], muévete en m[Bm]í,\ntoma mi m[G]ente y mi coraz[A]ón,\nllena mi v[F#m]ida de tu am[Bm]or,\nmuévete en mí[G], Dios Espí[A]ritu, muévete en m[D]í.",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s48",
+   "num": 49,
+   "title": "GLORIA",
+   "group": "espiritu",
+   "page": 22,
+   "src": "> tempo: 83bpm MARTÍN VALVERDE\n! Intro: ([Dm], [Dm], [Bbmaj7], [A]) x2\n# SECCIÓN 1\n! [Dm] ([C]) ( [Dm])\nGloria\n[Bbmaj7]Gloria[A7]\nG[Dm]loria[C]\nG[Gm]lor[(Bb)]ia[Asus4][A]\nA Jes[Gm]ús, el Señ[C]or[(C7)][(C)]\nAl Cord[F]ero de Di[Bb]os\nAl N[Gm]ombre, sobre [A]todo N[Dm]omb[(D]re[D7)][(Am][D7)]\nA Jes[Gm]ús, el Señ[C]or\nAl Cord[F]ero de Di[Bb]os\nAl N[Gm]ombre, sobre t[A]odo N[Dm]ombre[(A)].[(C)]\n> (DE NUEVO SECCIÓN 1)\nAl N[Gm]ombre, sobre t[A]odo N[Dm]ombre.\n! Instr.: ([Dm], [C], [Bbmaj7], [A]) x2 lento",
+   "refs": [
+    "https://youtu.be/SB-PFvb59sw?list=RDSB-PFvb59sw",
+    "https://youtu.be/IVXJkysTZcA",
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4"
+   ],
+   "refText": "20  21  22"
+  },
+  {
+   "id": "s49",
+   "num": 1,
+   "title": "TOMADO DE LA MANO",
+   "author": "SS",
+   "group": "misa1502",
+   "momento": "Entrada",
+   "page": 23,
+   "src": "[F][F7]Tomado de [A#]la mano con Jesús, [C]yo voy,\nlo sigo como o[F]veja que encont[C7]ró al past[Dm]or.\nTomado de la m[Gm]ano con Jesús, yo vo[C]y,\na donde él v[F]a.[F7]\nSi Jes[A#]ús me dice: Ami[C]go,\nDeja t[F]odo y [C7]ven conm[Dm]igo,\ndonde [Gm]todo es mas herm[C]oso\ny más fel[F]iz[F7].",
+   "refs": [
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4",
+    "https://youtu.be/zsSobDczFYE?list=RDzsSobDczFYE"
+   ],
+   "refText": "2  22"
+  },
+  {
+   "id": "s50",
+   "num": 1,
+   "title": "TEN PIEDAD",
+   "author": "SS",
+   "group": "misa1502",
+   "momento": "Perdón",
+   "page": 24,
+   "src": "> tempo: 90bpm\n# CORO 1\nTen pied[Am]ad, Señ[Dm]or, ten pie[Am]dad\nsoy pecado[F]r, t[E]en pied[Am]ad. (x[A7]2)\nY de m[F]í Cristo apiádate,\ncontra [G]ti yo pequé[C]. ([(A7)]x2)[(E7)]\n> (DE NUEVO CORO 1)",
+   "refs": [
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4",
+    "https://youtu.be/zsSobDczFYE?list=RDzsSobDczFYE"
+   ],
+   "refText": "2  22"
+  },
+  {
+   "id": "s51",
+   "num": 2,
+   "title": "CANCIÓN DEL MISIONERO",
+   "author": "SS",
+   "group": "misa1502",
+   "momento": "Comunión",
+   "page": 24,
+   "src": "Seño[E]r[B7], toma mi vida nu[C#m]eva\na[A]ntes de que la esp[E]era\ndesgaste años en m[B7]í.\nEst[E]oy di[B7]spuesto a lo que [C#m]quieras,\n[A]no importa lo que s[E]ea,\nTú, [B7]llámame a serv[E]ir.[B7]\n# CORO 1\nLlévam[E]e donde los h[B7]ombres\nnece[C#m]siten tus pal[A]abras,\nnecesi[E]ten mis ganas de vi[B7]vir,\ndonde f[E]alte la esper[B7]anza\ndonde[C#m] falte la alegr[A]ía,\nsimplem[E]ente, [B7]por no saber de T[E]i.[B7]\nTe d[E]oy[B7] mi corazón sinc[C#m]ero\np[A]ara gritar sin m[E]iedo\ntu grandeza, Señ[B7]or.\nTend[E]ré m[B7]is manos sin can[C#m]sancio,\n[A]tu historia entre mis [E]labios\ny [B7]fuerza en la orac[E]ión[B7].\n> (DE NUEVO CORO 1)\n\nY as[E]í,[B7] en marcha iré cant[C#m]ando,\np[A]or calles pred[E]icando\nlo bello que es tu am[B7]or.\nSeño[E]r, t[B7]engo alma misio[C#m]nera,\nc[A]ondúceme a la [E]tierra\nque t[B7]enga sed de D[E]ios[B7].\n> (DE NUEVO CORO 1)\n> ??",
+   "refs": [
+    "https://youtu.be/Rza-NZQgWx4?list=RDRza-NZQgWx4",
+    "https://youtu.be/zsSobDczFYE?list=RDzsSobDczFYE"
+   ],
+   "refText": "2  22"
+  },
+  {
+   "id": "s52",
+   "num": 3,
+   "title": "GLORIA, GLORIA, ALELUYA",
+   "author": "MARTÍN VALVERDE",
+   "group": "misa1502",
+   "page": 25,
+   "src": "> tempo: 90bpm\n# CORO 1\nGl[G]oria, Gloria, Ale[(G7)]luya.\nGl[C]oria, Gloria, Alel[G]uya.\nGloria, Gloria, Alel[B7]uya[Em];\nen N[Am]ombre d[D]el Señ[G]or.\n\nGl[G]oria al Padre, que ha creado\ntodo el mundo por amor;\nGloria al H[C]ijo, que ha nacido\npor salv[G]arnos del dolor;\nGloria demos al Espíritu [B7]divino del am[Em]or\nCan[Am]temos [D]al señ[G]or.\n> (DE NUEVO CORO 1)\n\nCu[G]ando sientas que tu hermano\nnecesita de tu amor;\nno le ni[C]egues la esperanza\nni el cal[G]or del corazón;\nbusca pronto en tu recuerdo\nla Pal[B7]abra del Señ[Em]or:\n“Mi [Am]ley es e[D]l amo[G]r”.\n> (DE NUEVO CORO 1)",
+   "refs": [
+    "https://youtu.be/H053bzyh1gc?list=RDH053bzyh1gc"
+   ],
+   "refText": "A ---- E"
+  },
+  {
+   "id": "s53",
+   "num": 4,
+   "title": "MI PENSAMIENTO ERES TÚ",
+   "author": "PBRO. EDGAR LARREA",
+   "group": "misa1502",
+   "momento": "Comunión",
+   "page": 25,
+   "src": "M[D]i pensamiento eres [G]tú Señor,[A]\nmi pensamiento eres [D]tú Señor,\nmi pensamiento eres [G]tú Señor[A],\nmi pensamiento eres [D]tú.[D7]\n# CORO 1\nP[D]orque [G]tú me has dado la v[A]ida,\n! F7# [Bm]\nporque tú me has dado el existir,\nporque[Em] tú me has dado car[A]iño,\nme has dado amo[D]r. ([(D7)]x2)\n\nM[D]i alegría eres [G]tú Señor[A],\nmi alegría eres [D]tú Señor,\nmi alegría eres [G]tú Señor[A],\nmi alegría eres [D]tú.[D7]\n> (DE NUEVO CORO 1)\n! [D] [G] ...\nMi fortaleza eres tú...\nMi esperanza eres tú...\nMi consuelo eres tú...\nMi libertad eres tú...",
+   "refs": [
+    "https://youtu.be/H053bzyh1gc?list=RDH053bzyh1gc"
+   ],
+   "refText": "A ---- E",
+   "key": "D"
+  },
+  {
+   "id": "s54",
+   "num": 1,
+   "title": "DANOS UN CORAZÓN",
+   "group": "misa1802",
+   "momento": "Entrada",
+   "page": 26,
+   "src": "> tempo: --bpm\n# CORO 1\n[Am]Danos [E]un coraz[Am]ón gr[F]ande p[G]ara ama[C]r[E];\n[Am]danos u[E]n cora[Am]zón f[G]uerte para luc[Am]har.\n\n[Am]Hombres nu[F]evos, cread[G]ores de la hist[C]oria,\nconstruct[F]ores de n[G]ueva humanid[C]ad;\nhombres nu[F]evos que [G]viven la exist[C]encia\n[Am]como [C]riesgo de un [Dm]largo camina[E]r.\n> (DE NUEVO CORO 1)\n\n[Am]Hombres n[F]uevos lucha[G]ndo en espera[C]nza,\ncamina[F]ntes sedi[G]entos de verd[C]ad;\nhombres n[F]uevos sin [G]frenos ni cad[C]enas,\n[Am]hombres [C]libres que [Dm]exigen libert[E]ad.\n> (DE NUEVO CORO 1)\n\n[Am]Hombres n[F]uevos am[G]ando sin front[C]eras,\npor enc[F]ima de r[G]azas y lug[C]ar;\nhombres n[F]uevos al l[G]ado de los p[C]obres,\nc[Am]ompart[C]iendo con[Dm] ellos techo y p[E]an.\n> (DE NUEVO CORO 1)",
+   "refs": [
+    "https://youtu.be/E9UGcDefG_M?list=RDE9UGcDefG_M"
+   ],
+   "refText": "A  E"
+  },
+  {
+   "id": "s55",
+   "num": 2,
+   "title": "APU TAYTAYKU",
+   "group": "misa1802",
+   "momento": "Perdón",
+   "page": 26,
+   "src": "Apu Taytayk[F]u, khuyapayaway[Dm]ku. (x2)\nJesucris[F]to qespirichiway[Dm]ku. (x2)\nApu Taytayk[F]u, khuyapayaway[Dm]ku. (x2)",
+   "refs": [
+    "https://youtu.be/E9UGcDefG_M?list=RDE9UGcDefG_M"
+   ],
+   "refText": "A  E"
+  },
+  {
+   "id": "s56",
+   "num": 3,
+   "title": "TÚ QUE SIEMPRE NOS PERDONAS",
+   "group": "misa1802",
+   "momento": "Perdón",
+   "page": 26,
+   "src": "[Dm]Tú, que siempre nos perdonas,\np[C]orque nos quieres m[Dm]ucho.\n[Gm]Tú, que siempre nos perdo[Dm]nas.\nSeño[C]r, ten pie[Dm]dad.\n\n[Dm]Tú, que siempre nos escuchas,\np[C]orque nos quieres m[Dm]ucho.\n[Gm]Tú, que siempre nos escuc[Dm]has,\nCris[C]to, ten pie[Dm]dad.\n\n[Dm]Tú, que siempre nos ayudas,\np[C]orque nos quieres m[Dm]ucho.\n[Gm]Tú, que siempre nos ayud[Dm]as,\nSeño[C]r, ten pie[Dm]dad.",
+   "refs": [
+    "https://youtu.be/E9UGcDefG_M?list=RDE9UGcDefG_M"
+   ],
+   "refText": "A  E"
+  },
+  {
+   "id": "s57",
+   "num": 4,
+   "title": "TU PALABRA ME DA VIDA",
+   "group": "misa1802",
+   "momento": "Aleluya",
+   "page": 27,
+   "src": "> tempo: --bpm\n# CORO 1\nTu pal[D]abra [D7]me da [G]vid[D]a,\ncon[Bm]fío en[Em] ti Señ[A7]or,\ntu pal[D]abra [D7]es et[G]ern[D]a,\nen[Em] ella esp[A7]erar[D]é.\nDich[D]oso el que con v[G]ida intac[D]hable\nca[A]mina en la ley del Seño[D]r.\nDich[D]oso el que guard[G]ando sus prec[D]eptos\nlo b[A7]usca de todo coraz[D]ón.\n> (DE NUEVO CORO 1)\nPostr[D]ada en el p[G]olvo está mi [D]alma,\ndevué[A]lvame la vida tu pal[D]abra.\nMi [D]alma está l[G]lena de tris[D]teza,\ncons[A7]uélame Señor con tus prom[D]esas.\n> (DE NUEVO CORO 1)\nEscog[D]í el cam[G]ino verdad[D]ero\ny he ten[A]ido presente tus decr[D]etos,\ncorrer[D]é por el cam[G]ino del Señ[D]or\ncuando me [A7]hayas ensanchado el coraz[D]ón.\n> (DE NUEVO CORO 1)",
+   "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
+  },
+  {
+   "id": "s58",
+   "num": 5,
+   "title": "TE AMO SEÑOR",
+   "group": "misa1802",
+   "momento": "Ofertorio",
+   "page": 27,
+   "src": "[D]Te amo oh Se[A]ñor fortaleza[Bm] mía.[F#m]\nR[G]oca mía, Castillo [A]mío y mi libertado[D]r.\nDio[G]s mío en[A] ti [F#m]confia[Bm]ré,\nmi[G] escudo eres tú\ny la f[A]uerza de mi salv[D]ación.",
+   "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
+  },
+  {
+   "id": "s59",
+   "num": 6,
+   "title": "POR LOS NIÑOS",
+   "group": "misa1802",
+   "momento": "Ofertorio",
+   "page": 27,
+   "src": "Por los [D]niños que empiezan la v[A]ida,\npor los h[D]ombres sin [G]techo ni hog[A7]ar,\npor los pu[D]eblos que sufren la[A] guerra,\nte ofre[G]cemos el [A7]Vino y el P[D7]an.\n# CORO 1\nP[G]an y vino sobre el alt[A]ar\ns[G]on ofrendas de am[D]or.\n[Bm]Pan y Vino serán desp[Em]ués\ntu Cu[A]erpo y Sangre Señ[D]or.\nPor los h[D]ombres que viven u[A]nidos,\npor los h[D]ombres que b[G]uscan la p[A7]az,\npor los pu[D]eblos que no te con[A]ocen,\nte ofre[G]cemos el [A7]Vino y el P[D7]an.\n> (DE NUEVO CORO 1)\nPor aque[D]llos a quienes quer[A]emos,\npor nos[D]otros y nue[G]stra amist[A7]ad,\npor los v[D]ivos y por los dif[A]untos,\nte ofre[G]cemos el [A7]vino y el p[D7]an.\n> (DE NUEVO CORO 1)",
+   "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
+  },
+  {
+   "id": "s60",
+   "num": 7,
+   "title": "SUMAQ",
+   "group": "misa1802",
+   "momento": "Santo",
+   "page": 27,
+   "src": "S[Em]u…maq, [G]Su[D]…[G]ma[Em]q, S[Em]u…[D]ma[Em]q.\n[G]Ancha sumaq kan[Em]ki, Di[G]os Taytayku\nk[C]usi kusiy[G]an, k[C]usi kusi[G]yan H[D]anaq pach[G]ap[Em]i.\nS[G]umaqtaq kac[Em]hun.\ns[G]utiykipi h[D]am[G]oq\nk[C]usi kusiy[G]an, k[C]usi kusi[G]yan H[D]anaq pach[G]ap[Em]i.",
+   "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
+  },
+  {
+   "id": "s61",
+   "num": 8,
+   "title": "SANTO DE LOS QUERUBINES",
+   "group": "misa1802",
+   "momento": "Santo",
+   "page": 28,
+   "src": "> tempo: --bpm\n[Dm]Santo, Santo, Santo, santo es el Señ[A]or,\nSanto, Santo, Santo, Santo [A7]es nuestro D[Dm]ios.\nSanto, Santo, Santo, [D7]es el que nos l[Gm]ibera.\n# CORO 1\nPorque mi Dios e[Dm]s Santo,\ny la Tierra l[A]lena de su Gl[A7]oria es[Dm]tá. [(Gm)](x2)\nCielo y tierra pasará[A]n,\nmás tu palabra no pasa[Dm]rá. (x2)\n[Gm]No, [Dm]no, [A]no pasar[Dm]á;\nno, no, no,[Gm] no, [Dm]no, [A]no pasar[Dm]á.\nBend[Dm]ito es el que viene en nombre del Señ[A]or;\nHosanna en las alturas, al [A7]hijo de Da[Dm]vid.\nBendito es el que viene en n[D7]ombre del [Gm]Señor.\n> (DE NUEVO CORO 1)",
+   "refs": [
+    "https://youtu.be/ZmSqjm2E0zw?list=RDZmSqjm2E0zw"
+   ],
+   "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
+  },
+  {
+   "id": "s62",
+   "num": 9,
+   "title": "EL SEÑOR NOS DA SU AMOR",
+   "group": "misa1802",
+   "momento": "Comunión",
+   "page": 28,
+   "src": "El señ[D]or nos da su amor como na[G]die nos lo di[D]o.\nÉl nos gu[D]ía como estrella en la inm[Em]ensa oscu[A]ridad;\nal parti[D]r juntos el pan, él nos l[G]lena de su am[D]or.\nPan de Di[D]os, el Pan co[Em]memos [A]de amist[D]ad.\n# CORO 1\nE[D]s mi cuerpo, t[G]omad y com[A]ed\n[D]Es mi sangre, [Am]tomad y beb[A]ed\nPorque [D]yo soy vida, [G]yo soy am[D]or\nOh Seño[D]r, nos reun[Em]iremos [A]en tu am[D]or.\nEl Señ[D]or nos da su amor como na[G]die nos lo di[D]o.\nComo t[D]odos sus amigos traba[Em]jaba en Nazare[A]t,\ncarpint[D]ero se alegró, traba[G]jando en su tall[D]er:\nCon sus ma[D]nos Cristo obr[Em]ero tra[A]baj[D]ó.\n> (DE NUEVO CORO 1)\nEl Señ[D]or nos da su amor como na[G]die nos lo di[D]o,\nera tan gr[D]ande y tan hondo que mur[Em]ió sobre una cr[A]uz\nEra tan fu[D]erte su amor, que de la mu[G]erte triunf[D]ó;\nde la t[D]umba sale[Em] libre y v[A]encedo[D]r.\n> (DE NUEVO CORO 1)\nEl Señ[D]or nos da su amor como na[G]die nos lo di[D]o,\nEl re[D]úne a sus amigos en la m[Em]esa del amo[A]r.\nEn el mu[D]ndo todos son, carne y s[G]angre del Señ[D]or,\nNada pu[D]ede separ[Em]arnos d[A]e su amo[D]r.\n> (DE NUEVO CORO 1)",
+   "refs": [
+    "https://youtu.be/ZmSqjm2E0zw?list=RDZmSqjm2E0zw"
+   ],
+   "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
+  },
+  {
+   "id": "s63",
+   "num": 10,
+   "title": "DEMOS GRACIAS AL SEÑOR",
+   "group": "misa1802",
+   "momento": "Final",
+   "page": 28,
+   "src": "D[G]emos gracias al Señor, demos gracias,\ndemos gr[D]acias al Señ[G]or.\nPor las mañ[C]anas las aves c[G]antan\nlas alab[D]anzas a Cristo Salv[G]ador[G7].\nY tú mi herm[C]ano, ¿por qué no c[G]antas\nlas alaban[D]zas a Cristo Salvad[G]or? (x2)",
+   "refs": [
+    "https://youtu.be/ZmSqjm2E0zw?list=RDZmSqjm2E0zw"
+   ],
+   "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
+  },
+  {
+   "id": "s64",
+   "num": 11,
+   "title": "JUNTO A TI MARÍA",
+   "group": "misa1802",
+   "momento": "Final",
+   "page": 29,
+   "src": "> tempo: --bpm\nJ[D]unto a ti Mar[A]ía,\ncomo un [Bm]niño quiero es[F#m]tar,\n[G]tómame en tus b[D]razos,\nguía[E]me en mi camina[A]r.\nQ[D]uiero que me ed[A]uques,\nque me en[Bm]señes a re[F#m]zar,\nh[G]azme transpar[D]ente, lléna[E]me d[A]e p[D]az.[A]\n# CORO 1\nMa[D]dr[A]e, [Bm]mad[F#m]re, m[G]adr[D]e, ma[E]dr[A]e. ([(D]x2[A)])\n\nG[D]racias, madre mí[A]a,\npor lle[Bm]varnos a Jes[F#m]ús,\nh[G]aznos más hum[D]ildes,\ntan senc[E]illos como t[A]ú.\nGr[D]acias, madre mí[A]a,\npor ab[Bm]rir tu coraz[F#m]ón,\np[G]orque nos cong[D]regas y nos d[E]as [A]tu amo[D]r.[A]",
+   "refs": [
+    "https://youtu.be/ZmSqjm2E0zw?list=RDZmSqjm2E0zw"
+   ],
+   "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
+  }
+ ],
+ "setlists": []
+}
