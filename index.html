@@ -384,6 +384,58 @@ body.live-open { overflow: hidden; }
 .rec-lines .now { background: var(--chord); color: var(--paper); }
 .rec-sum { font-size: 1.1rem; }
 .rec-count { position: static; min-height: 40vh; background: transparent; }
+.lv-beats { display: flex; gap: 7px; align-items: center; }
+.lv-beats i { width: 13px; height: 13px; border-radius: 50%; background: var(--rule); transition: transform .08s; }
+.lv-beats i.done { background: color-mix(in srgb, var(--chord) 40%, var(--rule)); }
+.lv-beats i.on { background: var(--chord); transform: scale(1.3); }
+.lv-beats-t { font: 700 .9rem var(--ui-font); color: var(--muted); }
+.lv-tempo .lv-clk { min-width: 0; padding: 0 .7rem; font-size: .95rem; gap: .3rem; }
+.lv-tempo .lv-clk.on { background: var(--chord); color: var(--paper); border-color: var(--chord); }
+.lbl-s { font: 700 .82rem var(--ui-font); color: var(--muted); }
+.g-head { display: grid; gap: .45rem; padding: .2rem 0 .6rem; }
+.g-note { margin: 0; padding: .5rem .7rem; border-radius: 10px; background: var(--chord-hl); font-size: .9rem; }
+.g-tempo, .g-sig { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.g-tempo .btn { min-height: 40px; }
+.g-tempo .btn[data-g="bpm-"], .g-tempo .btn[data-g="bpm+"] { min-width: 44px; padding: 0; font-size: 1.3rem; }
+.g-tempo output { min-width: 3rem; text-align: center; font: 700 1.35rem var(--chord-font); color: var(--ink); }
+.g-sig .seg button { min-width: 3.2rem; }
+.g-grid { display: grid; gap: .35rem; padding-bottom: 1rem; }
+.gbar { display: flex; align-items: stretch; gap: .35rem; }
+.gnum { width: 1.7rem; flex: none; display: grid; place-items: center; font: 700 .8rem var(--chord-font); color: var(--muted); }
+.grow { flex: 1; min-width: 0; display: flex; gap: 3px; min-height: 46px; }
+.gb { min-width: 0; border: 1.5px solid var(--rule); border-radius: 8px; background-color: var(--wash); color: var(--chord);
+  font: 700 1.05rem/1 var(--chord-font); text-align: left; padding: 0 .35rem; overflow: hidden; white-space: nowrap;
+  background-image: repeating-linear-gradient(to right, transparent 0, transparent calc(100% / var(--d) - 1.5px), var(--rule) calc(100% / var(--d) - 1.5px), var(--rule) calc(100% / var(--d))); }
+.gb.cont { color: var(--muted); border-left-style: dashed; }
+.gb.sel { border-color: var(--chord); box-shadow: inset 0 0 0 2px var(--chord); }
+.gb.play { background-color: var(--chord-hl); }
+.gb.empty { background: none; border-style: dashed; opacity: .5; }
+.g-play.on { background: var(--chord); color: var(--paper); border-color: var(--chord); }
+.g-selinfo { display: flex; align-items: baseline; gap: .6rem; min-width: 0; }
+.g-selinfo b { font: 700 1.5rem/1 var(--chord-font); color: var(--chord); }
+.g-selinfo span { font-weight: 600; white-space: nowrap; }
+.g-selinfo .g-line { color: var(--muted); font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
+.g-ctl { display: grid; grid-template-columns: repeat(6, 1fr); gap: .35rem; }
+.g-ctl .btn { min-height: 46px; padding: 0; font-size: 1.05rem; }
+.g-ins { display: grid; gap: .35rem; }
+.g-ins button { display: flex; gap: .7rem; align-items: baseline; text-align: left; padding: .55rem .7rem; border: 1.5px solid var(--rule); border-radius: 10px; background: var(--paper); color: var(--ink); }
+.g-ins b { font: 700 1.1rem var(--chord-font); color: var(--chord); min-width: 3rem; }
+.g-ins span { color: var(--muted); font-size: .9rem; }
+.tap-big { display: block; width: 100%; min-height: 150px; margin: .6rem 0; border: 0; border-radius: 20px; background: var(--chord); color: #fff;
+  font: 700 1.6rem var(--ui-font); touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.tap-big.hit { animation: hit .2s ease-out; }
+.tap-res { text-align: center; font: 700 1.3rem var(--chord-font); margin: .2rem 0 .8rem; }
+.rc-row { flex-wrap: wrap; }
+.rc-row input { min-width: 5rem; }
+.tl-big { font: 700 1.4rem var(--ui-font); text-align: center; margin: .6rem 0; }
+.tl-meter { height: 12px; border-radius: 6px; background: var(--rule); overflow: hidden; }
+.tl-meter i { display: block; height: 100%; width: 0; background: var(--chord); transition: width .1s; }
+.tl-res { text-align: center; margin: .4rem 0; font: 700 1.2rem var(--ui-font); color: var(--muted); }
+.tl-res b { font: 700 3.6rem/1 var(--chord-font); color: var(--chord); margin-right: .3rem; }
+.tl-warn { padding: .55rem .7rem; border-radius: 10px; background: var(--chord-hl); font-size: .92rem; }
+.tl-alt { margin: .3rem 0 .6rem; }
+.tl-alt button { min-width: 4.5rem; font: 700 1.1rem var(--chord-font); }
+.btnrow .btn.on { background: var(--chord); color: var(--paper); border-color: var(--chord); }
 @media (orientation: landscape) and (min-width: 640px) {
   .live:not(.rec) .lv-main { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: auto 1fr auto; gap: .5rem 1rem; }
   .live:not(.rec) .lv-now { grid-column: 1; grid-row: 1 / span 3; }
@@ -1078,6 +1130,170 @@ body.live-open { overflow: hidden; }
     return list.map(function (x) { return noteName(key.pc + x[0], spell || spellForKey(key.pc, key.minor), 'en') + x[1]; });
   }
 
+  /* ---------- Recorrido por compases ----------
+     Cada paso del recorrido es [acorde, tiempos, segundo del video opcional]. Los segundos reales salen del tempo. */
+  function tlRound(x) {
+    var i = Math.round(x);
+    if (Math.abs(x - i) <= 0.4) return Math.max(0.5, i);      // lo normal: cambios en el tiempo (medido: umbral 0,4)
+    return Math.max(0.5, Math.round(x * 2) / 2);             // si no, a medio tiempo (anticipaciones)
+  }
+  /* Cuadrícula que se engancha a los toques: cada toque se ubica en el tiempo más cercano de la cuadrícula,
+     la fase se corrige un poco en cada toque y el tempo se ajusta despacio (sigue un video que acelera). */
+  function tlFollow(times, spb0, shift) {
+    var spb = spb0, ref = times[0] + shift * spb0, pos = [0], cur = 0, cost = shift * shift;
+    for (var k = 1; k < times.length; k++) {
+      var t = Math.max(times[k], ref + 0.5 * spb), q = tlRound((t - ref) / spb), pred = ref + q * spb, e = t - pred;
+      cost += (e / spb) * (e / spb) + (q % 1 ? 0.12 : 0);
+      spb = spb * (1 + Math.max(-0.02, Math.min(0.02, 0.35 * e / (q * spb))));
+      ref = pred + 0.3 * e; cur += q; pos.push(cur);
+    }
+    return { pos: pos, cost: cost };
+  }
+  /* Toques (segundos) -> tiempos musicales. No se supone que el primer toque sea exacto: se prueban varios
+     arranques (primer toque algo antes o después, tempo ±2 %) y se elige el que mejor explica todos los toques. */
+  function tlQuantize(marks, end, bpm) {
+    if (!marks.length) return [];
+    var times = marks.map(function (m) { return m[1]; }).concat([end]), best = null;
+    for (var sh = -0.3; sh <= 0.3001; sh += 0.05) {
+      for (var f = 0.98; f <= 1.0201; f += 0.01) {
+        var r = tlFollow(times, 60 / (bpm * f), sh);
+        if (!best || r.cost < best.cost) best = r;
+      }
+    }
+    return marks.map(function (m, k) { return [m[0], best.pos[k + 1] - best.pos[k], Math.round(m[1] * 100) / 100]; });
+  }
+  /* Tempo sugerido a partir de los toques: duraciones en tiempos enteros, idealmente en compases o medios compases,
+     y una preferencia suave por tempos habituales. Es una sugerencia: se confirma escuchando. */
+  function tlEstimateBpm(marks, end, bpb) {
+    var ds = [];
+    for (var k = 0; k + 1 < marks.length; k++) ds.push(marks[k + 1][1] - marks[k][1]);
+    if (ds.length < 2) { if (marks.length === 1 && end > marks[0][1]) ds.push(end - marks[0][1]); else return null; }
+    var best = null;
+    for (var bpm = 55; bpm <= 170; bpm += 0.5) {
+      var spb = 60 / bpm, score = 0;
+      ds.forEach(function (d) {
+        var beats = d / spb, eb = Math.abs(beats - Math.round(beats)), bars = beats / bpb, ebar = Math.abs(bars * 2 - Math.round(bars * 2)) / 2;
+        score += (0.5 - eb) + 0.6 * (0.25 - ebar) - (beats < 0.9 ? 0.4 : 0);
+      });
+      score = score / ds.length - Math.abs(bpm - 100) / 600;
+      if (!best || score > best.score) best = { bpm: bpm, score: score };
+    }
+    return best ? Math.round(best.bpm) : null;
+  }
+  /* Tempo por toques de pulso: recta de mejor ajuste, así un toque desviado pesa poco. */
+  function tlTapBpm(ts) {
+    var n = ts.length; if (n < 3) return null;
+    var sx = 0, sy = 0, sxy = 0, sxx = 0;
+    for (var i = 0; i < n; i++) { sx += i; sy += ts[i]; sxy += i * ts[i]; sxx += i * i; }
+    var slope = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+    return slope > 0 ? Math.round(600000 / slope) / 10 : null;
+  }
+  function tlStarts(steps) { var out = [0]; steps.forEach(function (s) { out.push(out[out.length - 1] + s[1]); }); return out; }
+  /* Segundo del video de cada paso: el tocado, o interpolado por tiempos entre los pasos conocidos. */
+  function tlVideoTimes(steps, bpm) {
+    var st = tlStarts(steps), out = steps.map(function (s) { return typeof s[2] === 'number' ? s[2] : null; });
+    var known = []; out.forEach(function (v, k) { if (v !== null) known.push(k); });
+    var slope = function (p, q) { return (out[q] - out[p]) / Math.max(1e-6, st[q] - st[p]); };     // segundos por tiempo del video
+    for (var k = 0; k < out.length; k++) {
+      if (out[k] !== null) continue;
+      var p = -1, q = -1;
+      known.forEach(function (x) { if (x < k) p = x; else if (q < 0 && x > k) q = x; });
+      if (p >= 0 && q >= 0) out[k] = out[p] + (st[k] - st[p]) * slope(p, q);
+      else if (p >= 0) { var pp = known.indexOf(p) > 0 ? known[known.indexOf(p) - 1] : -1; out[k] = out[p] + (st[k] - st[p]) * (pp >= 0 ? slope(pp, p) : 60 / bpm); }
+      else if (q >= 0) { var qq = known.indexOf(q) + 1 < known.length ? known[known.indexOf(q) + 1] : -1; out[k] = out[q] - (st[q] - st[k]) * (qq >= 0 ? slope(q, qq) : 60 / bpm); }
+      else out[k] = st[k] * 60 / bpm;
+    }
+    return out;
+  }
+  /* ---------- Tempo escuchando la música ----------
+     1) Envolvente de ataques: cuánto crece el espectro de un cuadro al siguiente (flujo espectral), 100 veces por segundo.
+     2) Autocorrelación: el intervalo que más se repite entre ataques es el pulso.
+     3) Preferencia suave por tempos habituales para escoger entre la mitad y el doble (siempre se ofrecen ambos).
+     4) Fase: dónde caen los pulsos, para comprobar con un clic sobre la música. */
+  function fftRadix2(re, im) {
+    var n = re.length, i, j = 0, k, len, t;
+    for (i = 1; i < n; i++) { var bit = n >> 1; for (; j & bit; bit >>= 1) j ^= bit; j ^= bit; if (i < j) { t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; } }
+    for (len = 2; len <= n; len <<= 1) {
+      var ang = -2 * Math.PI / len, wr = Math.cos(ang), wi = Math.sin(ang), half = len >> 1;
+      for (i = 0; i < n; i += len) {
+        var cr = 1, ci = 0;
+        for (k = 0; k < half; k++) {
+          var a = i + k, b = a + half, xr = re[b] * cr - im[b] * ci, xi = re[b] * ci + im[b] * cr;
+          re[b] = re[a] - xr; im[b] = im[a] - xi; re[a] += xr; im[a] += xi;
+          t = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = t;
+        }
+      }
+    }
+  }
+  function onsetEnvelope(x, sr) {
+    var N = sr > 30000 ? 2048 : 1024, hop = Math.max(1, Math.round(sr / 100)), fps = sr / hop, i, k;
+    var rms = 0; for (i = 0; i < x.length; i++) rms += x[i] * x[i]; rms = Math.sqrt(rms / Math.max(1, x.length)) || 1;
+    var g = 0.1 / rms, win = new Float64Array(N), re = new Float64Array(N), im = new Float64Array(N);
+    for (i = 0; i < N; i++) win[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (N - 1));
+    var k0 = Math.max(1, Math.floor(30 * N / sr)), k1 = Math.min(N >> 1, Math.ceil(5000 * N / sr)), prev = new Float64Array(k1), raw = [];
+    for (var s = 0; s + N <= x.length; s += hop) {
+      for (i = 0; i < N; i++) { re[i] = x[s + i] * win[i] * g; im[i] = 0; }
+      fftRadix2(re, im);
+      var flux = 0;
+      for (k = k0; k < k1; k++) { var m = Math.log(1 + 100 * Math.sqrt(re[k] * re[k] + im[k] * im[k])), d = m - prev[k]; if (d > 0) flux += d; prev[k] = m; }
+      raw.push(raw.length ? flux : 0);
+    }
+    // se resta la media local (~1 s) para quedarse solo con los ataques
+    var n = raw.length, w = Math.round(fps / 2), pre = [0], env = new Float64Array(n);
+    for (i = 0; i < n; i++) pre.push(pre[i] + raw[i]);
+    for (i = 0; i < n; i++) { var lo = Math.max(0, i - w), hi = Math.min(n, i + w + 1); env[i] = Math.max(0, raw[i] - (pre[hi] - pre[lo]) / (hi - lo)); }
+    return { env: env, fps: fps, offset: N / 2 / sr };
+  }
+  function tempoFromEnvelope(e, fps) {
+    var n = e.length, minLag = Math.floor(fps * 60 / 200), maxLag = Math.ceil(fps * 60 / 50), L, t;
+    if (n < maxLag * 3) return null;
+    var mean = 0; for (t = 0; t < n; t++) mean += e[t] / n;
+    var top = Math.min(n - 1, 4 * maxLag + 2), ac = new Float64Array(top + 1);
+    for (L = 1; L <= top; L++) { var sum = 0; for (t = 0; t + L < n; t++) sum += (e[t] - mean) * (e[t + L] - mean); ac[L] = sum / (n - L); }
+    var at = function (x) { var i = Math.floor(x), f = x - i; return i + 1 <= top ? ac[i] * (1 - f) + ac[i + 1] * f : 0; };
+    var sc = new Float64Array(maxLag + 2), best = -1, bestL = minLag, tot = 0, cnt = 0;
+    for (L = minLag; L <= maxLag; L++) {
+      var bpm = 60 * fps / L, prior = Math.exp(-0.5 * Math.pow(Math.log(bpm / 110) / Math.LN2 / 0.9, 2));
+      // un pulso verdadero se repite en sus múltiplos (2, 3 y 4 tiempos: el compás) y en su mitad (corcheas);
+      // un patrón de rasgueo que se repite cada tiempo y medio, no
+      sc[L] = Math.max(0, ac[L] + 0.6 * at(2 * L) + 0.4 * at(3 * L) + 0.5 * at(4 * L) + 0.3 * at(L / 2)) * prior;
+      if (sc[L] > best) { best = sc[L]; bestL = L; }
+      tot += sc[L]; cnt++;
+    }
+    // nivel del pulso: se compara con la mitad y el doble, prefiriendo los tempos habituales de alabanza
+    var w2 = tempoFromEnvelope.w2, c2 = tempoFromEnvelope.c2;
+    if (w2) {
+      var pick = bestL, pv = -1;
+      [bestL / 2, bestL, bestL * 2].forEach(function (Lc) {
+        var Li = Math.round(Lc); if (Li < minLag || Li > maxLag) return;
+        var b = 60 * fps / Li, v = sc[Li] / Math.exp(-0.5 * Math.pow(Math.log(b / 110) / Math.LN2 / 0.9, 2)) * Math.exp(-0.5 * Math.pow(Math.log(b / c2) / Math.LN2 / w2, 2));
+        if (v > pv) { pv = v; pick = Li; }
+      });
+      bestL = pick;
+    }
+    // afinar el máximo con una parábola sobre la autocorrelación
+    var y0 = ac[bestL - 1], y1 = ac[bestL], y2 = ac[bestL + 1], den = y0 - 2 * y1 + y2, dl = den < 0 ? 0.5 * (y0 - y2) / den : 0;
+    var lag = bestL + Math.max(-0.5, Math.min(0.5, dl));
+    return { bpm: 60 * fps / lag, confidence: cnt && tot ? best / (tot / cnt) : 0 };
+  }
+  tempoFromEnvelope.w2 = 0.6; tempoFromEnvelope.c2 = 105;   // medido: 37 de 48 exactos, el resto casi todo en mitad o doble
+  function beatPhase(e, fps, period) {
+    var best = 0, bs = -1;
+    for (var ph = 0; ph < period; ph += 0.5) {
+      var s = 0, c = 0;
+      for (var t = ph; t < e.length - 1; t += period) { var i = Math.floor(t), f = t - i; s += e[i] * (1 - f) + e[i + 1] * f; c++; }
+      if (c && s / c > bs) { bs = s / c; best = ph; }
+    }
+    return best / fps;
+  }
+  function tempoFromSamples(x, sr) {
+    var oe = onsetEnvelope(x, sr), r = tempoFromEnvelope(oe.env, oe.fps);
+    if (!r) return null;
+    var bpm = r.bpm;
+    return { bpm: bpm, confidence: r.confidence, phase: beatPhase(oe.env, oe.fps, oe.fps * 60 / bpm) + oe.offset,
+             candidates: [bpm / 2, bpm, bpm * 2].filter(function (b) { return b >= 40 && b <= 240; }).map(function (b) { return Math.round(b); }) };
+  }
+
   /* ---------- Videos de YouTube y reloj ---------- */
   function ytId(u) {
     u = String(u || '').trim();
@@ -1113,7 +1329,9 @@ body.live-open { overflow: hidden; }
     srcToModel: srcToModel, modelToSrc: modelToSrc, modelLineToSrc: modelLineToSrc, normalizeModel: normalizeModel, sortChords: sortChords,
     modelToLetra: modelToLetra, parseLetra: parseLetra, reconcile: reconcile, transferChords: transferChords, lineKey: lineKey,
     syllableStarts: syllableStarts, copyChordsBySyllable: copyChordsBySyllable, diatonic: diatonic, chordLineInfo: chordLineInfo,
-    closeVoicing: closeVoicing, splitMulti: splitMulti, ytId: ytId, ytStart: ytStart, parseClock: parseClock, fmtClock: fmtClock
+    closeVoicing: closeVoicing, splitMulti: splitMulti, ytId: ytId, ytStart: ytStart, parseClock: parseClock, fmtClock: fmtClock,
+    tlRound: tlRound, tlQuantize: tlQuantize, tlEstimateBpm: tlEstimateBpm, tlTapBpm: tlTapBpm, tlStarts: tlStarts, tlVideoTimes: tlVideoTimes,
+    tempoFromSamples: tempoFromSamples, onsetEnvelope: onsetEnvelope, fftRadix2: fftRadix2, _tempoCfg: tempoFromEnvelope
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Core = api;
@@ -3158,7 +3376,7 @@ function openPasteSheet() {
   });
 }
 
-/* parte 6: modo en vivo — piano con las dos manos; avanza a mano, solo (recorrido grabado), con el video o escuchando */
+/* parte 6: modo en vivo — piano con las dos manos; avanza a mano, solo (por compases), con el video o escuchando */
 var liveState = null;
 function songRouteHash() {
   return ctx.setlist ? '#/r/' + enc(ctx.setlist.id) + '/' + ctx.index : (current.song ? '#/s/' + enc(current.song.id) : '#/');
@@ -3175,15 +3393,25 @@ function liveSteps(song) {
   return { steps: steps, firstN: firstN };
 }
 function seqSig(steps) { return steps.map(function (s) { return s.c; }).join('|'); }
-/* El recorrido grabado solo vale si la canción no cambió desde que se grabó. */
-function validTimeline(song, steps) {
-  var tl = song.timeline;
-  if (!tl || !Array.isArray(tl.steps) || tl.steps.length < 2 || tl.sig !== seqSig(steps)) return null;
-  for (var k = 0; k < tl.steps.length; k++) {
-    var x = tl.steps[k];
-    if (!Array.isArray(x) || !(x[0] >= 0 && x[0] < steps.length) || typeof x[1] !== 'number' || (k && x[1] < tl.steps[k - 1][1])) return null;
+/* Recorrido por compases: { v: 2, bpm, beats, sig, steps: [[acorde, tiempos, segundo del video|null]], video: {id, start}|null }.
+   Solo vale si la canción no cambió desde que se hizo. Los grabados antes en segundos se convierten aquí. */
+function normTimeline(song, steps) {
+  var tl = song.timeline, k;
+  if (!tl || !Array.isArray(tl.steps) || !tl.steps.length || tl.sig !== seqSig(steps)) return null;
+  if (tl.v === 2) {
+    if (!(tl.bpm >= 30 && tl.bpm <= 260) || !(tl.beats >= 1 && tl.beats <= 12)) return null;
+    for (k = 0; k < tl.steps.length; k++) {
+      var s = tl.steps[k];
+      if (!Array.isArray(s) || !(s[0] >= 0 && s[0] < steps.length) || !(s[1] > 0) || (s[2] != null && typeof s[2] !== 'number')) return null;
+    }
+    return tl;
   }
-  return tl;
+  if (tl.steps.length < 2) return null;
+  for (k = 1; k < tl.steps.length; k++) if (!(tl.steps[k][1] >= tl.steps[k - 1][1])) return null;
+  var end = tl.end || tl.steps[tl.steps.length - 1][1] + 2;
+  var bpm = +song.bpm || info(song).bpm || C.tlEstimateBpm(tl.steps, end, 4) || 90;
+  return { v: 2, bpm: bpm, beats: 4, sig: tl.sig, steps: C.tlQuantize(tl.steps, end, bpm),
+           video: tl.video ? { id: tl.video, start: tl.start || 0 } : null, converted: true };
 }
 function voiceNames(v, en, spell) {
   var pc = C.parseChord(en), names = {};
@@ -3200,7 +3428,7 @@ function lid(id) { return document.getElementById(id); }
 function buildLive(song, pushed, mode) {
   var r = liveSteps(song); if (!r.steps.length) return null;
   var inf = info(song), sh = songShift(song), spell = spellFor(inf.key, sh), keep = C.mod12(sh) === 0 && prefs.spell === 'auto';
-  var tl = validTimeline(song, r.steps);
+  var tl = normTimeline(song, r.steps);
   var path = tl ? tl.steps.map(function (x) { return x[0]; }) : r.steps.map(function (s, k) { return k; });
   var prev = null, vo = path.map(function (k) {
     var en = C.splitTok(C.transposeTok(r.steps[k].c, { shift: sh, spell: spell, notation: 'en', keep: keep })).core;
@@ -3215,10 +3443,13 @@ function buildLive(song, pushed, mode) {
   mode = mode || LS.get('cfp.liveMode', 'manual');
   if ((mode === 'auto' || mode === 'video') && !tl) mode = 'manual';
   if (mode === 'video' && !tl.video) mode = 'auto';
-  return { song: song, steps: r.steps, firstN: r.firstN, tl: tl, path: path, times: tl ? tl.steps.map(function (x) { return x[1]; }) : null,
-    stale: !!song.timeline && !tl, vo: vo, i: 0, rLo: b.rLo, rHi: b.rHi, lLo: b.lLo, lHi: b.lHi, spell: spell,
-    sound: !!LS.get('cfp.liveSound', false), pushed: !!pushed, mode: mode, playing: false, counting: false,
-    rate: +LS.get('cfp.liveRate', 1) || 1, t0: 0, tOffset: 0, raf: 0 };
+  var saved = viewState[song.id] && viewState[song.id].bpm;
+  return { song: song, steps: r.steps, firstN: r.firstN, tl: tl, path: path,
+    startB: tl ? C.tlStarts(tl.steps) : null, vtimes: tl && tl.video ? C.tlVideoTimes(tl.steps, tl.bpm) : null,
+    bpm: tl ? (saved || tl.bpm) : null, bpb: tl ? tl.beats : 4, stale: !!song.timeline && !tl,
+    vo: vo, i: 0, rLo: b.rLo, rHi: b.rHi, lLo: b.lLo, lHi: b.lHi, spell: spell,
+    sound: !!LS.get('cfp.liveSound', false), click: !!LS.get('cfp.liveClick', false), pushed: !!pushed, mode: mode,
+    playing: false, counting: false, t0: 0, beat0: 0, nextClick: null, raf: 0 };
 }
 function openLive(pushed) {
   var song = current.song; if (!song) return;
@@ -3233,13 +3464,13 @@ function openLive(pushed) {
   document.body.appendChild(el); document.body.classList.add('live-open');
   el.addEventListener('click', onLiveTap);
   enterFull(); keepAwake(true);
-  if (st.mode === 'video') showVideo(st.tl.video, st.tl.start).catch(videoFailed);
+  if (st.mode === 'video') showVideo(st.tl.video.id, st.tl.video.start).catch(videoFailed);
   drawLive();
 }
 function closeLive(silent) {
   var st = liveState;
   if (st) { st.playing = false; st.counting = false; cancelAnimationFrame(st.raf); }
-  stopEar(); recState = null; destroyPlayer();
+  stopEar(); gridStop(); stopTempoListen(); recState = null; gridState = null; destroyPlayer();
   var el = lid('live'); if (el) el.remove();
   document.body.classList.remove('live-open');
   liveState = null;
@@ -3275,8 +3506,17 @@ function sizeKeyboards() {
   });
 }
 var MODE_NAMES = { manual: 'Manual', auto: 'Automático', video: 'Con el video', listen: 'Escuchando' };
+function stepBeats(i) { var st = liveState; return st.startB ? st.startB[i + 1] - st.startB[i] : 0; }
+/* Pulsos del acorde actual: 1-2-3-4. Con más de 12 se muestra como texto. */
+function beatsHTML() {
+  var st = liveState; if (!st.tl || (st.mode !== 'auto' && st.mode !== 'video')) return '';
+  var n = Math.ceil(stepBeats(st.i)); if (n > 12) return '<span class="lv-beats lv-beats-t" id="lv-beats"></span>';
+  var h = ''; for (var k = 0; k < n; k++) h += '<i></i>';
+  return '<span class="lv-beats" id="lv-beats" aria-hidden="true">' + h + '</span>';
+}
 function drawLive() {
   var st = liveState; if (!st || !lid('live')) return;
+  if (gridState) { drawGrid(); return; }
   if (recState) { drawRec(); return; }
   lid('live').classList.remove('rec');
   var song = st.song, inf = info(song), sh = songShift(song), fmt = fmtFor(inf.key, sh);
@@ -3293,7 +3533,6 @@ function drawLive() {
     var ni = neighbor(1), ns = ni >= 0 ? getSong(ctx.setlist.items[ni].id) : null;
     if (ns) endHTML += '<a class="btn primary" href="#/r/' + enc(ctx.setlist.id) + '/' + ni + '/vivo">Siguiente canción: ' + esc(C.sentenceCase(ns.title)) + icon('fwd') + '</a>';
   }
-  var timed = st.mode === 'auto' || st.mode === 'video';
   lid('lv-top').innerHTML =
     '<button type="button" class="iconbtn" data-lv="close" aria-label="Salir del modo en vivo">' + icon('close') + '</button>' +
     '<h2>' + esc(C.sentenceCase(song.title)) + '</h2>' +
@@ -3305,8 +3544,7 @@ function drawLive() {
     '<div class="lv-text">' + (sec ? '<p class="lv-sec">' + esc(sec) + '</p>' : '') +
       '<div class="lv-lines song">' + line(step.li, 'cur') + (nli >= 0 ? line(nli, 'fade') : '') + '</div></div>' +
     '<div class="lv-now" data-lv="tapnow" role="button" tabindex="0" aria-label="Ahora ' + esc(fmt(step.c)) + '">' +
-      '<div class="lv-head"><span class="lv-label">Ahora</span><span class="lv-chord">' + esc(C.splitTok(fmt(step.c)).core) + '</span>' +
-      (timed ? '<span class="lv-prog"><i id="lv-prog"></i></span>' : '') + '</div>' +
+      '<div class="lv-head"><span class="lv-label">Ahora</span><span class="lv-chord">' + esc(C.splitTok(fmt(step.c)).core) + '</span>' + beatsHTML() + '</div>' +
       handsHTML(cur, false) +
     '</div>' +
     '<div class="lv-next">' + (nxt
@@ -3329,8 +3567,9 @@ function navHTML() {
   if (st.mode === 'listen') label = ear ? icon('pause') + 'Dejar de escuchar' : icon('mic') + 'Escuchar';
   else label = st.playing || st.counting ? icon('pause') + 'Pausa' : icon('play') + (st.i ? 'Seguir' : 'Empezar');
   var h = '<div class="lv-row lv-row3">' + prev + '<button type="button" class="btn primary" data-lv="play">' + label + '</button>' + next + '</div>';
-  if (st.mode === 'auto') h += '<div class="lv-tempo"><span>Velocidad</span><button type="button" class="btn" data-lv="slower" aria-label="Más lento">−</button>' +
-    '<output>' + Math.round(st.rate * 100) + ' %</output><button type="button" class="btn" data-lv="faster" aria-label="Más rápido">+</button></div>';
+  if (st.mode === 'auto') h += '<div class="lv-tempo"><button type="button" class="btn" data-lv="slower" aria-label="Más lento">−</button>' +
+    '<output>' + Math.round(st.bpm) + '</output><span>bpm</span><button type="button" class="btn" data-lv="faster" aria-label="Más rápido">+</button>' +
+    '<button type="button" class="btn lv-clk' + (st.click ? ' on' : '') + '" data-lv="click" aria-pressed="' + st.click + '">' + icon('metro') + 'Clic</button></div>';
   return h;
 }
 function soundNow() {
@@ -3347,120 +3586,169 @@ function setLiveIndex(i, fromTimer) {
   if (!fromTimer) announce('Ahora ' + C.splitTok(fmtFor(info(st.song).key, songShift(st.song))(st.steps[st.path[i]].c)).core);
 }
 
-/* ---------- avanzar solo con el recorrido grabado ---------- */
-function liveTime() {
-  var st = liveState;
-  if (st.mode === 'video' && yt.player && yt.player.getCurrentTime) return yt.player.getCurrentTime() - st.tl.start;
-  return st.tOffset + (performance.now() - st.t0) / 1000 * st.rate;
-}
-function indexAt(t) {
-  var ts = liveState.times, lo = 0, hi = ts.length - 1;
-  if (t < ts[0]) return 0;
-  while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (ts[mid] <= t) lo = mid; else hi = mid - 1; }
+/* ---------- avanzar solo, por compases ---------- */
+function beatNow() { var st = liveState; return st.beat0 + (performance.now() - st.t0) / 60000 * st.bpm; }
+function indexAtBeat(b) {
+  var s = liveState.startB, lo = 0, hi = s.length - 2;
+  if (b < s[0]) return 0;
+  while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (s[mid] <= b) lo = mid; else hi = mid - 1; }
   return lo;
+}
+function indexAtVideo(t) {
+  var v = liveState.vtimes, lo = 0, hi = v.length - 1;
+  if (t < v[0]) return 0;
+  while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (v[mid] <= t) lo = mid; else hi = mid - 1; }
+  return lo;
+}
+function clickAt(when, accent) {
+  var ac = AC; if (!ac) return;
+  var o = ac.createOscillator(), g = ac.createGain();
+  o.frequency.value = accent ? 1650 : 1100;
+  g.gain.setValueAtTime(0.0001, when); g.gain.exponentialRampToValueAtTime(accent ? 0.5 : 0.32, when + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, when + 0.05);
+  o.connect(g); g.connect(ac.destination); o.start(when); o.stop(when + 0.06);
+}
+/* Clic con el reloj de audio: cada pulso se programa un poco antes, así suena exacto aunque la pantalla se atrase. */
+function scheduleClicks() {
+  var st = liveState, ac = AC; if (!st.click || !ac) return;
+  var nowP = performance.now(), nowA = ac.currentTime, b = beatNow();
+  if (st.nextClick === null || st.nextClick < Math.ceil(b - 1e-6)) st.nextClick = Math.ceil(b - 1e-6);
+  for (var guard = 0; guard < 8; guard++) {
+    var at = st.t0 + (st.nextClick - st.beat0) * 60000 / st.bpm;
+    if (at - nowP > 150) break;
+    if (at >= nowP - 8) clickAt(nowA + Math.max(0, at - nowP) / 1000, st.nextClick % st.bpb === 0);
+    st.nextClick++;
+  }
+}
+function updateBeats(inStep) {
+  var box = lid('lv-beats'); if (!box) return;
+  if (box.classList.contains('lv-beats-t')) { box.textContent = 'Tiempo ' + (Math.floor(inStep) + 1) + ' de ' + Math.ceil(stepBeats(liveState.i)); return; }
+  var k = Math.floor(inStep);
+  Array.prototype.forEach.call(box.children, function (d, q) { d.className = q < k ? 'done' : (q === k ? 'on' : ''); });
 }
 function loop() {
   var st = liveState; if (!st || !st.playing) return;
-  var t = liveTime(), i = indexAt(t);
-  if (i !== st.i) setLiveIndex(i, true);
-  var a = st.times[st.i], b = st.i + 1 < st.times.length ? st.times[st.i + 1] : (st.tl.end || a + 2);
-  var bar = lid('lv-prog'); if (bar) bar.style.width = (Math.max(0, Math.min(1, (t - a) / Math.max(0.1, b - a))) * 100).toFixed(1) + '%';
-  if (st.mode === 'auto' && t > (st.tl.end || st.times[st.times.length - 1] + 2)) { pauseLive(); return; }
+  var k, inStep;
+  if (st.mode === 'video') {
+    var t = yt.player && yt.player.getCurrentTime ? yt.player.getCurrentTime() - st.tl.video.start : 0;
+    k = indexAtVideo(t);
+    var a = st.vtimes[k], z = k + 1 < st.vtimes.length ? st.vtimes[k + 1] : a + stepBeats(k) * 60 / st.tl.bpm;
+    inStep = Math.max(0, Math.min(0.999, (t - a) / Math.max(0.05, z - a))) * stepBeats(k);
+  } else {
+    var b = beatNow();
+    if (b >= st.startB[st.startB.length - 1]) { pauseLive(); return; }
+    k = indexAtBeat(b); inStep = b - st.startB[k];
+    scheduleClicks();
+  }
+  if (k !== st.i) setLiveIndex(k, true);
+  updateBeats(inStep);
   st.raf = requestAnimationFrame(loop);
 }
+/* Cuenta de entrada: un compás completo al tempo de la canción. */
 function countIn(done) {
-  var st = liveState, n = 3;
+  var st = liveState, n = 0, ac = audio(), spb = 60000 / st.bpm;
   st.counting = true; drawLive();
-  var step = function () {
+  var tick = function () {
     if (!liveState || !liveState.counting) return;
-    var box = lid('lv-count');
-    if (n === 0) { st.counting = false; done(); return; }
-    if (box) box.textContent = n;
-    if (st.sound) {
-      var ac = audio();
-      if (ac) { var o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime; o.frequency.value = n === 1 ? 1650 : 1100;
-        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.4, t + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
-        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.07); }
-    }
-    n--; setTimeout(step, 650);
+    if (n === st.bpb) { st.counting = false; done(); return; }
+    var box = lid('lv-count'); if (box) box.textContent = n + 1;
+    if ((st.click || st.sound) && ac) clickAt(ac.currentTime + 0.01, n === 0);
+    n++; setTimeout(tick, spb);
   };
-  step();
+  tick();
 }
 function playLive() {
-  var st = liveState; if (!st || !st.times) return;
+  var st = liveState; if (!st || !st.tl) return;
   if (st.mode === 'video') {
-    showVideo(st.tl.video, st.tl.start).then(function (p) {
+    showVideo(st.tl.video.id, st.tl.video.start).then(function (p) {
       if (!liveState) return;
-      p.seekTo(st.tl.start + (st.i ? st.times[st.i] : Math.max(0, st.times[0] - 2)), true); p.playVideo();
+      p.seekTo(st.tl.video.start + (st.i ? st.vtimes[st.i] : Math.max(0, st.vtimes[0] - 2)), true); p.playVideo();
       st.playing = true; drawLive(); loop();
     }).catch(videoFailed);
     return;
   }
+  audio();
   countIn(function () {
-    st.t0 = performance.now(); st.tOffset = st.times[st.i];
+    st.beat0 = st.startB[st.i]; st.t0 = performance.now(); st.nextClick = null;
     st.playing = true; drawLive(); loop();
   });
 }
 function pauseLive() {
   var st = liveState; if (!st) return;
-  if (st.playing && st.mode === 'auto') st.tOffset = liveTime();
   st.playing = false; st.counting = false; cancelAnimationFrame(st.raf);
   if (st.mode === 'video' && yt.player) { try { yt.player.pauseVideo(); } catch (e) { /* nada */ } }
   drawLive();
 }
-/* Volver a sincronizar: el acorde elegido es el que suena ahora. */
+/* Volver a sincronizar: el acorde elegido es el que suena ahora, desde su primer tiempo. */
 function jumpTo(i) {
   var st = liveState; if (!st) return;
   i = Math.max(0, Math.min(st.path.length - 1, i));
-  if (st.times && st.playing) {
-    if (st.mode === 'video' && yt.player) { try { yt.player.seekTo(st.tl.start + st.times[i], true); } catch (e) { /* nada */ } }
-    else { st.t0 = performance.now(); st.tOffset = st.times[i]; }
-  } else if (st.times) st.tOffset = st.times[i];
+  if (st.tl && st.playing) {
+    if (st.mode === 'video' && yt.player) { try { yt.player.seekTo(st.tl.video.start + st.vtimes[i], true); } catch (e) { /* nada */ } }
+    else { st.beat0 = st.startB[i]; st.t0 = performance.now(); st.nextClick = null; }
+  }
   setLiveIndex(i);
 }
-function setRate(r) {
-  var st = liveState; r = Math.max(0.6, Math.min(1.5, Math.round(r * 100) / 100));
-  if (st.playing) { st.tOffset = liveTime(); st.t0 = performance.now(); }
-  st.rate = r; LS.set('cfp.liveRate', r); lid('lv-nav').innerHTML = navHTML();
+function setBpm(v) {
+  var st = liveState; v = Math.max(30, Math.min(240, Math.round(v)));
+  if (st.playing && st.mode === 'auto') { st.beat0 = beatNow(); st.t0 = performance.now(); st.nextClick = null; }
+  st.bpm = v;
+  setView(st.song, { bpm: v === st.tl.bpm ? null : v });
+  lid('lv-nav').innerHTML = navHTML();
 }
 function setLiveMode(m) {
   var st = liveState; if (!st) return;
   pauseLive(); if (m !== 'listen') stopEar();
   st.mode = m; LS.set('cfp.liveMode', m);
-  if (m === 'video') showVideo(st.tl.video, st.tl.start).catch(videoFailed); else hideVideo();
+  if (m === 'video') showVideo(st.tl.video.id, st.tl.video.start).catch(videoFailed); else hideVideo();
   drawLive();
+}
+function saveGroupTempo() {
+  var st = liveState, song = clone(st.song), tl = clone(st.tl);
+  delete tl.converted; tl.bpm = st.bpm; song.timeline = tl;
+  local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id];
+  setView(song, { bpm: null });
+  current.song = getSong(song.id);
+  var i = st.i, mode = st.mode, pushed = st.pushed;
+  liveState = buildLive(current.song, pushed, mode); liveState.i = i;
+  drawLive();
+  toast('Tempo del grupo: ' + Math.round(tl.bpm) + ' bpm.' + (isGroup() ? ' Publica los cambios para que todos lo tengan.' : ''), 4000);
 }
 function openLiveModes() {
   var st = liveState, has = !!st.tl, hasV = has && !!st.tl.video;
-  var why = st.stale ? 'la canción cambió: vuelve a grabarlo' : 'primero graba el recorrido';
+  var why = st.stale ? 'la canción cambió: vuelve a hacerlo' : 'primero haz el recorrido';
   menuSheet('Cómo avanza', [
     { id: 'manual', icon: 'fwd', label: 'Manual', sub: 'tocando la pantalla o con un pedal', run: function () { setLiveMode('manual'); } },
-    { id: 'auto', icon: 'play', label: 'Automático', sub: has ? 'sigue el ritmo grabado' : why, disabled: !has, run: function () { setLiveMode('auto'); } },
-    { id: 'video', icon: 'video', label: 'Con el video', sub: hasV ? 'para practicar' : (has ? 'se grabó sin video' : why), disabled: !hasV, run: function () { setLiveMode('video'); } },
+    { id: 'auto', icon: 'play', label: 'Automático', sub: has ? 'por compases, a ' + Math.round(st.bpm) + ' bpm' : why, disabled: !has, run: function () { setLiveMode('auto'); } },
+    { id: 'video', icon: 'video', label: 'Con el video', sub: hasV ? 'para practicar' : (has ? 'el recorrido no tiene video' : why), disabled: !hasV, run: function () { setLiveMode('video'); } },
     { id: 'listen', icon: 'mic', label: 'Escuchando (en prueba)', sub: 'oye a la banda y avanza', run: function () { setLiveMode('listen'); } },
-    { id: 'rec', icon: 'rec', label: has ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', sub: 'con el video o tocando', run: openRecorder }
-  ], '<p class="help">Automático y Con el video usan el recorrido que grabes: los momentos exactos en que cambia cada acorde, con sus repeticiones. ' +
+    { id: 'rec', icon: 'rec', label: has ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', sub: 'tocando al ritmo del video o de la banda', run: openRecorder },
+    { id: 'grid', icon: 'list', label: has ? 'Revisar los compases' : 'Hacer el recorrido sin grabar', sub: has ? 'cuánto dura cada acorde' : 'un compás por acorde, y ajustas', run: function () { openGrid(has ? st.tl : newTimeline(), has && st.tl.converted ? 'Este recorrido se grabó en segundos y se pasó a compases. Revísalo y guárdalo.' : ''); } }
+  ], '<p class="help">El recorrido guarda cuántos tiempos dura cada acorde y el tempo de la canción. Automático avanza por compases y puedes cambiar el tempo sin que se desordene. ' +
     'Escuchando usa el micrófono y avanza cuando reconoce el acorde siguiente. En cualquier modo, tocar un acorde de la letra lo pone como el actual.</p>');
 }
 function openLiveMore() {
-  var st = liveState;
-  menuSheet('En vivo', [
+  var st = liveState, items = [
     { id: 'snd', icon: 'speaker', label: st.sound ? 'Sin sonido al avanzar' : 'Sonido al avanzar', sub: 'para practicar', run: function () { st.sound = !st.sound; LS.set('cfp.liveSound', st.sound); drawLive(); soundNow(); } },
-    { id: 'full', icon: 'full', label: document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa', run: function () { if (document.fullscreenElement) exitFull(); else enterFull(); } },
-    { id: 'rec', icon: 'rec', label: st.tl ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', run: openRecorder },
-    { id: 'help', icon: 'text', label: 'Cómo funciona', run: openLiveHelp }
-  ]);
+    { id: 'full', icon: 'full', label: document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa', run: function () { if (document.fullscreenElement) exitFull(); else enterFull(); } }
+  ];
+  if (st.tl) items.push({ id: 'ltempo', icon: 'mic', label: 'Detectar el tempo de la banda', sub: 'con el micrófono, y avanzar a ese tempo', run: function () { pauseLive(); openTempoListen(function (bpm) { setBpm(bpm); toast('Automático a ' + bpm + ' bpm (en este equipo).', 3500); }); } });
+  if (st.tl && Math.round(st.bpm) !== Math.round(st.tl.bpm)) items.push({ id: 'gt', icon: 'metro', label: 'Guardar ' + Math.round(st.bpm) + ' bpm como tempo del grupo', sub: 'ahora ' + Math.round(st.tl.bpm), run: saveGroupTempo });
+  items.push({ id: 'grid', icon: 'list', label: st.tl ? 'Revisar los compases' : 'Hacer el recorrido sin grabar', run: function () { openGrid(st.tl || newTimeline()); } });
+  items.push({ id: 'rec', icon: 'rec', label: st.tl ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', run: openRecorder });
+  items.push({ id: 'help', icon: 'text', label: 'Cómo funciona', run: openLiveHelp });
+  menuSheet('En vivo', items);
 }
 function openLiveHelp() {
   openSheet('Tocar en vivo', '<div class="help">' +
     '<p><b>Piano.</b> Arriba la mano derecha, abajo la izquierda, con los dedos marcados. Las posiciones son cercanas: de un acorde al siguiente la mano se mueve lo menos posible. Abajo ves el acorde que viene.</p>' +
     '<p><b>Manual.</b> Toca la pantalla, usa las flechas o un pedal Bluetooth de pasar páginas. Quien conoce la canción puede pasarla con el pie.</p>' +
-    '<p><b>Grabar el recorrido.</b> Abre el video (o toquen la canción), marca dónde empieza y toca «Cambio» cada vez que cambia el acorde. Si una parte se repite, toca ese acorde en la letra. Queda guardado en la canción y se publica con ella.</p>' +
-    '<p><b>Automático.</b> Avanza solo con el ritmo grabado, después de una cuenta de 3. Si la banda va más rápido o más lento, cambia la velocidad; si se desfasan, toca el acorde que suena en la letra para volver a sincronizar.</p>' +
-    '<p><b>Escuchando (en prueba).</b> El celular oye a la banda y avanza cuando reconoce el acorde siguiente. Funciona mejor cerca de la guitarra y con poco ruido; en una laptop con la guitarra conectada a la interfaz de audio, mejor todavía. Si se pierde, toca el acorde correcto en la letra.</p></div>');
+    '<p><b>Recorrido por compases.</b> Guarda cuántos tiempos dura cada acorde. Se graba tocando «Cambio» al ritmo del video o de la banda: la app acomoda cada toque al tiempo más cercano, así no depende de tu precisión. Luego lo revisas en la cuadrícula. También puedes hacerlo sin grabar: un compás por acorde y ajustas lo que cambie.</p>' +
+    '<p><b>Automático.</b> Tras una cuenta de un compás, avanza por tiempos y te muestra en qué tiempo del acorde van. Puedes subir o bajar el tempo en plena canción y con «Clic» suena el metrónomo para la banda. Si se desfasan, toca en la letra el acorde que suena.</p>' +
+    '<p><b>Escuchando (en prueba).</b> El celular oye a la banda y avanza cuando reconoce el acorde siguiente. Funciona mejor cerca de la guitarra y con poco ruido; en una laptop con la guitarra conectada a la interfaz de audio, mejor todavía.</p></div>');
 }
 function onLiveTap(e) {
   var st = liveState; if (!st) return;
+  if (gridState) { onGridTap(e); return; }
   if (recState) { onRecTap(e); return; }
   var jump = e.target.closest('.lv-lines [data-i]');
   if (jump) {
@@ -3481,14 +3769,16 @@ function onLiveTap(e) {
       if (st.mode === 'listen') { if (ear) { stopEar(); drawLive(); } else startEar(); }
       else if (st.playing || st.counting) pauseLive(); else playLive();
       break;
-    case 'slower': setRate(st.rate - 0.05); break;
-    case 'faster': setRate(st.rate + 0.05); break;
+    case 'slower': setBpm(st.bpm - 2); break;
+    case 'faster': setBpm(st.bpm + 2); break;
+    case 'click': st.click = !st.click; LS.set('cfp.liveClick', st.click); st.nextClick = null; audio(); lid('lv-nav').innerHTML = navHTML(); break;
   }
 }
 document.addEventListener('keydown', function (e) {
   var st = liveState; if (!st || sheetRoot.firstChild) return;
   var tag = (e.target && e.target.tagName || '').toLowerCase(); if (tag === 'input' || tag === 'textarea') return;
   var k = e.key;
+  if (gridState) { if (gridKey(k)) { e.preventDefault(); e.stopImmediatePropagation(); } return; }
   if (recState) { if (recKey(k)) { e.preventDefault(); e.stopImmediatePropagation(); } return; }
   if (k === ' ' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === 'Enter') jumpTo(st.i + 1);
   else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') jumpTo(st.i - 1);
@@ -3498,7 +3788,7 @@ document.addEventListener('keydown', function (e) {
   e.preventDefault(); e.stopImmediatePropagation();
 }, true);
 
-/* parte 7: grabar el recorrido (con un video de YouTube o mientras la banda toca) */
+/* parte 7: grabar el recorrido (con un video de YouTube o mientras la banda toca) y reproductor de YouTube */
 var recState = null;
 var yt = { player: null, id: '', ready: null };
 function loadYT() {
@@ -3543,11 +3833,42 @@ function destroyPlayer() {
 }
 function videoFailed() { toast('No se pudo abrir el video. Revisa la conexión a internet.', 4500); }
 
+/* ---------- marcar el pulso: la recta que mejor pasa por los toques da el tempo ---------- */
+function openTapTempo(onUse) {
+  var taps = [], bpm = null;
+  openSheet('Marcar el pulso', '<p class="help">Toca el botón siguiendo el pulso de la canción (el que marcarías con el pie), al menos 8 veces. También sirve la barra espaciadora.</p>' +
+    '<button type="button" class="tap-big" id="tap-b">Pulso</button><p class="tap-res" id="tap-r">Esperando toques…</p>' +
+    '<div class="btnrow"><button type="button" class="btn primary" data-x="use" disabled>Usar este tempo</button><button type="button" class="btn" data-x="reset">Empezar de nuevo</button></div>', function (el) {
+    var res = el.querySelector('#tap-r'), use = el.querySelector('[data-x="use"]');
+    var tap = function () {
+      var now = performance.now();
+      if (taps.length && now - taps[taps.length - 1] > 2500) taps = [];
+      taps.push(now); bpm = C.tlTapBpm(taps);
+      res.textContent = bpm ? Math.round(bpm) + ' bpm (' + taps.length + ' toques)' : taps.length + (taps.length === 1 ? ' toque…' : ' toques…');
+      use.disabled = !(bpm && taps.length >= 6);
+      var b = el.querySelector('#tap-b'); b.classList.remove('hit'); void b.offsetWidth; b.classList.add('hit');
+    };
+    el.querySelector('#tap-b').addEventListener('pointerdown', function (e) { e.preventDefault(); tap(); });
+    el.addEventListener('keydown', function (e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (e.target.id === 'tap-b' || e.key === ' ') tap(); } });
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-x]'); if (!b) return;
+      if (b.getAttribute('data-x') === 'reset') { taps = []; bpm = null; res.textContent = 'Esperando toques…'; use.disabled = true; }
+      else if (b.getAttribute('data-x') === 'use' && bpm) { closeSheet(); onUse(Math.round(bpm)); }
+    });
+    el.querySelector('#tap-b').focus();
+  });
+}
+
+/* ---------- grabar ---------- */
 function openRecorder() {
   var st = liveState; if (!st) return;
   pauseLive(); stopEar();
-  var song = st.song, tl = song.timeline || {}, ref = (song.refs || [])[0] || '';
-  recState = { video: tl.video || C.ytId(ref), start: tl.start != null ? tl.start : C.ytStart(ref), marks: [], p: 0, phase: 'setup', t0: 0, end: 0, timer: 0 };
+  var song = st.song, tl = st.tl, ref = (song.refs || [])[0] || '';
+  recState = {
+    video: tl && tl.video ? tl.video.id : C.ytId(ref), start: tl && tl.video ? tl.video.start : C.ytStart(ref),
+    bpm: tl ? Math.round(tl.bpm) : (+song.bpm || info(song).bpm || ''), beats: tl ? tl.beats : 4,
+    marks: [], p: 0, phase: 'setup', t0: 0, timer: 0
+  };
   if (recState.video) showVideo(recState.video, recState.start).catch(videoFailed); else hideVideo();
   drawRec();
 }
@@ -3555,6 +3876,9 @@ function recTime() {
   var r = recState;
   if (r.video && yt.player && yt.player.getCurrentTime) return yt.player.getCurrentTime() - r.start;
   return (performance.now() - r.t0) / 1000;
+}
+function sigButtons(cur, attr) {
+  return [2, 3, 4, 6].map(function (b) { return '<button type="button" ' + attr + '="' + b + '" aria-pressed="' + (cur === b) + '">' + b + '/' + (b === 6 ? 8 : 4) + '</button>'; }).join('');
 }
 function drawRec() {
   var st = liveState, r = recState, song = st.song, inf = info(song), fmt = fmtFor(inf.key, songShift(song));
@@ -3564,37 +3888,33 @@ function drawRec() {
   var main = '', nav = '';
   if (r.phase === 'setup') {
     main = '<div class="rec-setup">' +
-      '<p class="help">El recorrido guarda en qué momento cambia cada acorde, con sus repeticiones. Con eso el modo en vivo avanza solo.</p>' +
+      '<p class="help">Toca «Cambio» cada vez que cambia el acorde. La app acomoda cada toque al tiempo más cercano del compás, así que no hace falta ser exacto. Al final revisas los compases.</p>' +
       '<div class="field"><label for="rc-url">Video de YouTube (opcional)</label><div class="rc-row">' +
         '<input id="rc-url" value="' + esc(r.video ? 'https://youtu.be/' + r.video : '') + '" placeholder="Pega aquí el enlace del video" autocomplete="off">' +
         '<button type="button" class="btn" data-rc="load">Abrir</button></div></div>' +
       (r.video
         ? '<div class="field"><label for="rc-start">La canción empieza en</label><div class="rc-row"><input id="rc-start" inputmode="numeric" value="' + C.fmtClock(r.start) + '">' +
-          '<button type="button" class="btn" data-rc="markstart">Usar el minuto del video</button></div></div>' +
-          '<p class="help">Si el video trae varias canciones seguidas, pon el minuto en que empieza esta. Puedes adelantar el video hasta ahí y tocar «Usar el minuto del video».</p>'
-        : '<p class="help">Sin video: toca «Empezar», espera la cuenta de 3 y marca los cambios mientras la banda toca.</p>') +
-      '<p class="help"><b>Cómo marcar:</b> toca «Cambio» justo cuando empieza a sonar cada acorde. Si una parte se repite, toca ese acorde en la letra. Si te equivocas, «Deshacer».</p></div>';
+          '<button type="button" class="btn" data-rc="markstart">Usar el minuto del video</button></div></div>'
+        : '<p class="help">Sin video: toca «Empezar», espera la cuenta de 3 y marca los cambios mientras la banda toca. Si hay un enlace y quieres grabar sin video, bórralo.</p>') +
+      '<div class="grid2"><div class="field"><label for="rc-bpm">Tempo (bpm)</label><div class="rc-row"><input id="rc-bpm" inputmode="numeric" value="' + esc(String(r.bpm || '')) + '" placeholder="?">' +
+        '<button type="button" class="btn" data-rc="tap">Marcar el pulso</button><button type="button" class="btn" data-rc="listen">' + icon('mic') + 'Detectar</button></div></div>' +
+      '<div class="field"><span class="lbl-s">Compás</span><div class="seg">' + sigButtons(r.beats, 'data-rcsig') + '</div></div></div>' +
+      '<p class="help">Si no sabes el tempo: «Detectar» lo saca con el micrófono mientras suena la canción, «Marcar el pulso» lo calcula de tus toques, o déjalo vacío y se calcula al grabar.</p></div>';
     nav = '<div class="lv-row"><button type="button" class="btn" data-rc="close">Cancelar</button><button type="button" class="btn primary" data-rc="begin">' + icon('rec') + 'Empezar</button></div>';
   } else if (r.phase === 'count') {
     main = '<div class="lv-count rec-count" id="rc-count">3</div>';
     nav = '<div class="lv-row"><button type="button" class="btn" data-rc="again">Cancelar</button></div>';
-  } else if (r.phase === 'rec') {
+  } else {
     main = '<button type="button" class="rec-big" data-rc="mark" id="rc-big">Cambio<b id="rc-next"></b></button>' +
       '<p class="rec-stat"><span id="rc-clock">0:00</span><span id="rc-count2"></span></p>' +
       '<div class="song rec-lines" id="rc-lines">' + bodyHTML(song, fmt) + '</div>';
     nav = '<div class="lv-row"><button type="button" class="btn" data-rc="undo">Deshacer</button><button type="button" class="btn primary" data-rc="finish">Terminar</button></div>';
-  } else {
-    var dur = r.end;
-    main = '<div class="rec-setup"><p class="rec-sum">Marcaste <b>' + r.marks.length + '</b> cambios de acorde en <b>' + C.fmtClock(dur) + '</b>.</p>' +
-      '<p class="help">Al guardarlo, el modo en vivo podrá avanzar solo' + (r.video ? ', y también junto con el video para practicar' : '') + '. Se guarda en la canción' +
-      (isGroup() ? ' y se comparte con el grupo cuando publiques los cambios' : '') + '.</p></div>';
-    nav = '<div class="lv-row"><button type="button" class="btn" data-rc="again">Volver a grabar</button><button type="button" class="btn primary" data-rc="save">Guardar</button></div>';
   }
   lid('lv-main').innerHTML = main;
   lid('lv-nav').innerHTML = nav;
   if (r.phase === 'rec') { fixCollisions(lid('rc-lines')); updateRec(); }
 }
-/* Solo cambia lo necesario mientras se graba: el próximo acorde, los marcados y el reloj. */
+/* Mientras se graba solo cambia lo necesario: el próximo acorde, los marcados y el reloj. */
 function updateRec() {
   var st = liveState, r = recState; if (!r || r.phase !== 'rec') return;
   var fmt = fmtFor(info(st.song).key, songShift(st.song)), box = lid('rc-lines');
@@ -3604,22 +3924,27 @@ function updateRec() {
   Array.prototype.forEach.call(box.querySelectorAll('.done, .now'), function (x) { x.classList.remove('done', 'now'); });
   r.marks.forEach(function (m) { var x = box.querySelector('[data-i="' + st.steps[m[0]].n + '"]'); if (x) x.classList.add('done'); });
   var nx = r.p < st.steps.length ? box.querySelector('[data-i="' + st.steps[r.p].n + '"]') : null;
-  if (nx) { nx.classList.add('now'); var br = nx.getBoundingClientRect(), mr = lid('lv-main').getBoundingClientRect();
-    if (br.top < mr.top + 60 || br.bottom > mr.bottom - 20) lid('lv-main').scrollTop += br.top - mr.top - mr.height / 3; }
+  if (nx) {
+    nx.classList.add('now');
+    var br = nx.getBoundingClientRect(), mr = lid('lv-main').getBoundingClientRect();
+    if (br.top < mr.top + 60 || br.bottom > mr.bottom - 20) lid('lv-main').scrollTop += br.top - mr.top - mr.height / 3;
+  }
 }
 function startRec() {
-  var r = recState, sv = lid('rc-start'), uv = lid('rc-url');
+  var r = recState, sv = lid('rc-start'), uv = lid('rc-url'), bv = lid('rc-bpm');
   if (uv) {
     var u = uv.value.trim(), vid = C.ytId(u);
     if (u && !vid) { toast('Ese enlace no es de un video de YouTube. Bórralo para grabar sin video.', 4500); uv.focus(); return; }
-    r.video = vid;                                  // sin enlace: se graba con cronómetro, mientras la banda toca
+    r.video = vid;
     if (!vid) hideVideo();
   }
   if (sv && r.video) { var t = C.parseClock(sv.value); if (t === null) { toast('Escribe el inicio así: 2:43'); sv.focus(); return; } r.start = t; }
+  if (bv) { var b = +bv.value.trim(); r.bpm = bv.value.trim() && b >= 30 && b <= 240 ? b : ''; if (bv.value.trim() && !r.bpm) { toast('Escribe un tempo entre 30 y 240, o déjalo vacío.'); bv.focus(); return; } }
   r.marks = []; r.p = 0;
   var go = function () { r.phase = 'rec'; drawRec(); clearInterval(r.timer); r.timer = setInterval(function () { var c = lid('rc-clock'); if (c && recState) c.textContent = C.fmtClock(Math.max(0, recTime())); }, 200); };
   if (r.video) {
-    showVideo(r.video, r.start).then(function (p) { if (!recState) return; p.seekTo(Math.max(0, r.start - 1), true); p.playVideo(); go(); }).catch(videoFailed);
+    showVideo(r.video, r.start).then(function (p) { if (!recState) return; p.seekTo(Math.max(0, r.start - 1), true); p.playVideo(); go(); })
+      .catch(function () { toast('No se pudo abrir el video (¿sin internet?). Para grabar sin video, borra el enlace y toca «Empezar».', 6000); });
     return;
   }
   var n = 3; r.phase = 'count'; drawRec();
@@ -3635,7 +3960,7 @@ function recMark(k) {
   var st = liveState, r = recState; if (!r || r.phase !== 'rec' || k < 0 || k >= st.steps.length) return;
   var t = recTime();
   if (r.marks.length && t <= r.marks[r.marks.length - 1][1]) t = r.marks[r.marks.length - 1][1] + 0.01;
-  r.marks.push([k, Math.round(t * 100) / 100]);
+  r.marks.push([k, Math.round(t * 1000) / 1000]);
   r.p = Math.min(st.steps.length, k + 1);
   var big = lid('rc-big'); if (big) { big.classList.remove('hit'); void big.offsetWidth; big.classList.add('hit'); }
   updateRec();
@@ -3644,27 +3969,20 @@ function recUndo() {
   var r = recState; if (!r || !r.marks.length) return;
   var m = r.marks.pop(); r.p = m[0]; updateRec();
 }
+/* Al terminar, los toques se acomodan a la cuadrícula del compás y se abre la revisión. */
 function finishRec() {
-  var r = recState;
+  var st = liveState, r = recState;
   if (r.marks.length < 2) { toast('Marca al menos dos cambios de acorde.'); return; }
-  r.end = Math.max(recTime(), r.marks[r.marks.length - 1][1] + 1);
-  clearInterval(r.timer); r.phase = 'done';
+  var end = Math.max(recTime(), r.marks[r.marks.length - 1][1] + 0.5);
+  clearInterval(r.timer);
   if (yt.player) { try { yt.player.pauseVideo(); } catch (e) { /* nada */ } }
-  drawRec();
-}
-function saveRec() {
-  var st = liveState, r = recState, song = clone(st.song);
-  song.timeline = { v: 1, video: r.video || '', start: r.video ? Math.round(r.start * 100) / 100 : 0, sig: seqSig(st.steps),
-    steps: r.marks, end: Math.round(r.end * 100) / 100, rec: new Date().toISOString() };
-  local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id];
-  current.song = getSong(song.id);
-  var mode = r.video ? 'video' : 'auto', pushed = st.pushed;
-  clearInterval(r.timer); recState = null;
-  LS.set('cfp.liveMode', mode);
-  liveState = buildLive(current.song, pushed, mode);
-  if (mode !== 'video') hideVideo();
-  drawLive();
-  toast('Recorrido guardado: ' + r.marks.length + ' cambios.' + (isGroup() ? ' Publica los cambios para que el grupo también lo tenga.' : ''), 5000);
+  var guessed = !r.bpm, bpm = r.bpm || C.tlEstimateBpm(r.marks, end, r.beats) || 90;
+  var tl = { v: 2, bpm: bpm, beats: r.beats, sig: seqSig(st.steps), steps: C.tlQuantize(r.marks, end, bpm),
+             video: r.video ? { id: r.video, start: Math.round(r.start * 100) / 100 } : null };
+  if (!r.video) tl.steps.forEach(function (s) { s[2] = null; });
+  recState = null;
+  openGrid(tl, guessed ? 'Tempo calculado de tus toques: ' + Math.round(bpm) + ' bpm. Confírmalo con «Escuchar»; si no calza, márcalo con el pulso.'
+                       : 'Tus toques ya están acomodados a los tiempos. Revisa y guarda.', true);
 }
 function closeRec() {
   var r = recState; if (!r) return;
@@ -3679,6 +3997,8 @@ function onRecTap(e) {
     for (var k = 0; k < st.steps.length; k++) if (st.steps[k].n === n) { recMark(k); return; }
     return;
   }
+  var sig = e.target.closest('[data-rcsig]');
+  if (sig) { r.beats = +sig.getAttribute('data-rcsig'); Array.prototype.forEach.call(sig.parentNode.children, function (x) { x.setAttribute('aria-pressed', String(x === sig)); }); return; }
   var b = e.target.closest('[data-rc]'); if (!b || b.disabled) return;
   switch (b.getAttribute('data-rc')) {
     case 'close':
@@ -3688,17 +4008,19 @@ function onRecTap(e) {
       var u = lid('rc-url').value, id = C.ytId(u);
       if (!id) { toast('Ese enlace no es de un video de YouTube.'); break; }
       r.video = id; if (C.ytStart(u)) r.start = C.ytStart(u);
+      if (lid('rc-bpm')) r.bpm = lid('rc-bpm').value.trim() ? +lid('rc-bpm').value : '';
       showVideo(id, r.start).catch(videoFailed); drawRec();
       break;
     case 'markstart':
       if (yt.player && yt.player.getCurrentTime) { r.start = Math.max(0, yt.player.getCurrentTime()); lid('rc-start').value = C.fmtClock(r.start); toast('La canción empieza en ' + C.fmtClock(r.start) + '.'); }
       break;
+    case 'tap': openTapTempo(function (bpm) { r.bpm = bpm; var f = lid('rc-bpm'); if (f) f.value = bpm; }); break;
+    case 'listen': openTempoListen(function (bpm) { r.bpm = bpm; var f = lid('rc-bpm'); if (f) f.value = bpm; }); break;
     case 'begin': startRec(); break;
     case 'mark': recMark(r.p); break;
     case 'undo': recUndo(); break;
     case 'finish': finishRec(); break;
     case 'again': clearInterval(r.timer); r.marks = []; r.p = 0; r.phase = 'setup'; if (yt.player) { try { yt.player.pauseVideo(); } catch (x) { /* nada */ } } drawRec(); break;
-    case 'save': saveRec(); break;
   }
 }
 /* Teclado o pedal mientras se graba: espacio, Enter o → marcan el cambio; borrar deshace. */
@@ -3784,7 +4106,7 @@ function earFrame() {
   if (!mx || (mx - mean) / mx < 0.3) { ear.hits = Math.max(0, ear.hits - 1); earMeter('ruido'); return; }
   var cur = earTpl(st.i), n1 = st.i + 1 < st.path.length ? st.i + 1 : -1;
   // el mismo acorde dos veces seguidas no se distingue por el sonido: con recorrido grabado se respeta su tiempo
-  if (n1 >= 0 && sameChord(earTpl(n1), cur) && st.times && (performance.now() - ear.since) / 1000 >= (st.times[n1] - st.times[st.i]) * 0.95) { earAdvance(n1); return; }
+  if (n1 >= 0 && sameChord(earTpl(n1), cur) && st.startB && (performance.now() - ear.since) / 1000 >= stepBeats(st.i) * 60 / st.bpm * 0.95) { earAdvance(n1); return; }
   // se compara con el siguiente acorde que suena distinto (salta los repetidos)
   var j = -1;
   for (var q2 = st.i + 1; q2 < st.path.length && q2 <= st.i + 3; q2++) if (!sameChord(earTpl(q2), cur)) { j = q2; break; }
@@ -3802,6 +4124,298 @@ function earMeter(sc, sn, j) {
   if (sc === null) { el.textContent = 'Escuchando… (silencio)'; return; }
   if (sc === 'ruido') { el.textContent = 'Escuchando… (no distingo un acorde claro)'; return; }
   el.innerHTML = 'Escuchando: se parece al actual <b>' + Math.round(sc * 100) + ' %</b>' + (j >= 0 ? ', al siguiente <b>' + Math.round(sn * 100) + ' %</b>' : '');
+}
+
+/* parte 9: recorrido por compases — revisar y ajustar en una cuadrícula, escuchar con clic y acordes, guardar */
+var gridState = null;
+function newTimeline() {
+  var st = liveState, bpm = +st.song.bpm || info(st.song).bpm || 90;
+  return { v: 2, bpm: bpm, beats: 4, sig: seqSig(st.steps), steps: st.steps.map(function (s, k) { return [k, 4, null]; }), video: null };
+}
+function openGrid(tl, note, fromRec) {
+  var st = liveState; if (!st) return;
+  pauseLive(); stopEar();
+  var t = clone(tl); delete t.converted; t.sig = seqSig(st.steps);
+  gridState = { tl: t, sel: 0, undo: [], note: note || '', start: JSON.stringify(t), play: null, fromRec: !!fromRec };
+  hideVideo();
+  drawGrid();
+}
+function gridFmt() { var st = liveState; return fmtFor(info(st.song).key, songShift(st.song)); }
+function gridChord(k) { var st = liveState; return C.splitTok(gridFmt()(st.steps[gridState.tl.steps[k][0]].c)).core; }
+function beatsWord(b) { return (b === 1 ? '1 tiempo' : String(b).replace('.', ',') + ' tiempos') + (b % gridState.tl.beats === 0 ? ' (' + (b / gridState.tl.beats) + (b === gridState.tl.beats ? ' compás)' : ' compases)') : ''); }
+function lineText(li) {
+  var l = info(liveState.song).lines[li]; if (!l || !l.segs) return '';
+  if (l.type === 'instr') return 'Línea de acordes';
+  var t = l.segs.map(function (s) { return s.t; }).join('').replace(/\s+/g, ' ').trim();
+  return t.length > 42 ? t.slice(0, 40) + '…' : t;
+}
+function drawGrid() {
+  var st = liveState, g = gridState, tl = g.tl, starts = C.tlStarts(tl.steps), total = starts[starts.length - 1];
+  lid('live').classList.add('rec');
+  lid('lv-top').innerHTML = '<button type="button" class="iconbtn" data-g="close" aria-label="Salir de los compases">' + icon('close') + '</button>' +
+    '<h2>Compases: ' + esc(C.sentenceCase(st.song.title)) + '</h2>' +
+    '<button type="button" class="btn g-play' + (g.play ? ' on' : '') + '" data-g="play">' + (g.play ? icon('pause') + 'Detener' : icon('play') + 'Escuchar') + '</button>';
+  var bars = Math.ceil(total / tl.beats), rows = '';
+  for (var b = 0; b < bars; b++) {
+    var a0 = b * tl.beats, a1 = a0 + tl.beats, segs = '';
+    for (var k = 0; k < tl.steps.length; k++) {
+      var s0 = starts[k], s1 = starts[k + 1], o0 = Math.max(a0, s0), o1 = Math.min(a1, s1);
+      if (o1 <= o0) continue;
+      segs += '<button type="button" class="gb' + (k === g.sel ? ' sel' : '') + (o0 > s0 ? ' cont' : '') + '" data-gk="' + k + '" style="flex:' + (o1 - o0) + ' 1 0;--d:' + (o1 - o0) + '"' +
+        ' aria-label="' + esc(gridChord(k)) + ', ' + beatsWord(tl.steps[k][1]) + '">' + (o0 === s0 ? esc(gridChord(k)) : '') + '</button>';
+    }
+    if (a1 > total) segs += '<span class="gb empty" style="flex:' + (a1 - total) + ' 1 0;--d:' + (a1 - total) + '"></span>';
+    rows += '<div class="gbar"><span class="gnum">' + (b + 1) + '</span><div class="grow">' + segs + '</div></div>';
+  }
+  lid('lv-main').innerHTML =
+    '<div class="g-head">' + (g.note ? '<p class="g-note">' + esc(g.note) + '</p>' : '') +
+      '<div class="g-tempo"><span class="lbl-s">Tempo</span><button type="button" class="btn" data-g="bpm-" aria-label="Más lento">−</button><output>' + Math.round(tl.bpm) + '</output><span>bpm</span>' +
+        '<button type="button" class="btn" data-g="bpm+" aria-label="Más rápido">+</button><button type="button" class="btn" data-g="tap">Marcar el pulso</button>' +
+        '<button type="button" class="btn" data-g="listen">' + icon('mic') + 'Detectar</button></div>' +
+      '<div class="g-sig"><span class="lbl-s">Compás</span><div class="seg">' + sigButtons(tl.beats, 'data-gsig') + '</div></div>' +
+      '<p class="help">' + bars + (bars === 1 ? ' compás' : ' compases') + ', ' + C.fmtClock(total * 60 / tl.bpm) + ' aprox. Cada fila es un compás. Toca un acorde y cambia cuánto dura con los botones de abajo; «Escuchar» lo toca con clic para comprobarlo.</p></div>' +
+    '<div class="g-grid" id="g-grid">' + rows + '</div>';
+  var sel = tl.steps[g.sel];
+  lid('lv-nav').innerHTML =
+    '<div class="g-selinfo"><b>' + esc(gridChord(g.sel)) + '</b><span>' + beatsWord(sel[1]) + '</span><span class="g-line">' + esc(lineText(st.steps[sel[0]].li)) + '</span></div>' +
+    '<div class="g-ctl"><button type="button" class="btn" data-g="prev" aria-label="Acorde anterior"' + (g.sel ? '' : ' disabled') + '>' + icon('back') + '</button>' +
+      '<button type="button" class="btn" data-g="m1" aria-label="Un tiempo menos">−1</button><button type="button" class="btn" data-g="mh" aria-label="Medio tiempo menos">−½</button>' +
+      '<button type="button" class="btn" data-g="ph" aria-label="Medio tiempo más">+½</button><button type="button" class="btn" data-g="p1" aria-label="Un tiempo más">+1</button>' +
+      '<button type="button" class="btn" data-g="next" aria-label="Acorde siguiente"' + (g.sel < tl.steps.length - 1 ? '' : ' disabled') + '>' + icon('fwd') + '</button></div>' +
+    '<div class="lv-row"><button type="button" class="btn" data-g="more">' + icon('more') + 'Más</button><button type="button" class="btn primary" data-g="save">Guardar</button></div>';
+  var se = lid('g-grid').querySelector('.gb.sel');
+  if (se) { var r = se.getBoundingClientRect(), m = lid('lv-main').getBoundingClientRect(); if (r.top < m.top + 4 || r.bottom > m.bottom - 4) lid('lv-main').scrollTop += r.top - m.top - m.height / 2; }
+}
+function gPush() { var g = gridState; g.undo.push(JSON.stringify(g.tl)); if (g.undo.length > 120) g.undo.shift(); }
+function gDur(d) {
+  var g = gridState, s = g.tl.steps[g.sel], v = s[1] + d;
+  if (v < 0.5 || v > 64) return;
+  gPush(); s[1] = v; if (g.play) { gridStop(); } drawGrid();
+}
+function gridMore() {
+  var g = gridState;
+  menuSheet('Recorrido', [
+    { id: 'undo', icon: 'back', label: 'Deshacer', disabled: !g.undo.length, run: function () { g.tl = JSON.parse(g.undo.pop()); g.sel = Math.min(g.sel, g.tl.steps.length - 1); drawGrid(); } },
+    { id: 'ins', icon: 'add', label: 'Insertar un acorde después de ' + gridChord(g.sel), sub: 'por ejemplo, una parte que se repite', run: gridInsert },
+    { id: 'del', icon: 'trash', label: 'Quitar ' + gridChord(g.sel) + ' del recorrido', disabled: g.tl.steps.length < 2, run: function () { gPush(); g.tl.steps.splice(g.sel, 1); g.sel = Math.min(g.sel, g.tl.steps.length - 1); drawGrid(); } },
+    { id: 'bar', icon: 'list', label: 'Poner cada acorde en un compás', sub: 'y ajustar después', run: function () { gPush(); g.tl.steps.forEach(function (s) { s[1] = g.tl.beats; }); drawGrid(); } },
+    { id: 'rec', icon: 'rec', label: 'Grabar de nuevo', run: function () { gridStop(); gridState = null; openRecorder(); } }
+  ]);
+}
+function gridInsert() {
+  var g = gridState, st = liveState, fmt = gridFmt(), h = '';
+  st.steps.forEach(function (s, k) { h += '<button type="button" data-ins="' + k + '"><b>' + esc(C.splitTok(fmt(s.c)).core) + '</b><span>' + esc(lineText(s.li)) + '</span></button>'; });
+  openSheet('Insertar después de ' + gridChord(g.sel), '<p class="help">Elige el acorde que suena a continuación. Entra con un compás; luego ajustas cuánto dura.</p><div class="g-ins">' + h + '</div>', function (el) {
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-ins]'); if (!b) return;
+      gPush(); g.tl.steps.splice(g.sel + 1, 0, [+b.getAttribute('data-ins'), g.tl.beats, null]); g.sel++;
+      closeSheet(); drawGrid();
+    });
+  });
+}
+function gridSave() {
+  var st = liveState, g = gridState, song = clone(st.song), tl = g.tl;
+  gridStop();
+  song.timeline = { v: 2, bpm: Math.round(tl.bpm * 10) / 10, beats: tl.beats, sig: seqSig(st.steps),
+    steps: tl.steps.map(function (s) { return [s[0], s[1], typeof s[2] === 'number' ? s[2] : null]; }), video: tl.video || null, rec: new Date().toISOString() };
+  local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id];
+  setView(song, { bpm: null });
+  current.song = getSong(song.id);
+  var mode = tl.video && (st.mode === 'video' || g.fromRec) ? 'video' : 'auto', pushed = st.pushed;   // recién grabado con video: se comprueba con el video
+  gridState = null; LS.set('cfp.liveMode', mode);
+  liveState = buildLive(current.song, pushed, mode);
+  if (mode === 'video') showVideo(tl.video.id, tl.video.start).catch(videoFailed); else hideVideo();
+  drawLive();
+  var bars = Math.ceil(C.tlStarts(tl.steps)[tl.steps.length] / tl.beats);
+  toast('Recorrido guardado: ' + bars + ' compases a ' + Math.round(tl.bpm) + ' bpm.' + (isGroup() ? ' Publica los cambios para que el grupo lo tenga.' : ''), 5000);
+}
+function gridClose() {
+  var g = gridState;
+  var go = function () { gridStop(); gridState = null; var st = liveState; if (st.mode === 'video' && st.tl) showVideo(st.tl.video.id, st.tl.video.start).catch(videoFailed); drawLive(); };
+  if (JSON.stringify(g.tl) !== g.start) confirmSheet('Salir sin guardar', 'Se pierden los cambios del recorrido.', 'Salir', go, true); else go();
+}
+
+/* ---------- escuchar: clic con acento en el tiempo 1 y los acordes en su lugar (reloj de audio) ---------- */
+function chordAt(when, notes, len) {
+  var ac = AC; if (!ac) return;
+  var out = ac.createGain(); out.gain.value = 0.16; out.connect(ac.destination);
+  notes.forEach(function (m, q) {
+    var f = 440 * Math.pow(2, (m - 69) / 12), o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'triangle'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, when); g.gain.exponentialRampToValueAtTime(q === 0 ? 0.9 : 0.55, when + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + Math.max(0.3, len));
+    o.connect(g); g.connect(out); o.start(when); o.stop(when + Math.max(0.3, len) + 0.05);
+  });
+}
+function gridPlay() {
+  var g = gridState, st = liveState, ac = audio();
+  if (!ac) { toast('Este equipo no puede reproducir sonido.'); return; }
+  var tl = g.tl, starts = C.tlStarts(tl.steps), sh = songShift(st.song), inf = info(st.song), spell = spellFor(inf.key, sh), keep = C.mod12(sh) === 0 && prefs.spell === 'auto', prev = null;
+  var vo = tl.steps.map(function (s) { var en = C.splitTok(C.transposeTok(st.steps[s[0]].c, { shift: sh, spell: spell, notation: 'en', keep: keep })).core; var v = C.closeVoicing(en, prev) || C.pianoVoicing(en); prev = v; return v; });
+  g.play = { t0: ac.currentTime + 0.15, b0: starts[g.sel], starts: starts, spb: 60 / tl.bpm, nextBeat: Math.ceil(starts[g.sel]), nextStep: g.sel, vo: vo, end: starts[starts.length - 1], timer: 0, marks: [] };
+  g.play.timer = setInterval(gridTick, 40);
+  gridTick();
+}
+function gridTick() {
+  var g = gridState, p = g && g.play, ac = AC; if (!p || !ac) return;
+  var horizon = ac.currentTime + 0.3, at = function (b) { return p.t0 + (b - p.b0) * p.spb; };
+  while (p.nextBeat < p.end && at(p.nextBeat) < horizon) { clickAt(at(p.nextBeat), p.nextBeat % g.tl.beats === 0); p.nextBeat++; }
+  while (p.nextStep < g.tl.steps.length && at(p.starts[p.nextStep]) < horizon) {
+    var k = p.nextStep, when = at(p.starts[k]), v = p.vo[k];
+    chordAt(when, [v.left].concat(v.right), Math.min(2.4, (p.starts[k + 1] - p.starts[k]) * p.spb));
+    p.marks.push(setTimeout(gridMark.bind(null, k), Math.max(0, (when - ac.currentTime) * 1000)));
+    p.nextStep++;
+  }
+  if (p.nextStep >= g.tl.steps.length && ac.currentTime > at(p.end)) { gridStop(); drawGrid(); }
+}
+function gridMark(k) {
+  var box = lid('g-grid'); if (!box || !gridState || !gridState.play) return;
+  Array.prototype.forEach.call(box.querySelectorAll('.gb.play'), function (x) { x.classList.remove('play'); });
+  var first = null;
+  Array.prototype.forEach.call(box.querySelectorAll('[data-gk="' + k + '"]'), function (x) { x.classList.add('play'); if (!first) first = x; });
+  if (first) { var r = first.getBoundingClientRect(), m = lid('lv-main').getBoundingClientRect(); if (r.bottom > m.bottom - 8 || r.top < m.top + 4) lid('lv-main').scrollTop += r.top - m.top - m.height / 3; }
+}
+function gridStop() {
+  var g = gridState; if (!g || !g.play) return;
+  clearInterval(g.play.timer); g.play.marks.forEach(clearTimeout); g.play = null;
+  var box = lid('g-grid'); if (box) Array.prototype.forEach.call(box.querySelectorAll('.gb.play'), function (x) { x.classList.remove('play'); });
+}
+function onGridTap(e) {
+  var g = gridState;
+  var seg = e.target.closest('[data-gk]');
+  if (seg) { g.sel = +seg.getAttribute('data-gk'); var was = !!g.play; gridStop(); drawGrid(); if (was) { gridPlay(); drawGrid(); } return; }
+  var sig = e.target.closest('[data-gsig]');
+  if (sig) { gPush(); g.tl.beats = +sig.getAttribute('data-gsig'); gridStop(); drawGrid(); return; }
+  var b = e.target.closest('[data-g]'); if (!b || b.disabled) return;
+  switch (b.getAttribute('data-g')) {
+    case 'close': gridClose(); break;
+    case 'play': if (g.play) gridStop(); else gridPlay(); drawGrid(); break;
+    case 'bpm-': gPush(); g.tl.bpm = Math.max(30, Math.round(g.tl.bpm) - 1); gridStop(); drawGrid(); break;
+    case 'bpm+': gPush(); g.tl.bpm = Math.min(240, Math.round(g.tl.bpm) + 1); gridStop(); drawGrid(); break;
+    case 'tap': openTapTempo(function (bpm) { gPush(); g.tl.bpm = bpm; g.note = ''; gridStop(); drawGrid(); }); break;
+    case 'listen': gridStop(); openTempoListen(function (bpm) { gPush(); g.tl.bpm = bpm; g.note = ''; drawGrid(); toast('Tempo: ' + bpm + ' bpm. Compruébalo con «Escuchar».'); }); break;
+    case 'm1': gDur(-1); break;
+    case 'mh': gDur(-0.5); break;
+    case 'ph': gDur(0.5); break;
+    case 'p1': gDur(1); break;
+    case 'prev': g.sel = Math.max(0, g.sel - 1); drawGrid(); break;
+    case 'next': g.sel = Math.min(g.tl.steps.length - 1, g.sel + 1); drawGrid(); break;
+    case 'more': gridMore(); break;
+    case 'save': gridSave(); break;
+  }
+}
+function gridKey(k) {
+  var g = gridState;
+  if (k === 'ArrowLeft') { g.sel = Math.max(0, g.sel - 1); drawGrid(); return true; }
+  if (k === 'ArrowRight') { g.sel = Math.min(g.tl.steps.length - 1, g.sel + 1); drawGrid(); return true; }
+  if (k === '+' || k === 'ArrowUp') { gDur(1); return true; }
+  if (k === '-' || k === 'ArrowDown') { gDur(-1); return true; }
+  if (k === ' ') { if (g.play) gridStop(); else gridPlay(); drawGrid(); return true; }
+  if (k === 'Escape') { gridClose(); return true; }
+  return false;
+}
+
+/* parte 10: escuchar el tempo con el micrófono y comprobarlo con un clic sobre la música */
+var tempoL = null;
+var TEMPO_SECS = 12;
+function stopTempoListen() {
+  var t = tempoL; if (!t) return;
+  clearInterval(t.clickTimer); t.clickTimer = 0; t.clickOn = false;
+  if (t.node) { try { t.node.disconnect(); t.node.onaudioprocess = null; } catch (e) { /* nada */ } t.node = null; }
+  if (t.src) { try { t.src.disconnect(); } catch (e) { /* nada */ } t.src = null; }
+  if (t.stream) { t.stream.getTracks().forEach(function (k) { k.stop(); }); t.stream = null; }
+}
+function openTempoListen(onUse) {
+  stopTempoListen();
+  tempoL = { phase: 'ready', stream: null, src: null, node: null, chunks: [], len: 0, sr: 0, firstAC: null, level: 0, res: null, pick: null, clickOn: false, clickTimer: 0 };
+  openSheet('Detectar el tempo', '<div id="tlb"></div>', function (el) {
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-tl]'); if (!b || b.disabled) return;
+      var a = b.getAttribute('data-tl');
+      if (a === 'start' || a === 'again') tlStart();
+      else if (a === 'cancel') { stopTempoListen(); tempoL.phase = 'ready'; tlDraw(); }
+      else if (a === 'pick') { tempoL.pick = +b.getAttribute('data-v'); if (tempoL.clickOn) tlClick(true); tlDraw(); }
+      else if (a === 'click') { tlClick(!tempoL.clickOn); tlDraw(); }
+      else if (a === 'use') { var v = tempoL.pick; stopTempoListen(); closeSheet(); onUse(v); }
+    });
+    tlDraw();
+  }, { onClose: stopTempoListen });
+}
+function tlDraw() {
+  var t = tempoL, box = document.getElementById('tlb'); if (!t || !box) return;
+  var h = '';
+  if (t.phase === 'ready') {
+    h = '<p class="help">Pon a sonar la canción: el video en otro equipo (laptop, televisor o parlante) o la banda tocando. Deja el celular cerca y toca «Empezar». Escucho ' + TEMPO_SECS + ' segundos.</p>' +
+      '<p class="help">Si el video suena en este mismo celular, puede que el micrófono no lo oiga bien; es mejor en otro equipo.</p>' +
+      '<div class="btnrow"><button type="button" class="btn primary" data-tl="start">' + icon('mic') + 'Empezar a escuchar</button></div>';
+  } else if (t.phase === 'listen') {
+    var secs = t.sr ? Math.min(TEMPO_SECS, t.len / t.sr) : 0;
+    h = '<p class="tl-big">Escuchando… <span id="tl-s">' + Math.ceil(TEMPO_SECS - secs) + '</span> s</p>' +
+      '<div class="tl-meter"><i id="tl-lv"></i></div><p class="help" id="tl-hint">Nivel de sonido: si la barra casi no se mueve, acerca el celular a la música.</p>' +
+      '<div class="btnrow"><button type="button" class="btn" data-tl="cancel">Cancelar</button></div>';
+  } else if (t.phase === 'quiet') {
+    h = '<p class="tl-warn">Casi no se escuchó música. Acerca el celular o sube el volumen y vuelve a intentarlo.</p>' +
+      '<div class="btnrow"><button type="button" class="btn primary" data-tl="again">Escuchar de nuevo</button></div>';
+  } else {
+    var r = t.res, low = r.confidence < 9;
+    h = '<p class="tl-res"><b>' + t.pick + '</b> bpm</p>' +
+      (low ? '<p class="tl-warn">No encontré un pulso claro (poca música o mucho ruido). Compruébalo con el clic, o marca el pulso tocando.</p>' : '') +
+      '<p class="help">A veces se detecta la mitad o el doble del tempo. Elige el que calce con la música:</p>' +
+      '<div class="seg tl-alt">' + r.candidates.map(function (c) { return '<button type="button" data-tl="pick" data-v="' + c + '" aria-pressed="' + (c === t.pick) + '">' + c + '</button>'; }).join('') + '</div>' +
+      '<p class="help">Con la música sonando, toca «Comprobar»: el clic debe caer justo con el pulso y no irse adelantando ni atrasando.</p>' +
+      '<div class="btnrow"><button type="button" class="btn' + (t.clickOn ? ' on' : '') + '" data-tl="click">' + icon('metro') + (t.clickOn ? 'Detener el clic' : 'Comprobar con clic') + '</button>' +
+      '<button type="button" class="btn primary" data-tl="use">Usar ' + t.pick + ' bpm</button></div>' +
+      '<div class="btnrow"><button type="button" class="btn" data-tl="again">Escuchar de nuevo</button></div>';
+  }
+  box.innerHTML = h;
+}
+function tlStart() {
+  var t = tempoL; stopTempoListen();
+  var ac = audio();
+  if (!ac || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { toast('Este navegador no permite usar el micrófono. Marca el pulso tocando.', 5000); return; }
+  navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }).then(function (ms) {
+    if (!tempoL) { ms.getTracks().forEach(function (k) { k.stop(); }); return; }
+    t.stream = ms; t.src = ac.createMediaStreamSource(ms);
+    t.node = ac.createScriptProcessor(4096, 1, 1);
+    var mute = ac.createGain(); mute.gain.value = 0;
+    t.src.connect(t.node); t.node.connect(mute); mute.connect(ac.destination);
+    t.sr = ac.sampleRate; t.chunks = []; t.len = 0; t.firstAC = null; t.phase = 'listen'; tlDraw();
+    var inLat = 0; try { inLat = (ms.getAudioTracks()[0].getSettings().latency) || 0; } catch (e) { /* no se sabe */ }
+    t.node.onaudioprocess = function (ev) {
+      if (!tempoL || tempoL.phase !== 'listen') return;
+      var d = ev.inputBuffer.getChannelData(0), rms = 0;
+      if (t.firstAC === null) t.firstAC = ac.currentTime - d.length / t.sr - inLat;   // hora (reloj de audio) del primer sonido grabado
+      t.chunks.push(new Float32Array(d)); t.len += d.length;
+      for (var i = 0; i < d.length; i += 4) rms += d[i] * d[i];
+      rms = Math.sqrt(rms / (d.length / 4)); t.level = Math.max(t.level * 0.8, rms);
+      var lv = document.getElementById('tl-lv'); if (lv) lv.style.width = Math.min(100, Math.round(Math.sqrt(rms) * 250)) + '%';
+      var sEl = document.getElementById('tl-s'); if (sEl) sEl.textContent = Math.max(0, Math.ceil(TEMPO_SECS - t.len / t.sr));
+      if (t.len >= t.sr * TEMPO_SECS) tlAnalyze();
+    };
+  }).catch(function (e) {
+    toast('No se pudo usar el micrófono. ' + (e && e.name === 'NotAllowedError' ? 'Da permiso al micrófono en el navegador.' : 'Marca el pulso tocando.'), 5500);
+  });
+}
+function tlAnalyze() {
+  var t = tempoL, x = new Float32Array(t.len), o = 0;
+  t.chunks.forEach(function (c) { x.set(c, o); o += c.length; });
+  var firstAC = t.firstAC; stopTempoListen(); t.firstAC = firstAC; t.chunks = [];
+  var rms = 0; for (var i = 0; i < x.length; i += 8) rms += x[i] * x[i]; rms = Math.sqrt(rms / (x.length / 8));
+  var r = rms > 0.002 ? C.tempoFromSamples(x, t.sr) : null;
+  if (!r) { t.phase = 'quiet'; tlDraw(); return; }
+  t.res = r; t.pick = Math.round(r.bpm); t.phase = 'done'; tlDraw();
+}
+/* Clic de comprobación, alineado con los pulsos detectados (la música sigue sonando). */
+function tlClick(on) {
+  var t = tempoL, ac = AC; clearInterval(t.clickTimer); t.clickTimer = 0; t.clickOn = !!on && !!ac;
+  if (!t.clickOn) return;
+  var period = 60 / t.pick, base = t.firstAC + t.res.phase, lat = (ac.outputLatency || 0) + (ac.baseLatency || 0), next = null;
+  var tick = function () {
+    var now = ac.currentTime;
+    if (next === null) next = Math.ceil((now + 0.05 + lat - base) / period);
+    while (base + next * period - lat < now + 0.3) { var w = base + next * period - lat; if (w > now) clickAt(w, false); next++; }
+  };
+  tick(); t.clickTimer = setInterval(tick, 60);
 }
 
 /* parte 5: rutas, eventos y arranque */
@@ -3957,7 +4571,7 @@ if (window.matchMedia) {
 openBookData();
 render();
 fetchRemote().then(function (res) { if (res === 'nuevo') afterRemoteUpdate(); else refreshChrome(); });
-window.__cancionero = { fixCollisions: fixCollisions, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), times: liveState.times } : null; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
+window.__cancionero = { fixCollisions: fixCollisions, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), startB: liveState.startB, bpm: liveState.bpm, tl: liveState.tl } : null; }, grid: function () { return gridState ? JSON.parse(JSON.stringify(gridState.tl)) : null; }, _setV1: function (marks, end) { var st = liveState, song = clone(st.song); song.timeline = { v: 1, video: '', start: 0, sig: seqSig(st.steps), steps: marks, end: end }; local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id]; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
 })();
 
 
