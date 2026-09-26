@@ -1,7 +1,7 @@
 /* Cancionero: guarda la app en el equipo para usarla sin internet.
    - La app (index.html) y las canciones (canciones.json): primero internet, y si no hay, la copia guardada.
    - Fuentes e íconos: primero la copia guardada (no cambian). */
-var VERSION = 'cfp-20260926-021152';
+var VERSION = 'cfp-20260926-024104';
 var ARCHIVOS = ["./", "index.html", "canciones.json", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon-32.png", "balsamiq-sans-400.woff2", "balsamiq-sans-700.woff2", "balsamiq-sans-700i.woff2", "barlow-condensed-600.woff2", "barlow-condensed-700.woff2", "barlow-400.woff2", "barlow-600.woff2", "barlow-700.woff2"];
 
 self.addEventListener('install', function (e) {

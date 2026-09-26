@@ -185,7 +185,7 @@ svg.i { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-widt
 .setbar button[disabled] { opacity: .35; }
 
 /* ---------- Hojas (paneles inferiores) ---------- */
-.sheet-back { position: fixed; inset: 0; z-index: 20; background: rgba(16, 20, 42, .45); display: flex; align-items: flex-end; justify-content: center; }
+.sheet-back { position: fixed; inset: 0; z-index: 35; background: rgba(16, 20, 42, .45); display: flex; align-items: flex-end; justify-content: center; }
 .sheet { width: 100%; max-width: 40rem; max-height: 88vh; max-height: 88dvh; overflow: auto; background: var(--paper); color: var(--ink);
   border-radius: 22px 22px 0 0; box-shadow: var(--shadow); padding: .6rem 1.1rem calc(1.2rem + env(safe-area-inset-bottom, 0px)); animation: up .18s ease-out; }
 @keyframes up { from { transform: translateY(24px); opacity: .6; } to { transform: none; opacity: 1; } }
@@ -325,40 +325,78 @@ body.ed-chords #toast { bottom: calc(14.5rem + env(safe-area-inset-bottom, 0px))
 /* ---------- Modo en vivo ---------- */
 body.live-open { overflow: hidden; }
 .live { position: fixed; inset: 0; z-index: 30; background: var(--paper); color: var(--ink); display: flex; flex-direction: column; padding-top: env(safe-area-inset-top, 0px); }
-.lv-top { display: flex; align-items: center; gap: .35rem; padding: .3rem .5rem; border-bottom: 1.5px solid var(--rule); }
-.lv-top h2 { flex: 1; min-width: 0; margin: 0; font: 700 1.05rem/1.2 var(--lyric-font); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.lv-key { font: 700 1.2rem/1 var(--chord-font); color: var(--chord); padding: .3rem .5rem; border-radius: 8px; background: var(--wash); }
-.lv-pos { font: 700 1rem/1 var(--chord-font); color: var(--muted); min-width: 3.2rem; text-align: center; }
-.lv-snd.on { background: var(--chord); color: var(--paper); }
-.lv-main { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .4rem; padding: .4rem .8rem; overflow: auto; }
+.lv-top { flex: none; display: flex; align-items: center; gap: .3rem; padding: .25rem .4rem; border-bottom: 1.5px solid var(--rule); }
+.lv-top h2 { flex: 1; min-width: 0; margin: 0; font: 700 1rem/1.2 var(--lyric-font); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lv-key { font: 700 1.15rem/1 var(--chord-font); color: var(--chord); padding: .3rem .45rem; border-radius: 8px; background: var(--wash); }
+.lv-pos { font: 700 .95rem/1 var(--chord-font); color: var(--muted); min-width: 2.8rem; text-align: center; }
+.lv-mode { flex: none; min-height: 38px; padding: 0 .6rem; border-radius: 10px; border: 1.5px solid var(--rule); background: var(--wash); font: 700 .82rem/1 var(--ui-font); color: var(--ink); }
+.lv-video { flex: none; background: #000; aspect-ratio: 16 / 9; max-height: 32vh; width: 100%; }
+.lv-video iframe, .lv-video > div { width: 100%; height: 100%; border: 0; display: block; }
+.lv-main { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .35rem; padding: .35rem .7rem; overflow: auto; position: relative; }
 .lv-text { flex: none; }
-.lv-sec { margin: 0; text-align: center; font: 700 .8rem var(--lyric-font); color: var(--label); }
-.lv-lines { font-size: clamp(17px, 4.6vw, 24px); }
-.lv-lines .ln.hc { line-height: 2.5; }
+.lv-sec { margin: 0; text-align: center; font: 700 .78rem var(--lyric-font); color: var(--label); }
+.lv-lines { font-size: clamp(16px, 4.4vw, 24px); }
+.lv-lines .ln.hc { line-height: 2.45; }
 .lv-line.fade { opacity: .42; }
 .lv-lines .ch.now, .lv-lines .ci.now { background: var(--chord); color: var(--paper); }
-.lv-now { flex: 1 1 auto; min-height: 12rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .25rem;
-  border: 0; border-radius: 20px; background: var(--wash); color: var(--ink); padding: .6rem .6rem .8rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.lv-now { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; gap: .15rem; border-radius: 18px; background: var(--wash);
+  padding: .4rem .5rem .6rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .lv-now:active { background: var(--wash-2); }
-.lv-label { font: 700 .8rem/1 var(--ui-font); color: var(--muted); letter-spacing: .02em; }
-.lv-chord { font: 700 clamp(3.2rem, 17vw, 6.5rem)/1 var(--chord-font); color: var(--chord); }
-.lv-piano { width: 100%; max-width: 560px; margin: .2rem 0; }
-.lv-bass { font: 600 1rem/1.2 var(--ui-font); color: var(--muted); }
-.lv-bass b { color: var(--accent); font: 700 1.35rem var(--chord-font); margin-left: .25rem; }
-.lv-next { flex: none; display: flex; align-items: center; gap: .6rem; padding: .2rem .1rem; min-height: 4.2rem; flex-wrap: wrap; }
-.lv-next b { font: 700 2rem/1 var(--chord-font); color: var(--ink); min-width: 3.2rem; }
-.lv-mini { width: 55%; max-width: 300px; margin: 0 0 0 auto; }
+.lv-head { display: flex; align-items: center; gap: .7rem; justify-content: center; }
+.lv-label { font: 700 .78rem/1 var(--ui-font); color: var(--muted); }
+.lv-chord { font: 700 clamp(2.8rem, 14vw, 5.5rem)/1 var(--chord-font); color: var(--chord); }
+.lv-prog { flex: 0 1 30%; height: 6px; border-radius: 3px; background: var(--rule); overflow: hidden; }
+.lv-prog i { display: block; height: 100%; width: 0; background: var(--chord); }
+.lv-hands { display: flex; flex-direction: column; align-items: center; gap: .2rem; width: 100%; max-width: 680px; margin: 0 auto; }
+.lv-hand { width: 100%; display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.lv-hand svg { display: block; height: auto; margin: 0; }
+.lv-hl { align-self: stretch; margin: .2rem 0 .05rem; font: 700 .78rem/1.2 var(--ui-font); color: var(--muted); }
+.lv-hl b { color: var(--accent); font: 700 1.1rem var(--chord-font); margin-left: .2rem; }
+.lv-next { flex: none; display: flex; align-items: center; gap: .6rem; padding: .15rem .1rem; flex-wrap: wrap; }
+.lv-next-h { display: flex; flex-direction: column; align-items: flex-start; min-width: 3.4rem; }
+.lv-next-h b { font: 700 1.9rem/1 var(--chord-font); color: var(--ink); }
+.lv-minikb { flex: 1; min-width: 0; display: flex; gap: .35rem; align-items: flex-end; }
+.lv-minikb svg { width: 0; height: auto; display: block; }
 .lv-end { font-weight: 700; color: var(--muted); }
 .lv-next .btn { margin-left: auto; }
-.lv-nav { flex: none; display: grid; grid-template-columns: 1fr 1.6fr; gap: .5rem; padding: .5rem .8rem calc(.6rem + env(safe-area-inset-bottom, 0px)); border-top: 1.5px solid var(--rule); }
-.lv-nav .btn { min-height: 56px; font-size: 1.05rem; }
+.lv-meter { margin: 0; text-align: center; font-size: .85rem; color: var(--muted); }
+.lv-count { position: absolute; inset: 0; display: grid; place-items: center; font: 700 7rem/1 var(--chord-font); color: var(--chord);
+  background: color-mix(in srgb, var(--paper) 82%, transparent); z-index: 2; }
+.lv-nav { flex: none; padding: .45rem .7rem calc(.5rem + env(safe-area-inset-bottom, 0px)); border-top: 1.5px solid var(--rule); display: grid; gap: .4rem; }
+.lv-row { display: grid; grid-template-columns: 1fr 1.6fr; gap: .5rem; }
+.lv-row3 { grid-template-columns: 1fr 2.2fr 1fr; }
+.lv-nav .btn { min-height: 54px; font-size: 1.02rem; }
+.lv-tempo { display: flex; align-items: center; justify-content: center; gap: .5rem; font-weight: 600; color: var(--muted); }
+.lv-tempo .btn { min-height: 40px; min-width: 48px; padding: 0; font-size: 1.3rem; }
+.lv-tempo output { min-width: 4rem; text-align: center; font: 700 1.1rem var(--chord-font); color: var(--ink); }
 .lv-cta { margin: .75rem 0 0; }
+.rec-setup { padding: .3rem 0; }
+.rc-row { display: flex; gap: .4rem; }
+.rc-row input { flex: 1; min-width: 0; }
+.rec-big { flex: none; min-height: 88px; border: 0; border-radius: 18px; background: var(--chord); color: #fff; font: 700 1.1rem/1.2 var(--ui-font);
+  display: flex; align-items: center; justify-content: center; gap: .8rem; cursor: pointer; }
+.rec-big b { font: 700 2.6rem/1 var(--chord-font); }
+.rec-big.hit { animation: hit .25s ease-out; }
+@keyframes hit { from { transform: scale(.97); filter: brightness(1.3); } to { transform: none; filter: none; } }
+.rec-stat { margin: .1rem 0; font: 600 .9rem var(--ui-font); color: var(--muted); display: flex; gap: 1rem; justify-content: center; }
+.rec-lines { font-size: 18px; }
+.rec-lines .done { opacity: .45; }
+.rec-lines .now { background: var(--chord); color: var(--paper); }
+.rec-sum { font-size: 1.1rem; }
+.rec-count { position: static; min-height: 40vh; background: transparent; }
 @media (orientation: landscape) and (min-width: 640px) {
-  .lv-main { display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: auto 1fr; gap: .6rem 1rem; }
-  .lv-now { grid-column: 1; grid-row: 1 / span 2; min-height: 0; }
-  .lv-text { grid-column: 2; grid-row: 1; }
-  .lv-next { grid-column: 2; grid-row: 2; flex-direction: column; align-items: flex-start; }
-  .lv-mini { width: 100%; margin: 0; }
+  .live:not(.rec) .lv-main { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: auto 1fr auto; gap: .5rem 1rem; }
+  .live:not(.rec) .lv-now { grid-column: 1; grid-row: 1 / span 3; }
+  .live:not(.rec) .lv-text { grid-column: 2; grid-row: 1; }
+  .live:not(.rec) .lv-next { grid-column: 2; grid-row: 2; flex-direction: column; align-items: stretch; }
+  .live:not(.rec) .lv-meter { grid-column: 2; grid-row: 3; }
+  .lv-hands { flex-direction: row; align-items: flex-end; gap: .6rem; max-width: none; }
+  .lv-hand.hand-l { order: -1; }
+  .lv-chord { font-size: clamp(2.4rem, 9vh, 4.5rem); }
+  .lv-nav { padding-top: .3rem; padding-bottom: calc(.3rem + env(safe-area-inset-bottom, 0px)); }
+  .lv-nav .btn { min-height: 44px; }
+  .lv-lines { font-size: clamp(15px, 3.6vh, 20px); }
+  .lv-video { max-height: 38vh; }
 }
 
 /* ---------- Aviso ---------- */
@@ -675,12 +713,8 @@ body.live-open { overflow: hidden; }
       return d + Math.abs(center(n) - 64) * 0.15;
     };
     cands.sort(function (a, b) { return cost(a.notes, a.inv) - cost(b.notes, b.inv) || a.inv - b.inv; });
-    var best = cands[0], bassPc = c.bass !== null ? c.bass : c.root, target = prev && prev.left ? prev.left : 45, left = null;
-    for (var m = 33; m <= 57; m++) {
-      if (mod12(m) !== bassPc || m > best.notes[0] - 3) continue;
-      if (left === null || Math.abs(m - target) < Math.abs(left - target)) left = m;
-    }
-    if (left === null) { left = best.notes[0] - 1; while (mod12(left) !== bassPc) left--; }
+    // bajo siempre en la misma octava (Mi2 a Re#3): la mano izquierda se queda en su lugar y solo cambia de tecla
+    var best = cands[0], bassPc = c.bass !== null ? c.bass : c.root, left = 40 + mod12(bassPc - 40);
     var n = best.notes.length;
     var fingers = n === 3 ? (best.inv === 1 ? [1, 2, 5] : [1, 3, 5]) : n === 4 ? [1, 2, 3, 5] : n === 2 ? [1, 5] : [1, 2, 3, 4, 5];
     return { right: best.notes, left: left, fingers: fingers, inv: best.inv, root: c.root, bass: bassPc };
@@ -1044,6 +1078,32 @@ body.live-open { overflow: hidden; }
     return list.map(function (x) { return noteName(key.pc + x[0], spell || spellForKey(key.pc, key.minor), 'en') + x[1]; });
   }
 
+  /* ---------- Videos de YouTube y reloj ---------- */
+  function ytId(u) {
+    u = String(u || '').trim();
+    var m = /(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/.exec(u);
+    if (m) return m[1];
+    return /^[A-Za-z0-9_-]{11}$/.test(u) ? u : '';
+  }
+  function parseClock(s) {
+    s = String(s == null ? '' : s).trim().toLowerCase();
+    if (!s) return null;
+    var hms = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+(?:\.\d+)?)s)?$/.exec(s);
+    if (hms && (hms[1] || hms[2] || hms[3])) return (+hms[1] || 0) * 3600 + (+hms[2] || 0) * 60 + (+hms[3] || 0);
+    var parts = s.split(':');
+    if (parts.length > 3 || parts.some(function (x) { return !/^\d+(\.\d+)?$/.test(x); })) return null;
+    return parts.reduce(function (a, x) { return a * 60 + (+x); }, 0);
+  }
+  function ytStart(u) {
+    var m = /[?&#](?:t|start)=([0-9hms:.]+)/.exec(String(u || ''));
+    return m ? (parseClock(m[1]) || 0) : 0;
+  }
+  function fmtClock(t) {
+    t = Math.max(0, Math.round(t || 0));
+    var h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
+    return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(s).padStart(2, '0');
+  }
+
   var api = {
     SHARP: SHARP, FLAT: FLAT, LATIN: LATIN, mod12: mod12, splitTok: splitTok, isChordTok: isChordTok, isChordCore: isChordCore,
     parseChord: parseChord, isMinorQual: isMinorQual, noteName: noteName, spellForKey: spellForKey, transposeTok: transposeTok,
@@ -1053,7 +1113,7 @@ body.live-open { overflow: hidden; }
     srcToModel: srcToModel, modelToSrc: modelToSrc, modelLineToSrc: modelLineToSrc, normalizeModel: normalizeModel, sortChords: sortChords,
     modelToLetra: modelToLetra, parseLetra: parseLetra, reconcile: reconcile, transferChords: transferChords, lineKey: lineKey,
     syllableStarts: syllableStarts, copyChordsBySyllable: copyChordsBySyllable, diatonic: diatonic, chordLineInfo: chordLineInfo,
-    closeVoicing: closeVoicing, splitMulti: splitMulti
+    closeVoicing: closeVoicing, splitMulti: splitMulti, ytId: ytId, ytStart: ytStart, parseClock: parseClock, fmtClock: fmtClock
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Core = api;
@@ -1101,7 +1161,7 @@ var ICONS = {
   share: '<circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.4M8.3 13.2l7.4 4.4"/>',
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', publish: '<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>',
   download: '<path d="M12 4v12M7 11l5 5 5-5M5 20h14"/>', gear: '<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/>',
-  keys: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4v16M13 4v16M18 4v16"/>', speaker: '<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/>',
+  keys: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4v16M13 4v16M18 4v16"/>', mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>', full: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', rec: '<circle cx="12" cy="12" r="7" fill="currentColor" stroke="none"/>', speaker: '<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/>',
   add: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>', upload: '<path d="M12 20V8M7 13l5-5 5 5M5 4h14"/>', text: '<path d="M4 18L9 6l5 12M5.8 14h6.4M15 18l3-7 3 7M15.9 16h4.2"/>'
 };
 function icon(n) { return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[n] || '') + '</svg>'; }
@@ -1226,7 +1286,7 @@ function applyPublished() {
 }
 
 /* ---------- canciones y repertorios (base publicada + cambios de este equipo) ---------- */
-var SONG_FIELDS = ['id', 'num', 'title', 'author', 'group', 'momento', 'page', 'src', 'refs', 'refText', 'key', 'play', 'style', 'bpm'];
+var SONG_FIELDS = ['id', 'num', 'title', 'author', 'group', 'momento', 'page', 'src', 'refs', 'refText', 'key', 'play', 'style', 'bpm', 'timeline'];
 function cleanSong(s) { var o = {}; SONG_FIELDS.forEach(function (f) { if (s[f] !== undefined && s[f] !== '' && s[f] !== null) o[f] = s[f]; }); if (!o.src) o.src = ''; return o; }
 function allSongs() {
   var out = [], seen = {};
@@ -1842,7 +1902,7 @@ function pianoSVG(v, names, opts) {
   while (C.mod12(lo) !== 0 && C.mod12(lo) !== 5) lo--;          // empezar en Do o Fa
   while (C.mod12(hi) !== 4 && C.mod12(hi) !== 11) hi++;         // terminar en Mi o Si
   var whitesIn = function (a, b) { var n = 0; for (var q = a; q <= b; q++) if (!BLACK[C.mod12(q)]) n++; return n; };
-  while (whitesIn(lo, hi) < 14) { hi++; while (C.mod12(hi) !== 4 && C.mod12(hi) !== 11) hi++; }
+  while (whitesIn(lo, hi) < (opts.minWhites || 14)) { hi++; while (C.mod12(hi) !== 4 && C.mod12(hi) !== 11) hi++; }
   var fingers = v.fingers || (right.length === 3 ? [1, 3, 5] : right.length === 4 ? [1, 2, 3, 5] : right.length === 2 ? [1, 5] : [1, 2, 3, 4, 5]);
   for (var m = lo; m <= hi; m++) {
     var ri = right.indexOf(m), isL = left !== null && m === left, k = { m: m, cls: ri >= 0 ? 'rh' : (isL ? 'lh' : ''), f: ri >= 0 ? fingers[ri] : (isL ? 5 : '') };
@@ -2041,7 +2101,7 @@ function openHelp() {
     '<p><b>Guitarra con cejilla.</b> Si el piano toca en un tono difícil para la guitarra, toca «Cejilla»: te sugiere el traste y te muestra las formas que debes tocar. El tono que suena no cambia.</p>' +
     '<p><b>Piano.</b> Toca cualquier acorde para ver qué teclas se presionan, con los dedos de la mano derecha y el bajo de la izquierda, y escucharlo.</p>' +
     '<p><b>Repertorios.</b> Arma la lista del día con el tono de cada canción y toca «Tocar» para pasar de una a otra con los botones de abajo.</p>' +
-    '<p><b>Tocar en vivo.</b> En cada canción, «Tocar en vivo» muestra el acorde que toca ahora, grande y con las teclas del piano en posición cercana (la mano se mueve lo menos posible), el que viene después y la línea de la letra. Avanza tocando la pantalla, con las flechas, la barra espaciadora o un pedal Bluetooth de pasar páginas. Toca un acorde de la letra para saltar a él.</p>' +
+    '<p><b>Tocar en vivo.</b> En cada canción, «Tocar en vivo» muestra a pantalla completa el acorde que toca ahora con las dos manos en el piano (posiciones cercanas y dedos marcados) y el que viene después. Puede avanzar a mano (pantalla, flechas o pedal Bluetooth), solo con el recorrido grabado, junto con el video para practicar, o escuchando a la banda (en prueba). El recorrido se graba una vez por canción tocando «Cambio» al ritmo del video o de la banda.</p>' +
     '<p><b>Sin internet.</b> Instálala desde «Más opciones», en «Instalar en este equipo». Después de abrirla una vez con internet, funciona aunque no haya señal.</p>' +
     '<p><b>Canciones nuevas.</b> Escribe cada acorde entre corchetes antes de su sílaba, por ejemplo <code>Yo le al[D]abo</code>, o pega una canción de internet con los acordes encima.</p>' +
     '<p><b>Compartir cambios.</b> Lo que cambias se guarda en este equipo. Quien administra el cancionero lo publica para todos subiendo el archivo canciones.json a GitHub. Los demás le envían sus cambios como archivo.</p>' +
@@ -3098,13 +3158,13 @@ function openPasteSheet() {
   });
 }
 
-/* parte 6: modo en vivo para el piano */
+/* parte 6: modo en vivo — piano con las dos manos; avanza a mano, solo (recorrido grabado), con el video o escuchando */
 var liveState = null;
 function songRouteHash() {
   return ctx.setlist ? '#/r/' + enc(ctx.setlist.id) + '/' + ctx.index : (current.song ? '#/s/' + enc(current.song.id) : '#/');
 }
 function liveHash() { return songRouteHash() + '/vivo'; }
-/* Recorrido: los acordes en el orden en que se leen (letra y líneas de acordes). */
+/* Acordes en orden de lectura (letra y líneas de acordes). */
 function liveSteps(song) {
   var inf = info(song), steps = [], firstN = [], n = 0;
   inf.lines.forEach(function (l, li) {
@@ -3114,55 +3174,116 @@ function liveSteps(song) {
   });
   return { steps: steps, firstN: firstN };
 }
+function seqSig(steps) { return steps.map(function (s) { return s.c; }).join('|'); }
+/* El recorrido grabado solo vale si la canción no cambió desde que se grabó. */
+function validTimeline(song, steps) {
+  var tl = song.timeline;
+  if (!tl || !Array.isArray(tl.steps) || tl.steps.length < 2 || tl.sig !== seqSig(steps)) return null;
+  for (var k = 0; k < tl.steps.length; k++) {
+    var x = tl.steps[k];
+    if (!Array.isArray(x) || !(x[0] >= 0 && x[0] < steps.length) || typeof x[1] !== 'number' || (k && x[1] < tl.steps[k - 1][1])) return null;
+  }
+  return tl;
+}
 function voiceNames(v, en, spell) {
   var pc = C.parseChord(en), names = {};
   v.right.forEach(function (m) { names[m] = latin(C.noteName(m, spell, 'en')); });
   if (pc) v.right.forEach(function (m) { if (C.mod12(m) === pc.root) names[m] = latin(pc.rootName); });
   return { names: names, bass: pc ? latin(pc.bassName || pc.rootName) : latin(C.noteName(v.left, spell, 'en')) };
 }
-function openLive(pushed) {
-  var song = current.song; if (!song) return;
-  closeLive(true);
-  var r = liveSteps(song);
-  if (!r.steps.length) { toast('Esta canción no tiene acordes para tocar en vivo.'); location.replace(songRouteHash()); return; }
-  var inf = info(song), sh = songShift(song), spell = spellFor(inf.key, sh), keep = C.mod12(sh) === 0 && prefs.spell === 'auto', prev = null;
-  // posiciones cercanas para todo el recorrido: cada acorde se acomoda desde el anterior
-  var vo = r.steps.map(function (s) {
-    var en = C.splitTok(C.transposeTok(s.c, { shift: sh, spell: spell, notation: 'en', keep: keep })).core;
+function enterFull() {
+  try { var d = document.documentElement; if (!document.fullscreenElement && d.requestFullscreen) d.requestFullscreen({ navigationUI: 'hide' }).catch(function () {}); } catch (e) { /* sin pantalla completa */ }
+}
+function exitFull() { try { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {}); } catch (e) { /* nada */ } }
+function lid(id) { return document.getElementById(id); }
+
+function buildLive(song, pushed, mode) {
+  var r = liveSteps(song); if (!r.steps.length) return null;
+  var inf = info(song), sh = songShift(song), spell = spellFor(inf.key, sh), keep = C.mod12(sh) === 0 && prefs.spell === 'auto';
+  var tl = validTimeline(song, r.steps);
+  var path = tl ? tl.steps.map(function (x) { return x[0]; }) : r.steps.map(function (s, k) { return k; });
+  var prev = null, vo = path.map(function (k) {
+    var en = C.splitTok(C.transposeTok(r.steps[k].c, { shift: sh, spell: spell, notation: 'en', keep: keep })).core;
     var v = C.closeVoicing(en, prev) || C.pianoVoicing(en); prev = v;
     return { en: en, v: v };
   });
-  var lo = 127, hi = 0;
-  vo.forEach(function (x) { lo = Math.min(lo, x.v.right[0]); hi = Math.max(hi, x.v.right[x.v.right.length - 1]); });
-  liveState = { song: song, steps: r.steps, firstN: r.firstN, vo: vo, i: 0, lo: lo, hi: hi, spell: spell, sound: !!LS.get('cfp.liveSound', false), pushed: !!pushed };
+  var b = { rLo: 127, rHi: 0, lLo: 127, lHi: 0 };
+  vo.forEach(function (x) {
+    b.rLo = Math.min(b.rLo, x.v.right[0]); b.rHi = Math.max(b.rHi, x.v.right[x.v.right.length - 1]);
+    b.lLo = Math.min(b.lLo, x.v.left); b.lHi = Math.max(b.lHi, x.v.left);
+  });
+  mode = mode || LS.get('cfp.liveMode', 'manual');
+  if ((mode === 'auto' || mode === 'video') && !tl) mode = 'manual';
+  if (mode === 'video' && !tl.video) mode = 'auto';
+  return { song: song, steps: r.steps, firstN: r.firstN, tl: tl, path: path, times: tl ? tl.steps.map(function (x) { return x[1]; }) : null,
+    stale: !!song.timeline && !tl, vo: vo, i: 0, rLo: b.rLo, rHi: b.rHi, lLo: b.lLo, lHi: b.lHi, spell: spell,
+    sound: !!LS.get('cfp.liveSound', false), pushed: !!pushed, mode: mode, playing: false, counting: false,
+    rate: +LS.get('cfp.liveRate', 1) || 1, t0: 0, tOffset: 0, raf: 0 };
+}
+function openLive(pushed) {
+  var song = current.song; if (!song) return;
+  closeLive(true);
+  var st = buildLive(song, pushed);
+  if (!st) { toast('Esta canción no tiene acordes para tocar en vivo.'); location.replace(songRouteHash()); return; }
+  liveState = st;
   var el = document.createElement('div');
   el.id = 'live'; el.className = 'live'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Modo en vivo');
+  el.innerHTML = '<header class="lv-top" id="lv-top"></header><div class="lv-video" id="lv-video" hidden><div id="lv-yt"></div></div>' +
+    '<div class="lv-main" id="lv-main"></div><nav class="lv-nav" id="lv-nav"></nav>';
   document.body.appendChild(el); document.body.classList.add('live-open');
   el.addEventListener('click', onLiveTap);
-  drawLive(); keepAwake(true);
-  el.querySelector('.lv-now').focus({ preventScroll: true });
+  enterFull(); keepAwake(true);
+  if (st.mode === 'video') showVideo(st.tl.video, st.tl.start).catch(videoFailed);
+  drawLive();
 }
 function closeLive(silent) {
-  var el = document.getElementById('live');
-  if (el) el.remove();
+  var st = liveState;
+  if (st) { st.playing = false; st.counting = false; cancelAnimationFrame(st.raf); }
+  stopEar(); recState = null; destroyPlayer();
+  var el = lid('live'); if (el) el.remove();
   document.body.classList.remove('live-open');
-  var st = liveState; liveState = null;
+  liveState = null;
+  if (st) exitFull();
   if (!silent && st) { if (st.pushed) history.back(); else location.replace(songRouteHash()); }
 }
-function nextLyricLine(lines, li) {
-  for (var k = li + 1; k < lines.length; k++) if (lines[k].type === 'lyric' || lines[k].type === 'instr') return k;
-  return -1;
+function nextLyricLine(lines, li) { for (var k = li + 1; k < lines.length; k++) if (lines[k].type === 'lyric' || lines[k].type === 'instr') return k; return -1; }
+function sectionOf(lines, li) { for (var k = li; k >= 0; k--) if (lines[k].type === 'label') return C.sentenceCase(lines[k].text); return ''; }
+
+/* Las dos manos: arriba la derecha y abajo la izquierda, como en una partitura; teclas del mismo tamaño. */
+function handsHTML(x, mini) {
+  var st = liveState, nm = voiceNames(x.v, x.en, st.spell), ln = {};
+  ln[x.v.left] = nm.bass;
+  var R = pianoSVG(x.v, nm.names, { noBass: true, lo: st.rLo, hi: st.rHi, cls: 'kb-r', label: 'Mano derecha' });
+  var L = pianoSVG({ right: [], left: x.v.left, fingers: [] }, ln, { lo: st.lLo, hi: st.lHi, minWhites: 7, cls: 'kb-l', label: 'Mano izquierda: ' + nm.bass });
+  if (mini) return '<div class="lv-minikb">' + L + R + '</div>';
+  return '<div class="lv-hands"><div class="lv-hand hand-r"><p class="lv-hl">Mano derecha</p>' + R + '</div>' +
+    '<div class="lv-hand hand-l"><p class="lv-hl">Mano izquierda <b>' + esc(nm.bass) + '</b></p>' + L + '</div></div>';
 }
-function sectionOf(lines, li) {
-  for (var k = li; k >= 0; k--) if (lines[k].type === 'label') return C.sentenceCase(lines[k].text);
-  return '';
+/* Teclas del mismo tamaño en ambos teclados. Vertical: uno sobre otro. Horizontal: lado a lado, la izquierda a la izquierda. */
+function sizeKeyboards() {
+  var el = lid('lv-main'); if (!el) return;
+  var r = el.querySelector('.lv-hands .kb-r'), l = el.querySelector('.lv-hands .kb-l');
+  if (r && l) {
+    var wr = r.viewBox.baseVal.width, wl = l.viewBox.baseVal.width, wide = Math.max(wr, wl);
+    var side = window.matchMedia && matchMedia('(orientation: landscape) and (min-width: 640px)').matches;
+    var hr = r.parentNode, hl = l.parentNode;
+    if (side) { hr.style.flex = wr + ' 1 0'; hl.style.flex = wl + ' 1 0'; r.style.width = l.style.width = '100%'; }
+    else { hr.style.flex = hl.style.flex = ''; r.style.width = (100 * wr / wide).toFixed(1) + '%'; l.style.width = (100 * wl / wide).toFixed(1) + '%'; }
+  }
+  Array.prototype.forEach.call(el.querySelectorAll('.lv-minikb'), function (m) {
+    Array.prototype.forEach.call(m.querySelectorAll('svg'), function (s) { s.style.flex = s.viewBox.baseVal.width + ' 1 0'; });
+  });
 }
+var MODE_NAMES = { manual: 'Manual', auto: 'Automático', video: 'Con el video', listen: 'Escuchando' };
 function drawLive() {
-  var st = liveState, el = document.getElementById('live'); if (!st || !el) return;
+  var st = liveState; if (!st || !lid('live')) return;
+  if (recState) { drawRec(); return; }
+  lid('live').classList.remove('rec');
   var song = st.song, inf = info(song), sh = songShift(song), fmt = fmtFor(inf.key, sh);
-  var step = st.steps[st.i], nextStep = st.steps[st.i + 1], cur = st.vo[st.i], nxt = nextStep ? st.vo[st.i + 1] : null;
-  var nm = voiceNames(cur.v, cur.en, st.spell), sec = sectionOf(inf.lines, step.li), nli = nextLyricLine(inf.lines, step.li);
-  var lineHTML = function (li, cls) {
+  var step = st.steps[st.path[st.i]], cur = st.vo[st.i], j = st.i + 1 < st.path.length ? st.i + 1 : -1;
+  var nstep = j >= 0 ? st.steps[st.path[j]] : null, nxt = j >= 0 ? st.vo[j] : null;
+  var sec = sectionOf(inf.lines, step.li), nli = nextLyricLine(inf.lines, step.li);
+  var line = function (li, cls) {
     var l = inf.lines[li]; if (!l || !l.segs) return '';
     var counter = { i: st.firstN[li] };
     return '<div class="lv-line ' + cls + '">' + (l.type === 'instr' ? instrHTML(l, fmt, counter) : lyricHTML(l, fmt, counter)) + '</div>';
@@ -3172,68 +3293,516 @@ function drawLive() {
     var ni = neighbor(1), ns = ni >= 0 ? getSong(ctx.setlist.items[ni].id) : null;
     if (ns) endHTML += '<a class="btn primary" href="#/r/' + enc(ctx.setlist.id) + '/' + ni + '/vivo">Siguiente canción: ' + esc(C.sentenceCase(ns.title)) + icon('fwd') + '</a>';
   }
-  el.innerHTML =
-    '<header class="lv-top">' +
-      '<button type="button" class="iconbtn" data-lv="close" aria-label="Salir del modo en vivo">' + icon('close') + '</button>' +
-      '<h2>' + esc(C.sentenceCase(song.title)) + '</h2>' +
-      '<span class="lv-key" title="Tono">' + esc(keyLabel(inf.key, sh)) + '</span>' +
-      '<span class="lv-pos">' + (st.i + 1) + '/' + st.steps.length + '</span>' +
-      '<button type="button" class="iconbtn lv-snd' + (st.sound ? ' on' : '') + '" data-lv="sound" aria-pressed="' + st.sound + '" aria-label="Sonido al avanzar">' + icon('speaker') + '</button>' +
-    '</header>' +
-    '<div class="lv-main">' +
-      '<div class="lv-text">' + (sec ? '<p class="lv-sec">' + esc(sec) + '</p>' : '') +
-        '<div class="lv-lines song">' + lineHTML(step.li, 'cur') + (nli >= 0 ? lineHTML(nli, 'fade') : '') + '</div></div>' +
-      '<button type="button" class="lv-now" data-lv="next" aria-label="Ahora ' + esc(fmt(step.c)) + '. Toca para pasar al siguiente acorde">' +
-        '<span class="lv-label">Ahora</span>' +
-        '<span class="lv-chord">' + esc(C.splitTok(fmt(step.c)).core) + '</span>' +
-        pianoSVG(cur.v, nm.names, { noBass: true, lo: st.lo, hi: st.hi, cls: 'lv-piano', label: 'Mano derecha' }) +
-        '<span class="lv-bass">Mano izquierda <b>' + esc(nm.bass) + '</b></span>' +
-      '</button>' +
-      '<div class="lv-next">' + (nxt
-        ? '<span class="lv-label">Luego</span><b>' + esc(C.splitTok(fmt(nextStep.c)).core) + '</b>' +
-          pianoSVG(nxt.v, voiceNames(nxt.v, nxt.en, st.spell).names, { noBass: true, lo: st.lo, hi: st.hi, cls: 'lv-mini', label: 'Acorde siguiente' })
-        : endHTML) + '</div>' +
+  var timed = st.mode === 'auto' || st.mode === 'video';
+  lid('lv-top').innerHTML =
+    '<button type="button" class="iconbtn" data-lv="close" aria-label="Salir del modo en vivo">' + icon('close') + '</button>' +
+    '<h2>' + esc(C.sentenceCase(song.title)) + '</h2>' +
+    '<span class="lv-key" title="Tono">' + esc(keyLabel(inf.key, sh)) + '</span>' +
+    '<span class="lv-pos">' + (st.i + 1) + '/' + st.path.length + '</span>' +
+    '<button type="button" class="lv-mode" data-lv="modes" aria-label="Cómo avanza: ' + MODE_NAMES[st.mode] + '. Cambiar">' + esc(MODE_NAMES[st.mode]) + ' ▾</button>' +
+    '<button type="button" class="iconbtn" data-lv="more" aria-label="Más opciones">' + icon('more') + '</button>';
+  lid('lv-main').innerHTML =
+    '<div class="lv-text">' + (sec ? '<p class="lv-sec">' + esc(sec) + '</p>' : '') +
+      '<div class="lv-lines song">' + line(step.li, 'cur') + (nli >= 0 ? line(nli, 'fade') : '') + '</div></div>' +
+    '<div class="lv-now" data-lv="tapnow" role="button" tabindex="0" aria-label="Ahora ' + esc(fmt(step.c)) + '">' +
+      '<div class="lv-head"><span class="lv-label">Ahora</span><span class="lv-chord">' + esc(C.splitTok(fmt(step.c)).core) + '</span>' +
+      (timed ? '<span class="lv-prog"><i id="lv-prog"></i></span>' : '') + '</div>' +
+      handsHTML(cur, false) +
     '</div>' +
-    '<nav class="lv-nav"><button type="button" class="btn" data-lv="prev"' + (st.i ? '' : ' disabled') + '>' + icon('back') + 'Anterior</button>' +
-      '<button type="button" class="btn primary" data-lv="next"' + (nxt ? '' : ' disabled') + '>Siguiente' + icon('fwd') + '</button></nav>';
-  var chEl = el.querySelector('.lv-line.cur [data-i="' + step.n + '"]');
+    '<div class="lv-next">' + (nxt
+      ? '<div class="lv-next-h"><span class="lv-label">Luego</span><b>' + esc(C.splitTok(fmt(nstep.c)).core) + '</b></div>' + handsHTML(nxt, true)
+      : endHTML) + '</div>' +
+    (st.mode === 'listen' ? '<p class="lv-meter" id="lv-meter" aria-live="off">' + (ear ? 'Escuchando…' : 'Toca «Escuchar» y deja el celular cerca de la banda.') + '</p>' : '') +
+    (st.counting ? '<div class="lv-count" id="lv-count"></div>' : '');
+  lid('lv-nav').innerHTML = navHTML();
+  var chEl = lid('lv-main').querySelector('.lv-line.cur [data-i="' + step.n + '"]');
   if (chEl) chEl.classList.add('now');
-  fixCollisions(el.querySelector('.lv-lines'));
+  sizeKeyboards();
+  fixCollisions(lid('lv-main').querySelector('.lv-lines'));
 }
-function liveGo(to) {
+function navHTML() {
+  var st = liveState, last = st.path.length - 1, manual = st.mode === 'manual';
+  var prev = '<button type="button" class="btn" data-lv="prev"' + (st.i ? '' : ' disabled') + ' aria-label="Acorde anterior">' + icon('back') + (manual ? 'Anterior' : '') + '</button>';
+  var next = '<button type="button" class="btn' + (manual ? ' primary' : '') + '" data-lv="next"' + (st.i < last ? '' : ' disabled') + ' aria-label="Acorde siguiente">' + (manual ? 'Siguiente' : '') + icon('fwd') + '</button>';
+  if (manual) return '<div class="lv-row">' + prev + next + '</div>';
+  var label;
+  if (st.mode === 'listen') label = ear ? icon('pause') + 'Dejar de escuchar' : icon('mic') + 'Escuchar';
+  else label = st.playing || st.counting ? icon('pause') + 'Pausa' : icon('play') + (st.i ? 'Seguir' : 'Empezar');
+  var h = '<div class="lv-row lv-row3">' + prev + '<button type="button" class="btn primary" data-lv="play">' + label + '</button>' + next + '</div>';
+  if (st.mode === 'auto') h += '<div class="lv-tempo"><span>Velocidad</span><button type="button" class="btn" data-lv="slower" aria-label="Más lento">−</button>' +
+    '<output>' + Math.round(st.rate * 100) + ' %</output><button type="button" class="btn" data-lv="faster" aria-label="Más rápido">+</button></div>';
+  return h;
+}
+function soundNow() {
+  var st = liveState; if (!st || !st.sound || st.mode === 'listen') return;
+  var v = st.vo[st.i].v; playNotes([v.left].concat(v.right));
+}
+function setLiveIndex(i, fromTimer) {
   var st = liveState; if (!st) return;
-  var i = Math.max(0, Math.min(st.steps.length - 1, to));
+  i = Math.max(0, Math.min(st.path.length - 1, i));
   if (i === st.i) return;
-  st.i = i; drawLive();
-  var cur = st.vo[i];
-  if (st.sound && cur && cur.v) playNotes([cur.v.left].concat(cur.v.right));
-  announce('Ahora ' + C.splitTok(fmtFor(info(st.song).key, songShift(st.song))(st.steps[i].c)).core);
+  st.i = i;
+  if (ear) ear.since = performance.now();
+  drawLive(); soundNow();
+  if (!fromTimer) announce('Ahora ' + C.splitTok(fmtFor(info(st.song).key, songShift(st.song))(st.steps[st.path[i]].c)).core);
+}
+
+/* ---------- avanzar solo con el recorrido grabado ---------- */
+function liveTime() {
+  var st = liveState;
+  if (st.mode === 'video' && yt.player && yt.player.getCurrentTime) return yt.player.getCurrentTime() - st.tl.start;
+  return st.tOffset + (performance.now() - st.t0) / 1000 * st.rate;
+}
+function indexAt(t) {
+  var ts = liveState.times, lo = 0, hi = ts.length - 1;
+  if (t < ts[0]) return 0;
+  while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (ts[mid] <= t) lo = mid; else hi = mid - 1; }
+  return lo;
+}
+function loop() {
+  var st = liveState; if (!st || !st.playing) return;
+  var t = liveTime(), i = indexAt(t);
+  if (i !== st.i) setLiveIndex(i, true);
+  var a = st.times[st.i], b = st.i + 1 < st.times.length ? st.times[st.i + 1] : (st.tl.end || a + 2);
+  var bar = lid('lv-prog'); if (bar) bar.style.width = (Math.max(0, Math.min(1, (t - a) / Math.max(0.1, b - a))) * 100).toFixed(1) + '%';
+  if (st.mode === 'auto' && t > (st.tl.end || st.times[st.times.length - 1] + 2)) { pauseLive(); return; }
+  st.raf = requestAnimationFrame(loop);
+}
+function countIn(done) {
+  var st = liveState, n = 3;
+  st.counting = true; drawLive();
+  var step = function () {
+    if (!liveState || !liveState.counting) return;
+    var box = lid('lv-count');
+    if (n === 0) { st.counting = false; done(); return; }
+    if (box) box.textContent = n;
+    if (st.sound) {
+      var ac = audio();
+      if (ac) { var o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime; o.frequency.value = n === 1 ? 1650 : 1100;
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.4, t + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.07); }
+    }
+    n--; setTimeout(step, 650);
+  };
+  step();
+}
+function playLive() {
+  var st = liveState; if (!st || !st.times) return;
+  if (st.mode === 'video') {
+    showVideo(st.tl.video, st.tl.start).then(function (p) {
+      if (!liveState) return;
+      p.seekTo(st.tl.start + (st.i ? st.times[st.i] : Math.max(0, st.times[0] - 2)), true); p.playVideo();
+      st.playing = true; drawLive(); loop();
+    }).catch(videoFailed);
+    return;
+  }
+  countIn(function () {
+    st.t0 = performance.now(); st.tOffset = st.times[st.i];
+    st.playing = true; drawLive(); loop();
+  });
+}
+function pauseLive() {
+  var st = liveState; if (!st) return;
+  if (st.playing && st.mode === 'auto') st.tOffset = liveTime();
+  st.playing = false; st.counting = false; cancelAnimationFrame(st.raf);
+  if (st.mode === 'video' && yt.player) { try { yt.player.pauseVideo(); } catch (e) { /* nada */ } }
+  drawLive();
+}
+/* Volver a sincronizar: el acorde elegido es el que suena ahora. */
+function jumpTo(i) {
+  var st = liveState; if (!st) return;
+  i = Math.max(0, Math.min(st.path.length - 1, i));
+  if (st.times && st.playing) {
+    if (st.mode === 'video' && yt.player) { try { yt.player.seekTo(st.tl.start + st.times[i], true); } catch (e) { /* nada */ } }
+    else { st.t0 = performance.now(); st.tOffset = st.times[i]; }
+  } else if (st.times) st.tOffset = st.times[i];
+  setLiveIndex(i);
+}
+function setRate(r) {
+  var st = liveState; r = Math.max(0.6, Math.min(1.5, Math.round(r * 100) / 100));
+  if (st.playing) { st.tOffset = liveTime(); st.t0 = performance.now(); }
+  st.rate = r; LS.set('cfp.liveRate', r); lid('lv-nav').innerHTML = navHTML();
+}
+function setLiveMode(m) {
+  var st = liveState; if (!st) return;
+  pauseLive(); if (m !== 'listen') stopEar();
+  st.mode = m; LS.set('cfp.liveMode', m);
+  if (m === 'video') showVideo(st.tl.video, st.tl.start).catch(videoFailed); else hideVideo();
+  drawLive();
+}
+function openLiveModes() {
+  var st = liveState, has = !!st.tl, hasV = has && !!st.tl.video;
+  var why = st.stale ? 'la canción cambió: vuelve a grabarlo' : 'primero graba el recorrido';
+  menuSheet('Cómo avanza', [
+    { id: 'manual', icon: 'fwd', label: 'Manual', sub: 'tocando la pantalla o con un pedal', run: function () { setLiveMode('manual'); } },
+    { id: 'auto', icon: 'play', label: 'Automático', sub: has ? 'sigue el ritmo grabado' : why, disabled: !has, run: function () { setLiveMode('auto'); } },
+    { id: 'video', icon: 'video', label: 'Con el video', sub: hasV ? 'para practicar' : (has ? 'se grabó sin video' : why), disabled: !hasV, run: function () { setLiveMode('video'); } },
+    { id: 'listen', icon: 'mic', label: 'Escuchando (en prueba)', sub: 'oye a la banda y avanza', run: function () { setLiveMode('listen'); } },
+    { id: 'rec', icon: 'rec', label: has ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', sub: 'con el video o tocando', run: openRecorder }
+  ], '<p class="help">Automático y Con el video usan el recorrido que grabes: los momentos exactos en que cambia cada acorde, con sus repeticiones. ' +
+    'Escuchando usa el micrófono y avanza cuando reconoce el acorde siguiente. En cualquier modo, tocar un acorde de la letra lo pone como el actual.</p>');
+}
+function openLiveMore() {
+  var st = liveState;
+  menuSheet('En vivo', [
+    { id: 'snd', icon: 'speaker', label: st.sound ? 'Sin sonido al avanzar' : 'Sonido al avanzar', sub: 'para practicar', run: function () { st.sound = !st.sound; LS.set('cfp.liveSound', st.sound); drawLive(); soundNow(); } },
+    { id: 'full', icon: 'full', label: document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa', run: function () { if (document.fullscreenElement) exitFull(); else enterFull(); } },
+    { id: 'rec', icon: 'rec', label: st.tl ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', run: openRecorder },
+    { id: 'help', icon: 'text', label: 'Cómo funciona', run: openLiveHelp }
+  ]);
+}
+function openLiveHelp() {
+  openSheet('Tocar en vivo', '<div class="help">' +
+    '<p><b>Piano.</b> Arriba la mano derecha, abajo la izquierda, con los dedos marcados. Las posiciones son cercanas: de un acorde al siguiente la mano se mueve lo menos posible. Abajo ves el acorde que viene.</p>' +
+    '<p><b>Manual.</b> Toca la pantalla, usa las flechas o un pedal Bluetooth de pasar páginas. Quien conoce la canción puede pasarla con el pie.</p>' +
+    '<p><b>Grabar el recorrido.</b> Abre el video (o toquen la canción), marca dónde empieza y toca «Cambio» cada vez que cambia el acorde. Si una parte se repite, toca ese acorde en la letra. Queda guardado en la canción y se publica con ella.</p>' +
+    '<p><b>Automático.</b> Avanza solo con el ritmo grabado, después de una cuenta de 3. Si la banda va más rápido o más lento, cambia la velocidad; si se desfasan, toca el acorde que suena en la letra para volver a sincronizar.</p>' +
+    '<p><b>Escuchando (en prueba).</b> El celular oye a la banda y avanza cuando reconoce el acorde siguiente. Funciona mejor cerca de la guitarra y con poco ruido; en una laptop con la guitarra conectada a la interfaz de audio, mejor todavía. Si se pierde, toca el acorde correcto en la letra.</p></div>');
 }
 function onLiveTap(e) {
   var st = liveState; if (!st) return;
+  if (recState) { onRecTap(e); return; }
   var jump = e.target.closest('.lv-lines [data-i]');
-  if (jump) { var n = +jump.getAttribute('data-i'); for (var k = 0; k < st.steps.length; k++) if (st.steps[k].n === n) { liveGo(k); return; } }
+  if (jump) {
+    var n = +jump.getAttribute('data-i'), best = -1;
+    st.path.forEach(function (k, q) { if (st.steps[k].n === n && (best < 0 || Math.abs(q - st.i) < Math.abs(best - st.i))) best = q; });
+    if (best >= 0) jumpTo(best);
+    return;
+  }
   var b = e.target.closest('[data-lv]'); if (!b || b.disabled) return;
-  var a = b.getAttribute('data-lv');
-  if (a === 'next') liveGo(st.i + 1);
-  else if (a === 'prev') liveGo(st.i - 1);
-  else if (a === 'close') closeLive(false);
-  else if (a === 'sound') {
-    st.sound = !st.sound; LS.set('cfp.liveSound', st.sound); drawLive();
-    if (st.sound) { var v = st.vo[st.i].v; playNotes([v.left].concat(v.right)); }
+  switch (b.getAttribute('data-lv')) {
+    case 'next': jumpTo(st.i + 1); break;
+    case 'prev': jumpTo(st.i - 1); break;
+    case 'tapnow': if (st.mode !== 'video') jumpTo(st.i + 1); break;
+    case 'close': closeLive(false); break;
+    case 'modes': openLiveModes(); break;
+    case 'more': openLiveMore(); break;
+    case 'play':
+      if (st.mode === 'listen') { if (ear) { stopEar(); drawLive(); } else startEar(); }
+      else if (st.playing || st.counting) pauseLive(); else playLive();
+      break;
+    case 'slower': setRate(st.rate - 0.05); break;
+    case 'faster': setRate(st.rate + 0.05); break;
   }
 }
-/* Teclado y pedales Bluetooth (envían flechas, Av Pág/Re Pág o espacio). Va antes que los atajos de la canción. */
 document.addEventListener('keydown', function (e) {
   var st = liveState; if (!st || sheetRoot.firstChild) return;
+  var tag = (e.target && e.target.tagName || '').toLowerCase(); if (tag === 'input' || tag === 'textarea') return;
   var k = e.key;
-  if (k === ' ' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === 'Enter') liveGo(st.i + 1);
-  else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') liveGo(st.i - 1);
-  else if (k === 'Home') liveGo(0);
+  if (recState) { if (recKey(k)) { e.preventDefault(); e.stopImmediatePropagation(); } return; }
+  if (k === ' ' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === 'Enter') jumpTo(st.i + 1);
+  else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') jumpTo(st.i - 1);
+  else if (k === 'Home') jumpTo(0);
   else if (k === 'Escape') closeLive(false);
   else return;
   e.preventDefault(); e.stopImmediatePropagation();
 }, true);
+
+/* parte 7: grabar el recorrido (con un video de YouTube o mientras la banda toca) */
+var recState = null;
+var yt = { player: null, id: '', ready: null };
+function loadYT() {
+  if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+  if (yt.ready) return yt.ready;
+  yt.ready = new Promise(function (res, rej) {
+    var prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () { if (typeof prev === 'function') prev(); res(window.YT); };
+    var s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api'; s.async = true;
+    s.onerror = function () { yt.ready = null; rej(new Error('sin conexión')); };
+    document.head.appendChild(s);
+    setTimeout(function () { if (!(window.YT && window.YT.Player)) { yt.ready = null; rej(new Error('tiempo')); } }, 15000);
+  });
+  return yt.ready;
+}
+function showVideo(id, start) {
+  var box = lid('lv-video');
+  if (!box || !id) return Promise.reject(new Error('sin video'));
+  box.hidden = false;
+  if (yt.player && yt.id === id) return Promise.resolve(yt.player);
+  destroyPlayer();
+  box.innerHTML = '<div id="lv-yt"></div>';
+  return loadYT().then(function (YT) {
+    return new Promise(function (res, rej) {
+      var done = false;
+      yt.id = id;
+      yt.player = new YT.Player('lv-yt', { videoId: id, width: '100%', height: '100%',
+        playerVars: { start: Math.floor(start || 0), playsinline: 1, rel: 0, modestbranding: 1 },
+        events: { onReady: function () { done = true; res(yt.player); }, onError: function () { if (!done) rej(new Error('video')); } } });
+      setTimeout(function () { if (!done) rej(new Error('tiempo')); }, 20000);
+    });
+  });
+}
+function hideVideo() {
+  var box = lid('lv-video'); if (box) box.hidden = true;
+  if (yt.player) { try { yt.player.pauseVideo(); } catch (e) { /* nada */ } }
+}
+function destroyPlayer() {
+  if (yt.player) { try { yt.player.destroy(); } catch (e) { /* nada */ } }
+  yt.player = null; yt.id = '';
+}
+function videoFailed() { toast('No se pudo abrir el video. Revisa la conexión a internet.', 4500); }
+
+function openRecorder() {
+  var st = liveState; if (!st) return;
+  pauseLive(); stopEar();
+  var song = st.song, tl = song.timeline || {}, ref = (song.refs || [])[0] || '';
+  recState = { video: tl.video || C.ytId(ref), start: tl.start != null ? tl.start : C.ytStart(ref), marks: [], p: 0, phase: 'setup', t0: 0, end: 0, timer: 0 };
+  if (recState.video) showVideo(recState.video, recState.start).catch(videoFailed); else hideVideo();
+  drawRec();
+}
+function recTime() {
+  var r = recState;
+  if (r.video && yt.player && yt.player.getCurrentTime) return yt.player.getCurrentTime() - r.start;
+  return (performance.now() - r.t0) / 1000;
+}
+function drawRec() {
+  var st = liveState, r = recState, song = st.song, inf = info(song), fmt = fmtFor(inf.key, songShift(song));
+  lid('live').classList.add('rec');
+  lid('lv-top').innerHTML = '<button type="button" class="iconbtn" data-rc="close" aria-label="Salir de la grabación">' + icon('close') + '</button>' +
+    '<h2>Grabar recorrido: ' + esc(C.sentenceCase(song.title)) + '</h2>';
+  var main = '', nav = '';
+  if (r.phase === 'setup') {
+    main = '<div class="rec-setup">' +
+      '<p class="help">El recorrido guarda en qué momento cambia cada acorde, con sus repeticiones. Con eso el modo en vivo avanza solo.</p>' +
+      '<div class="field"><label for="rc-url">Video de YouTube (opcional)</label><div class="rc-row">' +
+        '<input id="rc-url" value="' + esc(r.video ? 'https://youtu.be/' + r.video : '') + '" placeholder="Pega aquí el enlace del video" autocomplete="off">' +
+        '<button type="button" class="btn" data-rc="load">Abrir</button></div></div>' +
+      (r.video
+        ? '<div class="field"><label for="rc-start">La canción empieza en</label><div class="rc-row"><input id="rc-start" inputmode="numeric" value="' + C.fmtClock(r.start) + '">' +
+          '<button type="button" class="btn" data-rc="markstart">Usar el minuto del video</button></div></div>' +
+          '<p class="help">Si el video trae varias canciones seguidas, pon el minuto en que empieza esta. Puedes adelantar el video hasta ahí y tocar «Usar el minuto del video».</p>'
+        : '<p class="help">Sin video: toca «Empezar», espera la cuenta de 3 y marca los cambios mientras la banda toca.</p>') +
+      '<p class="help"><b>Cómo marcar:</b> toca «Cambio» justo cuando empieza a sonar cada acorde. Si una parte se repite, toca ese acorde en la letra. Si te equivocas, «Deshacer».</p></div>';
+    nav = '<div class="lv-row"><button type="button" class="btn" data-rc="close">Cancelar</button><button type="button" class="btn primary" data-rc="begin">' + icon('rec') + 'Empezar</button></div>';
+  } else if (r.phase === 'count') {
+    main = '<div class="lv-count rec-count" id="rc-count">3</div>';
+    nav = '<div class="lv-row"><button type="button" class="btn" data-rc="again">Cancelar</button></div>';
+  } else if (r.phase === 'rec') {
+    main = '<button type="button" class="rec-big" data-rc="mark" id="rc-big">Cambio<b id="rc-next"></b></button>' +
+      '<p class="rec-stat"><span id="rc-clock">0:00</span><span id="rc-count2"></span></p>' +
+      '<div class="song rec-lines" id="rc-lines">' + bodyHTML(song, fmt) + '</div>';
+    nav = '<div class="lv-row"><button type="button" class="btn" data-rc="undo">Deshacer</button><button type="button" class="btn primary" data-rc="finish">Terminar</button></div>';
+  } else {
+    var dur = r.end;
+    main = '<div class="rec-setup"><p class="rec-sum">Marcaste <b>' + r.marks.length + '</b> cambios de acorde en <b>' + C.fmtClock(dur) + '</b>.</p>' +
+      '<p class="help">Al guardarlo, el modo en vivo podrá avanzar solo' + (r.video ? ', y también junto con el video para practicar' : '') + '. Se guarda en la canción' +
+      (isGroup() ? ' y se comparte con el grupo cuando publiques los cambios' : '') + '.</p></div>';
+    nav = '<div class="lv-row"><button type="button" class="btn" data-rc="again">Volver a grabar</button><button type="button" class="btn primary" data-rc="save">Guardar</button></div>';
+  }
+  lid('lv-main').innerHTML = main;
+  lid('lv-nav').innerHTML = nav;
+  if (r.phase === 'rec') { fixCollisions(lid('rc-lines')); updateRec(); }
+}
+/* Solo cambia lo necesario mientras se graba: el próximo acorde, los marcados y el reloj. */
+function updateRec() {
+  var st = liveState, r = recState; if (!r || r.phase !== 'rec') return;
+  var fmt = fmtFor(info(st.song).key, songShift(st.song)), box = lid('rc-lines');
+  var nb = lid('rc-next'); if (nb) nb.textContent = r.p < st.steps.length ? C.splitTok(fmt(st.steps[r.p].c)).core : '—';
+  var cc = lid('rc-count2'); if (cc) cc.textContent = r.marks.length + (r.marks.length === 1 ? ' marcado' : ' marcados');
+  if (!box) return;
+  Array.prototype.forEach.call(box.querySelectorAll('.done, .now'), function (x) { x.classList.remove('done', 'now'); });
+  r.marks.forEach(function (m) { var x = box.querySelector('[data-i="' + st.steps[m[0]].n + '"]'); if (x) x.classList.add('done'); });
+  var nx = r.p < st.steps.length ? box.querySelector('[data-i="' + st.steps[r.p].n + '"]') : null;
+  if (nx) { nx.classList.add('now'); var br = nx.getBoundingClientRect(), mr = lid('lv-main').getBoundingClientRect();
+    if (br.top < mr.top + 60 || br.bottom > mr.bottom - 20) lid('lv-main').scrollTop += br.top - mr.top - mr.height / 3; }
+}
+function startRec() {
+  var r = recState, sv = lid('rc-start'), uv = lid('rc-url');
+  if (uv) {
+    var u = uv.value.trim(), vid = C.ytId(u);
+    if (u && !vid) { toast('Ese enlace no es de un video de YouTube. Bórralo para grabar sin video.', 4500); uv.focus(); return; }
+    r.video = vid;                                  // sin enlace: se graba con cronómetro, mientras la banda toca
+    if (!vid) hideVideo();
+  }
+  if (sv && r.video) { var t = C.parseClock(sv.value); if (t === null) { toast('Escribe el inicio así: 2:43'); sv.focus(); return; } r.start = t; }
+  r.marks = []; r.p = 0;
+  var go = function () { r.phase = 'rec'; drawRec(); clearInterval(r.timer); r.timer = setInterval(function () { var c = lid('rc-clock'); if (c && recState) c.textContent = C.fmtClock(Math.max(0, recTime())); }, 200); };
+  if (r.video) {
+    showVideo(r.video, r.start).then(function (p) { if (!recState) return; p.seekTo(Math.max(0, r.start - 1), true); p.playVideo(); go(); }).catch(videoFailed);
+    return;
+  }
+  var n = 3; r.phase = 'count'; drawRec();
+  var step = function () {
+    if (!recState || r.phase !== 'count') return;
+    if (n === 0) { r.t0 = performance.now(); go(); return; }
+    var c = lid('rc-count'); if (c) c.textContent = n;
+    n--; setTimeout(step, 700);
+  };
+  step();
+}
+function recMark(k) {
+  var st = liveState, r = recState; if (!r || r.phase !== 'rec' || k < 0 || k >= st.steps.length) return;
+  var t = recTime();
+  if (r.marks.length && t <= r.marks[r.marks.length - 1][1]) t = r.marks[r.marks.length - 1][1] + 0.01;
+  r.marks.push([k, Math.round(t * 100) / 100]);
+  r.p = Math.min(st.steps.length, k + 1);
+  var big = lid('rc-big'); if (big) { big.classList.remove('hit'); void big.offsetWidth; big.classList.add('hit'); }
+  updateRec();
+}
+function recUndo() {
+  var r = recState; if (!r || !r.marks.length) return;
+  var m = r.marks.pop(); r.p = m[0]; updateRec();
+}
+function finishRec() {
+  var r = recState;
+  if (r.marks.length < 2) { toast('Marca al menos dos cambios de acorde.'); return; }
+  r.end = Math.max(recTime(), r.marks[r.marks.length - 1][1] + 1);
+  clearInterval(r.timer); r.phase = 'done';
+  if (yt.player) { try { yt.player.pauseVideo(); } catch (e) { /* nada */ } }
+  drawRec();
+}
+function saveRec() {
+  var st = liveState, r = recState, song = clone(st.song);
+  song.timeline = { v: 1, video: r.video || '', start: r.video ? Math.round(r.start * 100) / 100 : 0, sig: seqSig(st.steps),
+    steps: r.marks, end: Math.round(r.end * 100) / 100, rec: new Date().toISOString() };
+  local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id];
+  current.song = getSong(song.id);
+  var mode = r.video ? 'video' : 'auto', pushed = st.pushed;
+  clearInterval(r.timer); recState = null;
+  LS.set('cfp.liveMode', mode);
+  liveState = buildLive(current.song, pushed, mode);
+  if (mode !== 'video') hideVideo();
+  drawLive();
+  toast('Recorrido guardado: ' + r.marks.length + ' cambios.' + (isGroup() ? ' Publica los cambios para que el grupo también lo tenga.' : ''), 5000);
+}
+function closeRec() {
+  var r = recState; if (!r) return;
+  clearInterval(r.timer); recState = null;
+  if (!(liveState.mode === 'video' && liveState.tl)) hideVideo();
+  drawLive();
+}
+function onRecTap(e) {
+  var r = recState, ch = r.phase === 'rec' ? e.target.closest('#rc-lines [data-i]') : null;
+  if (ch) {
+    var n = +ch.getAttribute('data-i'), st = liveState;
+    for (var k = 0; k < st.steps.length; k++) if (st.steps[k].n === n) { recMark(k); return; }
+    return;
+  }
+  var b = e.target.closest('[data-rc]'); if (!b || b.disabled) return;
+  switch (b.getAttribute('data-rc')) {
+    case 'close':
+      if (r.marks.length && r.phase !== 'setup') confirmSheet('Salir sin guardar', 'Se pierden los cambios que marcaste.', 'Salir', closeRec, true); else closeRec();
+      break;
+    case 'load':
+      var u = lid('rc-url').value, id = C.ytId(u);
+      if (!id) { toast('Ese enlace no es de un video de YouTube.'); break; }
+      r.video = id; if (C.ytStart(u)) r.start = C.ytStart(u);
+      showVideo(id, r.start).catch(videoFailed); drawRec();
+      break;
+    case 'markstart':
+      if (yt.player && yt.player.getCurrentTime) { r.start = Math.max(0, yt.player.getCurrentTime()); lid('rc-start').value = C.fmtClock(r.start); toast('La canción empieza en ' + C.fmtClock(r.start) + '.'); }
+      break;
+    case 'begin': startRec(); break;
+    case 'mark': recMark(r.p); break;
+    case 'undo': recUndo(); break;
+    case 'finish': finishRec(); break;
+    case 'again': clearInterval(r.timer); r.marks = []; r.p = 0; r.phase = 'setup'; if (yt.player) { try { yt.player.pauseVideo(); } catch (x) { /* nada */ } } drawRec(); break;
+    case 'save': saveRec(); break;
+  }
+}
+/* Teclado o pedal mientras se graba: espacio, Enter o → marcan el cambio; borrar deshace. */
+function recKey(k) {
+  var r = recState;
+  if (r.phase === 'rec') {
+    if (k === ' ' || k === 'Enter' || k === 'ArrowRight' || k === 'PageDown' || k === 'ArrowDown') { recMark(r.p); return true; }
+    if (k === 'Backspace' || k === 'ArrowLeft' || k === 'PageUp') { recUndo(); return true; }
+  }
+  if (k === 'Escape') { closeRec(); return true; }
+  return false;
+}
+
+/* parte 8: modo «escuchando» (en prueba)
+   No intenta reconocer cualquier acorde: solo decide si ya suena el acorde siguiente del recorrido o sigue el actual.
+   Cada 60 ms toma el espectro del micrófono, lo reduce a 12 notas (cromagrama) y lo compara con ambos acordes. */
+var ear = null;
+function chordTemplate(en) {
+  var c = C.parseChord(en), t = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  if (!c) return t;
+  C.chordIntervals(c.qual).forEach(function (iv) {
+    var pc = C.mod12(c.root + iv), w = iv === 0 ? 1.2 : (C.mod12(iv) === 10 || C.mod12(iv) === 11 || C.mod12(iv) === 9 || iv > 12) ? 0.7 : 1;
+    t[pc] = Math.max(t[pc], w);
+  });
+  if (c.bass !== null) t[c.bass] = Math.max(t[c.bass], 0.8);
+  var n = Math.sqrt(t.reduce(function (a, x) { return a + x * x; }, 0)) || 1;
+  return t.map(function (x) { return x / n; });
+}
+function cosSim(a, b) { var s = 0; for (var k = 0; k < 12; k++) s += a[k] * b[k]; return s; }
+function sameChord(a, b) { for (var k = 0; k < 12; k++) if (Math.abs(a[k] - b[k]) > 1e-6) return false; return true; }
+function startEar(stream) {
+  if (ear) return;
+  var st = liveState; if (!st) return;
+  var get = stream ? Promise.resolve(stream)
+    : (navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+      ? navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } })
+      : Promise.reject(new Error('Este navegador no permite usar el micrófono.')));
+  get.then(function (ms) {
+    var ac = audio(); if (!ac) throw new Error('Sin audio en este equipo.');
+    var src = ac.createMediaStreamSource(ms), an = ac.createAnalyser();
+    an.fftSize = 8192; an.smoothingTimeConstant = 0; src.connect(an);
+    var bins = an.frequencyBinCount, hz = ac.sampleRate / an.fftSize, map = [];
+    for (var k = 1; k < bins; k++) {
+      var f = k * hz; if (f < 100 || f > 2600) continue;              // debajo de 100 Hz: bombo y ruido; arriba de 2,6 kHz: poco útil
+      var midi = 69 + 12 * Math.log(f / 440) / Math.LN2, r = Math.round(midi), w = 1 - Math.min(1, Math.abs(midi - r) * 2);
+      if (w > 0) map.push([k, C.mod12(r), w]);
+    }
+    ear = { ms: ms, src: src, an: an, buf: new Float32Array(bins), map: map, ema: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hits: 0,
+            since: performance.now(), own: !stream, tpl: {}, lastMeter: 0 };
+    ear.timer = setInterval(earFrame, 60);
+    if (liveState) drawLive();
+  }).catch(function (e) {
+    toast('No se pudo usar el micrófono. ' + (e && e.name === 'NotAllowedError' ? 'Da permiso al micrófono en el navegador.' : (e && e.message ? e.message : '')), 5500);
+  });
+}
+function stopEar() {
+  if (!ear) return;
+  clearInterval(ear.timer);
+  try { ear.src.disconnect(); } catch (e) { /* nada */ }
+  if (ear.own) ear.ms.getTracks().forEach(function (t) { t.stop(); });
+  ear = null;
+}
+function earTpl(i) { var st = liveState; return ear.tpl[i] || (ear.tpl[i] = chordTemplate(st.vo[i].en)); }
+function earFrame() {
+  var st = liveState;
+  if (!ear || !st || st.mode !== 'listen' || recState) return;
+  ear.an.getFloatFrequencyData(ear.buf);
+  var ch = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], peak = -200, q, p;
+  for (q = 0; q < ear.map.length; q++) {
+    var m = ear.map[q], db = ear.buf[m[0]];
+    if (db > peak) peak = db;
+    ch[m[1]] += Math.pow(10, db / 20) * m[2];
+  }
+  var norm = 0;
+  for (p = 0; p < 12; p++) { ch[p] = Math.sqrt(ch[p]); norm += ch[p] * ch[p]; }
+  norm = Math.sqrt(norm) || 1;
+  var quiet = peak < -72;
+  for (p = 0; p < 12; p++) ear.ema[p] = ear.ema[p] * 0.65 + (quiet ? 0 : ch[p] / norm) * 0.35;
+  if (quiet) { ear.hits = 0; earMeter(null); return; }
+  // ¿suena un acorde? El ruido reparte la energía entre las 12 notas; un acorde la concentra en pocas.
+  var mx = 0, mean = 0;
+  for (p = 0; p < 12; p++) { mx = Math.max(mx, ear.ema[p]); mean += ear.ema[p] / 12; }
+  if (!mx || (mx - mean) / mx < 0.3) { ear.hits = Math.max(0, ear.hits - 1); earMeter('ruido'); return; }
+  var cur = earTpl(st.i), n1 = st.i + 1 < st.path.length ? st.i + 1 : -1;
+  // el mismo acorde dos veces seguidas no se distingue por el sonido: con recorrido grabado se respeta su tiempo
+  if (n1 >= 0 && sameChord(earTpl(n1), cur) && st.times && (performance.now() - ear.since) / 1000 >= (st.times[n1] - st.times[st.i]) * 0.95) { earAdvance(n1); return; }
+  // se compara con el siguiente acorde que suena distinto (salta los repetidos)
+  var j = -1;
+  for (var q2 = st.i + 1; q2 < st.path.length && q2 <= st.i + 3; q2++) if (!sameChord(earTpl(q2), cur)) { j = q2; break; }
+  var sc = cosSim(ear.ema, cur), sn = j >= 0 ? cosSim(ear.ema, earTpl(j)) : 0;
+  earMeter(sc, sn, j);
+  if (j < 0) return;
+  if (sn > sc + 0.05 && sn > 0.65) { ear.hits++; if (ear.hits >= 3) earAdvance(j); }
+  else ear.hits = Math.max(0, ear.hits - 1);
+}
+function earAdvance(j) { ear.hits = 0; ear.since = performance.now(); if (window.__earLog) window.__earLog.push([j, performance.now()]); setLiveIndex(j, true); }
+function earMeter(sc, sn, j) {
+  var el = lid('lv-meter'), now = performance.now();
+  if (!el || now - ear.lastMeter < 180) return;
+  ear.lastMeter = now;
+  if (sc === null) { el.textContent = 'Escuchando… (silencio)'; return; }
+  if (sc === 'ruido') { el.textContent = 'Escuchando… (no distingo un acorde claro)'; return; }
+  el.innerHTML = 'Escuchando: se parece al actual <b>' + Math.round(sc * 100) + ' %</b>' + (j >= 0 ? ', al siguiente <b>' + Math.round(sn * 100) + ' %</b>' : '');
+}
 
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
@@ -3352,6 +3921,7 @@ document.addEventListener('keydown', function (e) {
 var refit = debounce(function () {
   fixCollisions(document.getElementById('song-body'));
   fixCollisions(document.getElementById('ed-prev'));
+  if (liveState && !recState) drawLive();
   var eds = document.getElementById('ed-song'); if (eds && editorState && editorState.mode === 'acordes') { fixCollisions(eds); renderPanel(); }
 }, 150);
 window.addEventListener('resize', refit);
@@ -3387,7 +3957,7 @@ if (window.matchMedia) {
 openBookData();
 render();
 fetchRemote().then(function (res) { if (res === 'nuevo') afterRemoteUpdate(); else refreshChrome(); });
-window.__cancionero = { fixCollisions: fixCollisions, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
+window.__cancionero = { fixCollisions: fixCollisions, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), times: liveState.times } : null; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
 })();
 
 
