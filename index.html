@@ -295,6 +295,11 @@ pre.out { white-space: pre; overflow: auto; background: var(--wash); padding: .8
 .lt.on { background: var(--chord); color: var(--paper); border-color: var(--chord); }
 .lt.end { font: 600 .8rem/1 var(--ui-font); color: var(--muted); }
 .ep-hint { margin: .3rem .1rem .1rem; font-size: .82rem; color: var(--muted); line-height: 1.3; }
+.ep-ctx { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.ep-ctx .ep-hint { flex: 1 1 11rem; }
+.ep-cb { display: flex; gap: .3rem; flex: none; margin-top: .25rem; }
+.ctxb { min-height: 34px; padding: 0 .6rem; border-radius: 9px; border: 1.5px solid var(--rule); background: var(--wash); font: 700 .82rem/1 var(--ui-font); color: var(--ink); }
+.lt.syl { min-width: 44px; padding: 0 .45rem; }
 .ep-row { display: flex; gap: .3rem; overflow-x: auto; scrollbar-width: none; padding: .35rem 0 .05rem; }
 .ep-foot { display: flex; align-items: flex-end; gap: .4rem; }
 .ep-foot .ep-row { flex: 1; min-width: 0; }
@@ -316,6 +321,45 @@ body.ed-chords #toast { bottom: calc(14.5rem + env(safe-area-inset-bottom, 0px))
 .setitem .ttl { flex: 1; min-width: 0; font: 700 1.02rem/1.25 var(--lyric-font); }
 .setitem .ttl small { display: block; font: 500 .82rem var(--ui-font); color: var(--muted); }
 .setitem .iconbtn { min-width: 40px; height: 40px; }
+
+/* ---------- Modo en vivo ---------- */
+body.live-open { overflow: hidden; }
+.live { position: fixed; inset: 0; z-index: 30; background: var(--paper); color: var(--ink); display: flex; flex-direction: column; padding-top: env(safe-area-inset-top, 0px); }
+.lv-top { display: flex; align-items: center; gap: .35rem; padding: .3rem .5rem; border-bottom: 1.5px solid var(--rule); }
+.lv-top h2 { flex: 1; min-width: 0; margin: 0; font: 700 1.05rem/1.2 var(--lyric-font); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lv-key { font: 700 1.2rem/1 var(--chord-font); color: var(--chord); padding: .3rem .5rem; border-radius: 8px; background: var(--wash); }
+.lv-pos { font: 700 1rem/1 var(--chord-font); color: var(--muted); min-width: 3.2rem; text-align: center; }
+.lv-snd.on { background: var(--chord); color: var(--paper); }
+.lv-main { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .4rem; padding: .4rem .8rem; overflow: auto; }
+.lv-text { flex: none; }
+.lv-sec { margin: 0; text-align: center; font: 700 .8rem var(--lyric-font); color: var(--label); }
+.lv-lines { font-size: clamp(17px, 4.6vw, 24px); }
+.lv-lines .ln.hc { line-height: 2.5; }
+.lv-line.fade { opacity: .42; }
+.lv-lines .ch.now, .lv-lines .ci.now { background: var(--chord); color: var(--paper); }
+.lv-now { flex: 1 1 auto; min-height: 12rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .25rem;
+  border: 0; border-radius: 20px; background: var(--wash); color: var(--ink); padding: .6rem .6rem .8rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.lv-now:active { background: var(--wash-2); }
+.lv-label { font: 700 .8rem/1 var(--ui-font); color: var(--muted); letter-spacing: .02em; }
+.lv-chord { font: 700 clamp(3.2rem, 17vw, 6.5rem)/1 var(--chord-font); color: var(--chord); }
+.lv-piano { width: 100%; max-width: 560px; margin: .2rem 0; }
+.lv-bass { font: 600 1rem/1.2 var(--ui-font); color: var(--muted); }
+.lv-bass b { color: var(--accent); font: 700 1.35rem var(--chord-font); margin-left: .25rem; }
+.lv-next { flex: none; display: flex; align-items: center; gap: .6rem; padding: .2rem .1rem; min-height: 4.2rem; flex-wrap: wrap; }
+.lv-next b { font: 700 2rem/1 var(--chord-font); color: var(--ink); min-width: 3.2rem; }
+.lv-mini { width: 55%; max-width: 300px; margin: 0 0 0 auto; }
+.lv-end { font-weight: 700; color: var(--muted); }
+.lv-next .btn { margin-left: auto; }
+.lv-nav { flex: none; display: grid; grid-template-columns: 1fr 1.6fr; gap: .5rem; padding: .5rem .8rem calc(.6rem + env(safe-area-inset-bottom, 0px)); border-top: 1.5px solid var(--rule); }
+.lv-nav .btn { min-height: 56px; font-size: 1.05rem; }
+.lv-cta { margin: .75rem 0 0; }
+@media (orientation: landscape) and (min-width: 640px) {
+  .lv-main { display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: auto 1fr; gap: .6rem 1rem; }
+  .lv-now { grid-column: 1; grid-row: 1 / span 2; min-height: 0; }
+  .lv-text { grid-column: 2; grid-row: 1; }
+  .lv-next { grid-column: 2; grid-row: 2; flex-direction: column; align-items: flex-start; }
+  .lv-mini { width: 100%; margin: 0; }
+}
 
 /* ---------- Aviso ---------- */
 #toast { position: fixed; left: 50%; bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 40; max-width: calc(100% - 2rem);
@@ -467,12 +511,22 @@ body.ed-chords #toast { bottom: calc(14.5rem + env(safe-area-inset-bottom, 0px))
     while ((m = re.exec(s))) {
       cur.t += s.slice(last, m.index);
       if (cur.c !== null || cur.t !== '') segs.push(cur);
-      cur = { c: m[1], t: '' };
+      var parts = splitMulti(m[1]);                 // «[G D]» o «[(A B7)]»: varios acordes en el mismo lugar
+      for (var q = 0; q < parts.length - 1; q++) segs.push({ c: parts[q], t: '' });
+      cur = { c: parts[parts.length - 1], t: '' };
       last = re.lastIndex;
     }
     cur.t += s.slice(last);
     if (cur.c !== null || cur.t !== '' || !segs.length) segs.push(cur);
     return segs;
+  }
+
+  function splitMulti(inner) {
+    var t = inner.trim();
+    if (!/[\s,]/.test(t)) return [inner];
+    var parts = t.split(/[\s,]+/).filter(Boolean);
+    if (parts.length > 1 && parts.every(function (p) { return isChordTok(p) || /^\(?[xX]\s?\d+\)?$/.test(p); })) return parts;
+    return [inner];
   }
 
   function parseSong(src) {
@@ -592,6 +646,46 @@ body.ed-chords #toast { bottom: calc(14.5rem + env(safe-area-inset-bottom, 0px))
   }
 
   /* ---------------- Exportar a texto (acordes encima de la letra) ---------------- */
+  /* Posición cercana: de las inversiones posibles, la que menos mueve la mano desde el acorde anterior.
+     Mano derecha entre Fa3 y La5; bajo (fundamental o nota del bajo) cerca del bajo anterior. */
+  function closeVoicing(core, prev) {
+    var c = parseChord(splitTok(core).core);
+    if (!c) return null;
+    var pcs = [], seen = {};
+    chordIntervals(c.qual).forEach(function (x) { var pc = mod12(c.root + x); if (!seen[pc]) { seen[pc] = 1; pcs.push({ pc: pc, iv: mod12(x) }); } });
+    if (pcs.length > 4) pcs = pcs.filter(function (p) { return p.iv !== 7; }).slice(0, 4);
+    var cands = [];
+    for (var r = 0; r < pcs.length; r++) {
+      var order = pcs.slice(r).concat(pcs.slice(0, r));
+      for (var base = 48; base <= 76; base++) {
+        if (mod12(base) !== order[0].pc) continue;
+        var notes = [base];
+        for (var k = 1; k < order.length; k++) { var nx = notes[k - 1] + 1; while (mod12(nx) !== order[k].pc) nx++; notes.push(nx); }
+        if (notes[0] < 53 || notes[notes.length - 1] > 81) continue;
+        cands.push({ notes: notes, inv: r });
+      }
+    }
+    if (!cands.length) return pianoVoicing(core);
+    var center = function (n) { return (n[0] + n[n.length - 1]) / 2; };
+    var cost = function (n, inv) {
+      if (!prev || !prev.right) return inv * 3 + Math.abs(center(n) - 64) / 4;
+      var d = 0;
+      n.forEach(function (x) { var b = 99; prev.right.forEach(function (y) { b = Math.min(b, Math.abs(x - y)); }); d += b; });
+      prev.right.forEach(function (y) { var b = 99; n.forEach(function (x) { b = Math.min(b, Math.abs(x - y)); }); d += b; });
+      return d + Math.abs(center(n) - 64) * 0.15;
+    };
+    cands.sort(function (a, b) { return cost(a.notes, a.inv) - cost(b.notes, b.inv) || a.inv - b.inv; });
+    var best = cands[0], bassPc = c.bass !== null ? c.bass : c.root, target = prev && prev.left ? prev.left : 45, left = null;
+    for (var m = 33; m <= 57; m++) {
+      if (mod12(m) !== bassPc || m > best.notes[0] - 3) continue;
+      if (left === null || Math.abs(m - target) < Math.abs(left - target)) left = m;
+    }
+    if (left === null) { left = best.notes[0] - 1; while (mod12(left) !== bassPc) left--; }
+    var n = best.notes.length;
+    var fingers = n === 3 ? (best.inv === 1 ? [1, 2, 5] : [1, 3, 5]) : n === 4 ? [1, 2, 3, 5] : n === 2 ? [1, 5] : [1, 2, 3, 4, 5];
+    return { right: best.notes, left: left, fingers: fingers, inv: best.inv, root: c.root, bass: bassPc };
+  }
+
   function lineToText(line, fmt) {
     if (line.type === 'blank') return [''];
     if (line.type === 'label') return ['[' + line.text + ']'];
@@ -958,7 +1052,8 @@ body.ed-chords #toast { bottom: calc(14.5rem + env(safe-area-inset-bottom, 0px))
     importText: importText, bracketInline: bracketInline, sentenceCase: sentenceCase, nameCase: nameCase, normalize: normalize,
     srcToModel: srcToModel, modelToSrc: modelToSrc, modelLineToSrc: modelLineToSrc, normalizeModel: normalizeModel, sortChords: sortChords,
     modelToLetra: modelToLetra, parseLetra: parseLetra, reconcile: reconcile, transferChords: transferChords, lineKey: lineKey,
-    syllableStarts: syllableStarts, copyChordsBySyllable: copyChordsBySyllable, diatonic: diatonic, chordLineInfo: chordLineInfo
+    syllableStarts: syllableStarts, copyChordsBySyllable: copyChordsBySyllable, diatonic: diatonic, chordLineInfo: chordLineInfo,
+    closeVoicing: closeVoicing, splitMulti: splitMulti
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Core = api;
@@ -1482,6 +1577,7 @@ function renderSong(id, setId, idx) {
     '<h1>' + esc(C.sentenceCase(song.title)) + '</h1>' +
     ((song.author || song.momento) ? '<p class="meta">' + (song.momento ? '<span class="pill">' + esc(C.sentenceCase(song.momento)) + '</span>' : '') + esc(C.nameCase(song.author || '')) + '</p>' : '') +
     '<p class="keyline">' + keyLineHTML(song) + '</p>' +
+    (inf.seq.length ? '<p class="lv-cta"><a class="btn primary" href="' + esc(liveHash()) + '">' + icon('keys') + 'Tocar en vivo</a></p>' : '') +
     ((song.style || song.bpm) ? '<p class="style">' + esc([song.style, song.bpm ? song.bpm + ' bpm' : ''].filter(Boolean).join(', ')) + '</p>' : '') +
   '</header>';
   var refs = song.refs || [];
@@ -1738,20 +1834,21 @@ function playNotes(midis) {
     o.start(t); o2.start(t); o.stop(t + 1.9); o2.stop(t + 1.9);
   });
 }
-function pianoSVG(v, names) {
-  var right = v.right, left = v.left, all = right.concat([left]);
+function pianoSVG(v, names, opts) {
+  opts = opts || {};
+  var right = v.right, left = opts.noBass ? null : v.left, all = right.concat(left !== null ? [left] : []);
   var BLACK = { 1: 1, 3: 1, 6: 1, 8: 1, 10: 1 }, W = 30, H = 132, BW = 18, BH = 82, x = 0, whites = [], blacks = [];
-  var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
+  var lo = opts.lo != null ? opts.lo : Math.min.apply(null, all), hi = opts.hi != null ? opts.hi : Math.max.apply(null, all);
   while (C.mod12(lo) !== 0 && C.mod12(lo) !== 5) lo--;          // empezar en Do o Fa
   while (C.mod12(hi) !== 4 && C.mod12(hi) !== 11) hi++;         // terminar en Mi o Si
   var whitesIn = function (a, b) { var n = 0; for (var q = a; q <= b; q++) if (!BLACK[C.mod12(q)]) n++; return n; };
   while (whitesIn(lo, hi) < 14) { hi++; while (C.mod12(hi) !== 4 && C.mod12(hi) !== 11) hi++; }
-  var fingers = right.length === 3 ? [1, 3, 5] : right.length === 4 ? [1, 2, 3, 5] : right.length === 2 ? [1, 5] : [1, 2, 3, 4, 5];
+  var fingers = v.fingers || (right.length === 3 ? [1, 3, 5] : right.length === 4 ? [1, 2, 3, 5] : right.length === 2 ? [1, 5] : [1, 2, 3, 4, 5]);
   for (var m = lo; m <= hi; m++) {
-    var ri = right.indexOf(m), k = { m: m, cls: ri >= 0 ? 'rh' : (m === left ? 'lh' : ''), f: ri >= 0 ? fingers[ri] : (m === left ? 5 : '') };
+    var ri = right.indexOf(m), isL = left !== null && m === left, k = { m: m, cls: ri >= 0 ? 'rh' : (isL ? 'lh' : ''), f: ri >= 0 ? fingers[ri] : (isL ? 5 : '') };
     if (!BLACK[C.mod12(m)]) { k.x = x; whites.push(k); x += W; } else { k.x = x - BW / 2; blacks.push(k); }
   }
-  var s = '<svg class="piano" viewBox="0 0 ' + x + ' ' + (H + 2) + '" role="img" aria-label="Teclado del piano">';
+  var s = '<svg class="piano' + (opts.cls ? ' ' + opts.cls : '') + '" viewBox="0 0 ' + x + ' ' + (H + 2) + '" role="img" aria-label="' + esc(opts.label || 'Teclado del piano') + '">';
   whites.forEach(function (k) {
     s += '<rect class="wk' + (k.cls ? ' ' + k.cls : '') + '" x="' + (k.x + 0.5) + '" y="0.5" width="' + (W - 1) + '" height="' + H + '" rx="3"/>';
     if (k.cls) s += '<text class="lbl-w" x="' + (k.x + W / 2) + '" y="' + (H - 34) + '" style="font-size:14px">' + esc(names[k.m] || '') + '</text><text class="lbl-w" x="' + (k.x + W / 2) + '" y="' + (H - 12) + '" style="font-size:13px;opacity:.92">' + k.f + '</text>';
@@ -1909,6 +2006,7 @@ function openSongMenu() {
   var song = current.song; if (!song) return;
   var inf = info(song);
   var items = [
+    { href: liveHash(), icon: 'keys', label: 'Tocar en vivo (piano)', sub: 'acorde por acorde' },
     { id: 'wa', icon: 'copy', label: 'Copiar para WhatsApp', sub: 'en el tono actual', run: function () { copyText(songText(song, { wa: true }), 'Copiado. Pégalo en WhatsApp.'); } },
     { id: 'share', icon: 'copy', label: 'Compartir o copiar texto', run: function () { shareText(songText(song, {}), C.sentenceCase(song.title)); } },
     { id: 'print', icon: 'print', label: 'Imprimir o guardar en PDF', run: function () { openPrintSheet([{ song: song, shift: songShift(song) }], '', fileName(song.title)); } },
@@ -1943,6 +2041,7 @@ function openHelp() {
     '<p><b>Guitarra con cejilla.</b> Si el piano toca en un tono difícil para la guitarra, toca «Cejilla»: te sugiere el traste y te muestra las formas que debes tocar. El tono que suena no cambia.</p>' +
     '<p><b>Piano.</b> Toca cualquier acorde para ver qué teclas se presionan, con los dedos de la mano derecha y el bajo de la izquierda, y escucharlo.</p>' +
     '<p><b>Repertorios.</b> Arma la lista del día con el tono de cada canción y toca «Tocar» para pasar de una a otra con los botones de abajo.</p>' +
+    '<p><b>Tocar en vivo.</b> En cada canción, «Tocar en vivo» muestra el acorde que toca ahora, grande y con las teclas del piano en posición cercana (la mano se mueve lo menos posible), el que viene después y la línea de la letra. Avanza tocando la pantalla, con las flechas, la barra espaciadora o un pedal Bluetooth de pasar páginas. Toca un acorde de la letra para saltar a él.</p>' +
     '<p><b>Sin internet.</b> Instálala desde «Más opciones», en «Instalar en este equipo». Después de abrirla una vez con internet, funciona aunque no haya señal.</p>' +
     '<p><b>Canciones nuevas.</b> Escribe cada acorde entre corchetes antes de su sílaba, por ejemplo <code>Yo le al[D]abo</code>, o pega una canción de internet con los acordes encima.</p>' +
     '<p><b>Compartir cambios.</b> Lo que cambias se guarda en este equipo. Quien administra el cancionero lo publica para todos subiendo el archivo canciones.json a GitHub. Los demás le envían sus cambios como archivo.</p>' +
@@ -2526,7 +2625,7 @@ function refreshModeView() {
 /* ---------- pestaña Acordes: dibujo ---------- */
 function selIs(li, kind, k) {
   var s = editorState.sel;
-  return !!s && s.li === li && s.kind === kind && (k === undefined || (kind === 'pos' ? s.i === k : kind === 'chord' ? s.ci === k : s.k === k));
+  return !!s && s.li === li && s.kind === kind && (k === undefined || (kind === 'pos' ? s.i === k : (kind === 'chord' || kind === 'add') ? s.ci === k : s.k === k));
 }
 function edLyricHTML(l, li) {
   var byPos = {}, text = l.text, out = '', inWord = false, i;
@@ -2534,7 +2633,7 @@ function edLyricHTML(l, li) {
   function anchors(p) {
     return (byPos[p] || []).map(function (ci) {
       var c = l.chords[ci];
-      return '<span class="a"><b class="ch' + (C.isChordTok(c.c) ? '' : ' x') + (selIs(li, 'chord', ci) ? ' sel' : '') +
+      return '<span class="a"><b class="ch' + (C.isChordTok(c.c) ? '' : ' x') + (selIs(li, 'chord', ci) || selIs(li, 'add', ci) ? ' sel' : '') +
         '" data-li="' + li + '" data-ci="' + ci + '" role="button" tabindex="-1">' + esc(edFmt(c.c)) + '</b></span>';
     }).join('');
   }
@@ -2581,13 +2680,40 @@ function updateSelectionUI() {
   if (s) {
     var el = null;
     if (s.kind === 'pos') el = box.querySelector('.c[data-li="' + s.li + '"][data-i="' + s.i + '"]');
-    else if (s.kind === 'chord') el = box.querySelector('.ch[data-li="' + s.li + '"][data-ci="' + s.ci + '"]');
+    else if (s.kind === 'chord' || s.kind === 'add') el = box.querySelector('.ch[data-li="' + s.li + '"][data-ci="' + s.ci + '"]');
     else if (s.kind === 'seg') el = box.querySelector('.chip[data-li="' + s.li + '"][data-seg="' + s.k + '"]');
     else if (s.kind === 'append') el = box.querySelector('.chip[data-li="' + s.li + '"][data-append]');
     if (el) el.classList.add('sel');
   }
   renderPanel();
 }
+/* ---------- sílabas y varios acordes en un mismo lugar ---------- */
+var sylCache = {};
+function sylStarts(text) { return sylCache[text] || (sylCache[text] = C.syllableStarts(text)); }
+function isLetter(ch) { return /[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(ch || ''); }
+function bySyl() { return prefs.edUnit !== 'letter'; }
+/* Inicio de la sílaba que contiene la letra i; si i no es una letra (espacio, signo, final), se queda ahí. */
+function snapSyl(text, i) {
+  if (i >= text.length || !isLetter(text[i])) return i;
+  var st = sylStarts(text), best = i;
+  for (var k = 0; k < st.length; k++) { if (st[k] <= i) best = st[k]; else break; }
+  return best;
+}
+/* Sílaba anterior o siguiente dentro de la línea (el final de la línea cuenta como una posición más). */
+function stepSyl(text, i, d) {
+  var pts = sylStarts(text).concat([text.length]), k;
+  if (d > 0) { for (k = 0; k < pts.length; k++) if (pts[k] > i) return pts[k]; return text.length; }
+  for (k = pts.length - 1; k >= 0; k--) if (pts[k] < i) return pts[k];
+  return 0;
+}
+function chordsAt(l, i) { var out = []; l.chords.forEach(function (c, k) { if (c.i === i) out.push(k); }); return out; }
+function syllableAround(text, at, wr) {
+  var starts = sylStarts(text).filter(function (x) { return x >= wr[0] && x < wr[1]; });
+  if (!starts.length || starts[0] !== wr[0]) starts.unshift(wr[0]);
+  var cur = -1; starts.forEach(function (x, k) { if (x <= at) cur = k; });
+  return { starts: starts, cur: at < wr[1] ? cur : -1 };
+}
+
 function onSongTap(e) {
   var t = e.target, st = editorState, g = t.closest('[data-edgo]');
   if (g) { if (g.getAttribute('data-edgo') === 'letra') setMode('letra'); else addInstrLine(); return; }
@@ -2598,12 +2724,18 @@ function onSongTap(e) {
   var add = t.closest('.chip[data-append]');
   if (add) { st.sel = { li: +add.getAttribute('data-li'), kind: 'append' }; updateSelectionUI(); return; }
   var c = t.closest('.c[data-i]');
-  if (c) {
-    var li = +c.getAttribute('data-li'), i = +c.getAttribute('data-i'), l = st.model[li], ex = -1;
-    l.chords.forEach(function (x, k) { if (x.i === i) ex = k; });
-    st.sel = ex >= 0 ? { li: li, kind: 'chord', ci: ex } : { li: li, kind: 'pos', i: i };
-    updateSelectionUI();
-  }
+  if (!c) return;
+  var li = +c.getAttribute('data-li'), i = +c.getAttribute('data-i'), l = st.model[li];
+  // acordes justo en esa letra; si no hay y se trabaja por sílabas, se busca en el inicio de su sílaba
+  var here = chordsAt(l, i);
+  if (!here.length && bySyl()) { i = snapSyl(l.text, i); here = chordsAt(l, i); }
+  if (here.length) {
+    // tocar otra vez el mismo lugar pasa al siguiente acorde que está ahí
+    var s = st.sel, pick = here[0];
+    if (s && (s.kind === 'chord' || s.kind === 'add') && s.li === li) { var at = here.indexOf(s.ci); if (at >= 0) pick = here[(at + 1) % here.length]; }
+    st.sel = { li: li, kind: 'chord', ci: pick };
+  } else st.sel = { li: li, kind: 'pos', i: i };
+  updateSelectionUI();
 }
 
 /* ---------- panel de acordes ---------- */
@@ -2635,23 +2767,41 @@ function wordRange(text, i) {
 function renderPanel() {
   var st = editorState, p = $('edpanel'); if (!p || st.mode !== 'acordes') return;
   var s = st.sel, key = edKey(), spell = edSpell(key), diat = C.diatonic(key, spell), used = usedChords(diat).slice(0, 12);
-  var strip = '', hint;
-  if (s && (s.kind === 'pos' || s.kind === 'chord')) {
-    var l = st.model[s.li], at = s.kind === 'pos' ? s.i : l.chords[s.ci].i, wr = wordRange(l.text, at), word = l.text.slice(wr[0], wr[1]);
-    for (var i = wr[0]; i < wr[1]; i++) strip += '<button type="button" class="lt' + (i === at ? ' on' : '') + '" data-ep="at" data-i="' + i + '" aria-label="Poner en la letra ' + esc(l.text[i]) + '">' + esc(l.text[i]) + '</button>';
+  var strip = '', hint, btns = '';
+  var unitBtn = '<button type="button" class="ctxb" data-ep="unit" aria-label="Cambiar entre mover por sílabas o por letras">' + (bySyl() ? 'Por sílabas' : 'Por letras') + '</button>';
+  if (s && (s.kind === 'pos' || s.kind === 'chord' || s.kind === 'add')) {
+    var l = st.model[s.li], at = s.kind === 'pos' ? s.i : l.chords[s.ci].i, wr = wordRange(l.text, at), word = l.text.slice(wr[0], wr[1]), piece;
+    if (bySyl()) {
+      var sy = syllableAround(l.text, at, wr);
+      sy.starts.forEach(function (x, k) {
+        var end = k + 1 < sy.starts.length ? sy.starts[k + 1] : wr[1];
+        strip += '<button type="button" class="lt syl' + (k === sy.cur ? ' on' : '') + '" data-ep="at" data-i="' + x + '" aria-label="Poner en la sílaba ' + esc(l.text.slice(x, end)) + '">' + esc(l.text.slice(x, end)) + '</button>';
+      });
+      piece = sy.cur >= 0 ? l.text.slice(sy.starts[sy.cur], sy.cur + 1 < sy.starts.length ? sy.starts[sy.cur + 1] : wr[1]) : 'final';
+    } else {
+      for (var i = wr[0]; i < wr[1]; i++) strip += '<button type="button" class="lt' + (i === at ? ' on' : '') + '" data-ep="at" data-i="' + i + '" aria-label="Poner en la letra ' + esc(l.text[i]) + '">' + esc(l.text[i]) + '</button>';
+      piece = at < l.text.length ? l.text[at] : 'final';
+    }
     if (wr[1] === l.text.length || wr[1] === wr[0]) strip += '<button type="button" class="lt end' + (at === l.text.length ? ' on' : '') + '" data-ep="at" data-i="' + l.text.length + '" aria-label="Al final de la línea">fin</button>';
-    hint = s.kind === 'pos' ? 'Elige el acorde para «' + (at < l.text.length ? l.text[at] : 'final') + '» de «' + word + '».'
-      : 'Acorde ' + edFmt(l.chords[s.ci].c) + ': elige otro para cambiarlo, muévelo con ‹ › o quítalo.';
-  } else if (s && s.kind === 'seg') hint = 'Acorde ' + edFmt(st.model[s.li].segs[s.k].c) + ' de la línea de acordes: elige otro, muévelo con ‹ › o quítalo.';
-  else if (s && s.kind === 'append') hint = 'Elige los acordes en orden: se van agregando a la línea.';
+    if (s.kind === 'pos') hint = 'Elige el acorde para «' + piece + '» de «' + word + '».';
+    else if (s.kind === 'chord') {
+      var nHere = chordsAt(l, at).length;
+      hint = 'Acorde ' + edFmt(l.chords[s.ci].c) + (nHere > 1 ? ' (hay ' + nHere + ' aquí: toca otra vez para pasar al siguiente)' : '') + '. Elige otro para cambiarlo, muévelo con ‹ › o quítalo.';
+      btns = '<button type="button" class="ctxb" data-ep="addhere">+ Otro aquí</button><button type="button" class="ctxb" data-ep="alt" aria-label="Poner o quitar paréntesis de alternativo">( )</button>';
+    } else hint = 'Elige el acorde que va después de ' + edFmt(l.chords[s.ci].c) + ', en el mismo lugar.';
+  } else if (s && s.kind === 'seg') {
+    hint = 'Acorde ' + edFmt(st.model[s.li].segs[s.k].c) + ' de la línea de acordes: elige otro, muévelo con ‹ › o quítalo.';
+    btns = '<button type="button" class="ctxb" data-ep="alt" aria-label="Poner o quitar paréntesis de alternativo">( )</button>';
+  } else if (s && s.kind === 'append') hint = 'Elige los acordes en orden: se van agregando a la línea.';
   else hint = 'Toca una sílaba de la letra para poner ahí un acorde.';
   var chip = function (c) { return '<button type="button" class="chip" data-chord="' + esc(c) + '">' + esc(edFmt(c)) + '</button>'; };
   p.innerHTML =
     '<div class="ep-bar">' +
-      '<button type="button" class="epb" data-ep="prev" aria-label="Mover una letra a la izquierda">‹</button>' +
+      '<button type="button" class="epb" data-ep="prev" aria-label="' + (bySyl() ? 'Sílaba anterior' : 'Letra anterior') + '">‹</button>' +
       '<div class="ep-strip">' + (strip || '<span class="ep-hint1">' + esc(hint) + '</span>') + '</div>' +
-      '<button type="button" class="epb" data-ep="next" aria-label="Mover una letra a la derecha">›</button></div>' +
-    (strip ? '<p class="ep-hint">' + esc(hint) + '</p>' : '') +
+      '<button type="button" class="epb" data-ep="next" aria-label="' + (bySyl() ? 'Sílaba siguiente' : 'Letra siguiente') + '">›</button></div>' +
+    (strip ? '<div class="ep-ctx"><p class="ep-hint">' + esc(hint) + '</p><div class="ep-cb">' + unitBtn + btns + '</div></div>'
+           : (btns ? '<div class="ep-ctx"><p class="ep-hint"></p><div class="ep-cb">' + btns + '</div></div>' : '')) +
     '<div class="ep-row"><button type="button" class="chip keychip" data-ep="key" aria-label="Cambiar el tono de la paleta">Tono ' + esc(C.keyName(key, spell, prefs.notation)) + ' ▾</button>' + diat.map(chip).join('') + '</div>' +
     '<div class="ep-foot"><div class="ep-row">' + used.map(chip).join('') + '<button type="button" class="chip other" data-ep="other">Otro…</button></div>' +
       '<div class="ep-acts">' +
@@ -2666,6 +2816,7 @@ function onPanelTap(e) {
   var b = e.target.closest('button'); if (!b || b.disabled) return;
   var ch = b.getAttribute('data-chord');
   if (ch) { applyChord(ch); return; }
+  var st = editorState;
   switch (b.getAttribute('data-ep')) {
     case 'prev': nudge(-1); break;
     case 'next': nudge(1); break;
@@ -2675,6 +2826,10 @@ function onPanelTap(e) {
     case 'key': openEdKey(); break;
     case 'other': openChordBuilder(); break;
     case 'at': moveTo(+b.getAttribute('data-i')); break;
+    case 'unit': prefs.edUnit = bySyl() ? 'letter' : 'syl'; savePrefs(); renderPanel();
+      toast(bySyl() ? 'Ahora se mueve por sílabas.' : 'Ahora se mueve por letras, para afinar.'); break;
+    case 'addhere': if (st.sel && st.sel.kind === 'chord') { st.sel = { li: st.sel.li, kind: 'add', ci: st.sel.ci }; updateSelectionUI(); } break;
+    case 'alt': toggleAlt(); break;
   }
 }
 
@@ -2685,7 +2840,11 @@ function applyChord(name) {
   if (!s) { toast('Primero toca la sílaba donde va el acorde.'); return; }
   var l = st.model[s.li]; pushUndo();
   if (s.kind === 'chord') l.chords[s.ci].c = name;
-  else if (s.kind === 'pos') {
+  else if (s.kind === 'add') {
+    // va justo después del acorde elegido, en el mismo lugar
+    l.chords.splice(s.ci + 1, 0, { i: l.chords[s.ci].i, c: name });
+    st.sel = { li: s.li, kind: 'chord', ci: s.ci + 1 };
+  } else if (s.kind === 'pos') {
     var obj = { i: s.i, c: name }; l.chords.push(obj);
     st.sel = { li: s.li, kind: 'chord', ci: reindexChord(l, obj) };
   } else if (s.kind === 'seg') l.segs[s.k].c = name;
@@ -2696,29 +2855,54 @@ function applyChord(name) {
   }
   renderChordEditor();
 }
+/* Alternativos entre paréntesis: el acorde elegido y los que lo siguen en el mismo lugar, como «(A B7)». */
+function wrapAlt(toks) {
+  var first = C.splitTok(toks[0]), last = C.splitTok(toks[toks.length - 1]);
+  var has = first.pre.indexOf('(') >= 0 && last.post.indexOf(')') >= 0;
+  return toks.map(function (t, q) {
+    var p = C.splitTok(t), pre = p.pre.replace(/\(/g, ''), post = p.post.replace(/\)/g, '');
+    if (!has) { if (q === 0) pre = '(' + pre; if (q === toks.length - 1) post = post + ')'; }
+    return pre + p.core + post;
+  });
+}
+function toggleAlt() {
+  var st = editorState, s = st.sel; if (!s) { toast('Toca primero un acorde.'); return; }
+  var l = st.model[s.li];
+  if (s.kind === 'seg') { pushUndo(); l.segs[s.k].c = wrapAlt([l.segs[s.k].c])[0]; renderChordEditor(); return; }
+  if (s.kind !== 'chord') { toast('Toca primero un acorde.'); return; }
+  var at = l.chords[s.ci].i, grp = chordsAt(l, at).filter(function (k) { return k >= s.ci; });
+  pushUndo();
+  var res = wrapAlt(grp.map(function (k) { return l.chords[k].c; }));
+  grp.forEach(function (k, q) { l.chords[k].c = res[q]; });
+  renderChordEditor();
+}
 function nudge(d) {
   var st = editorState, s = st.sel; if (!s) return;
   var l = st.model[s.li];
-  if (s.kind === 'chord') {
-    var c = l.chords[s.ci], ni = Math.max(0, Math.min(l.text.length, c.i + d)); if (ni === c.i) return;
-    pushUndo(); c.i = ni; s.ci = reindexChord(l, c); renderChordEditor();
-  } else if (s.kind === 'pos') { s.i = Math.max(0, Math.min(l.text.length, s.i + d)); updateSelectionUI(); }
-  else if (s.kind === 'seg') {
+  if (s.kind === 'chord' || s.kind === 'add') {
+    var c = l.chords[s.ci], ni = bySyl() ? stepSyl(l.text, c.i, d) : Math.max(0, Math.min(l.text.length, c.i + d));
+    if (ni === c.i) return;
+    pushUndo(); c.i = ni; st.sel = { li: s.li, kind: 'chord', ci: reindexChord(l, c) }; renderChordEditor();
+  } else if (s.kind === 'pos') {
+    s.i = bySyl() ? stepSyl(l.text, s.i, d) : Math.max(0, Math.min(l.text.length, s.i + d));
+    var here = chordsAt(l, s.i); if (here.length) st.sel = { li: s.li, kind: 'chord', ci: here[0] };
+    updateSelectionUI();
+  } else if (s.kind === 'seg') {
     var idx = []; l.segs.forEach(function (x, k) { if (x.c !== null) idx.push(k); });
-    var at = idx.indexOf(s.k), to = idx[at + d]; if (to === undefined) return;
+    var pos = idx.indexOf(s.k), to = idx[pos + d]; if (to === undefined) return;
     pushUndo(); var tmp = l.segs[s.k].c; l.segs[s.k].c = l.segs[to].c; l.segs[to].c = tmp; s.k = to; renderChordEditor();
   }
 }
 function moveTo(i) {
   var st = editorState, s = st.sel; if (!s) return;
   var l = st.model[s.li];
-  if (s.kind === 'chord') { var c = l.chords[s.ci]; if (c.i === i) return; pushUndo(); c.i = i; s.ci = reindexChord(l, c); renderChordEditor(); }
-  else { var ex = -1; l.chords.forEach(function (x, k) { if (x.i === i) ex = k; }); st.sel = ex >= 0 ? { li: s.li, kind: 'chord', ci: ex } : { li: s.li, kind: 'pos', i: i }; updateSelectionUI(); }
+  if (s.kind === 'chord' || s.kind === 'add') { var c = l.chords[s.ci]; if (c.i === i) return; pushUndo(); c.i = i; st.sel = { li: s.li, kind: 'chord', ci: reindexChord(l, c) }; renderChordEditor(); }
+  else { var here = chordsAt(l, i); st.sel = here.length ? { li: s.li, kind: 'chord', ci: here[0] } : { li: s.li, kind: 'pos', i: i }; updateSelectionUI(); }
 }
 function deleteSel() {
   var st = editorState, s = st.sel; if (!s) { toast('Toca primero el acorde que quieres quitar.'); return; }
   var l = st.model[s.li];
-  if (s.kind === 'chord') { pushUndo(); var at = l.chords[s.ci].i; l.chords.splice(s.ci, 1); st.sel = { li: s.li, kind: 'pos', i: at }; renderChordEditor(); }
+  if (s.kind === 'chord' || s.kind === 'add') { pushUndo(); var at = l.chords[s.ci].i; l.chords.splice(s.ci, 1); st.sel = { li: s.li, kind: 'pos', i: at }; renderChordEditor(); }
   else if (s.kind === 'pos') {
     var ex = -1; l.chords.forEach(function (x, k) { if (x.i === s.i) ex = k; });
     if (ex >= 0) { pushUndo(); l.chords.splice(ex, 1); renderChordEditor(); } else toast('Aquí no hay acorde.');
@@ -2760,6 +2944,8 @@ function openEdMore() {
       pushUndo(); stanzaLyrics(r).forEach(function (k) { st.model[k].chords = []; }); st.sel = null; renderChordEditor();
     } });
   }
+  if (s && (s.kind === 'chord' || s.kind === 'seg')) items.push({ id: 'alt', icon: 'edit', label: 'Alternativo, entre paréntesis', sub: 'poner o quitar', run: toggleAlt });
+  items.push({ id: 'unit', icon: 'text', label: bySyl() ? 'Mover por letras' : 'Mover por sílabas', sub: bySyl() ? 'para afinar' : 'lo normal', run: function () { prefs.edUnit = bySyl() ? 'letter' : 'syl'; savePrefs(); renderPanel(); } });
   items.push({ id: 'instr', icon: 'add', label: 'Agregar una línea solo de acordes', sub: s ? 'debajo de la seleccionada' : 'al final', run: addInstrLine });
   if (s && st.model[s.li] && st.model[s.li].type === 'instr') items.push({ id: 'rminstr', icon: 'trash', label: 'Quitar esta línea de acordes', run: function () {
     pushUndo(); st.model.splice(s.li, 1); st.sel = null; renderChordEditor(); } });
@@ -2769,7 +2955,8 @@ function openEdMore() {
 function openEdHelp() {
   openSheet('Cómo usar el editor', '<div class="help">' +
     '<p><b>Letra.</b> Escribe o pega la letra: un verso por línea, una línea vacía entre estrofas. Los botones ponen secciones como [Coro]. Si pegas una canción con los acordes en la línea de arriba, se convierten solos.</p>' +
-    '<p><b>Acordes.</b> Toca la sílaba donde va el acorde y elígelo abajo. La fila de letras grandes sirve para afinar la posición. Con ‹ › lo mueves una letra. Toca un acorde puesto para cambiarlo o quitarlo.</p>' +
+    '<p><b>Acordes.</b> Toca la sílaba donde va el acorde y elígelo abajo. La fila grande muestra las sílabas de la palabra; con ‹ › el acorde salta de sílaba en sílaba. Si necesitas ponerlo en una letra exacta, toca «Por sílabas» para cambiar a «Por letras». Toca un acorde puesto para cambiarlo o quitarlo.</p>' +
+    '<p><b>Varios acordes en un lugar.</b> Toca un acorde y luego «+ Otro aquí» para poner otro justo después, como «D (A)». Si ya hay varios, tocar otra vez el mismo lugar pasa de uno a otro. «( )» los marca como alternativos entre paréntesis, desde el acorde elegido hasta el último de ese lugar: «(A B7)».</p>' +
     '<p><b>Estrofas iguales.</b> Toca una línea de una estrofa, abre «Más acciones» (⋯) y copia sus acordes. Luego toca otra estrofa y pégalos: se ubican sílaba por sílaba.</p>' +
     '<p><b>Intro y final.</b> «Agregar una línea solo de acordes» crea una fila donde los acordes se agregan en orden.</p>' +
     '<p><b>Paleta.</b> Arriba están los acordes del tono de la canción; toca «Tono» para cambiarlo. Abajo, los que ya usaste y «Otro…» para armar cualquiera.</p></div>');
@@ -2911,9 +3098,152 @@ function openPasteSheet() {
   });
 }
 
+/* parte 6: modo en vivo para el piano */
+var liveState = null;
+function songRouteHash() {
+  return ctx.setlist ? '#/r/' + enc(ctx.setlist.id) + '/' + ctx.index : (current.song ? '#/s/' + enc(current.song.id) : '#/');
+}
+function liveHash() { return songRouteHash() + '/vivo'; }
+/* Recorrido: los acordes en el orden en que se leen (letra y líneas de acordes). */
+function liveSteps(song) {
+  var inf = info(song), steps = [], firstN = [], n = 0;
+  inf.lines.forEach(function (l, li) {
+    firstN[li] = n;
+    if (!l.segs) return;
+    l.segs.forEach(function (g) { if (g.c !== null && C.isChordTok(g.c)) { steps.push({ li: li, n: n, c: g.c }); n++; } });
+  });
+  return { steps: steps, firstN: firstN };
+}
+function voiceNames(v, en, spell) {
+  var pc = C.parseChord(en), names = {};
+  v.right.forEach(function (m) { names[m] = latin(C.noteName(m, spell, 'en')); });
+  if (pc) v.right.forEach(function (m) { if (C.mod12(m) === pc.root) names[m] = latin(pc.rootName); });
+  return { names: names, bass: pc ? latin(pc.bassName || pc.rootName) : latin(C.noteName(v.left, spell, 'en')) };
+}
+function openLive(pushed) {
+  var song = current.song; if (!song) return;
+  closeLive(true);
+  var r = liveSteps(song);
+  if (!r.steps.length) { toast('Esta canción no tiene acordes para tocar en vivo.'); location.replace(songRouteHash()); return; }
+  var inf = info(song), sh = songShift(song), spell = spellFor(inf.key, sh), keep = C.mod12(sh) === 0 && prefs.spell === 'auto', prev = null;
+  // posiciones cercanas para todo el recorrido: cada acorde se acomoda desde el anterior
+  var vo = r.steps.map(function (s) {
+    var en = C.splitTok(C.transposeTok(s.c, { shift: sh, spell: spell, notation: 'en', keep: keep })).core;
+    var v = C.closeVoicing(en, prev) || C.pianoVoicing(en); prev = v;
+    return { en: en, v: v };
+  });
+  var lo = 127, hi = 0;
+  vo.forEach(function (x) { lo = Math.min(lo, x.v.right[0]); hi = Math.max(hi, x.v.right[x.v.right.length - 1]); });
+  liveState = { song: song, steps: r.steps, firstN: r.firstN, vo: vo, i: 0, lo: lo, hi: hi, spell: spell, sound: !!LS.get('cfp.liveSound', false), pushed: !!pushed };
+  var el = document.createElement('div');
+  el.id = 'live'; el.className = 'live'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Modo en vivo');
+  document.body.appendChild(el); document.body.classList.add('live-open');
+  el.addEventListener('click', onLiveTap);
+  drawLive(); keepAwake(true);
+  el.querySelector('.lv-now').focus({ preventScroll: true });
+}
+function closeLive(silent) {
+  var el = document.getElementById('live');
+  if (el) el.remove();
+  document.body.classList.remove('live-open');
+  var st = liveState; liveState = null;
+  if (!silent && st) { if (st.pushed) history.back(); else location.replace(songRouteHash()); }
+}
+function nextLyricLine(lines, li) {
+  for (var k = li + 1; k < lines.length; k++) if (lines[k].type === 'lyric' || lines[k].type === 'instr') return k;
+  return -1;
+}
+function sectionOf(lines, li) {
+  for (var k = li; k >= 0; k--) if (lines[k].type === 'label') return C.sentenceCase(lines[k].text);
+  return '';
+}
+function drawLive() {
+  var st = liveState, el = document.getElementById('live'); if (!st || !el) return;
+  var song = st.song, inf = info(song), sh = songShift(song), fmt = fmtFor(inf.key, sh);
+  var step = st.steps[st.i], nextStep = st.steps[st.i + 1], cur = st.vo[st.i], nxt = nextStep ? st.vo[st.i + 1] : null;
+  var nm = voiceNames(cur.v, cur.en, st.spell), sec = sectionOf(inf.lines, step.li), nli = nextLyricLine(inf.lines, step.li);
+  var lineHTML = function (li, cls) {
+    var l = inf.lines[li]; if (!l || !l.segs) return '';
+    var counter = { i: st.firstN[li] };
+    return '<div class="lv-line ' + cls + '">' + (l.type === 'instr' ? instrHTML(l, fmt, counter) : lyricHTML(l, fmt, counter)) + '</div>';
+  };
+  var endHTML = '<span class="lv-end">Fin de la canción</span>';
+  if (!nxt && ctx.setlist) {
+    var ni = neighbor(1), ns = ni >= 0 ? getSong(ctx.setlist.items[ni].id) : null;
+    if (ns) endHTML += '<a class="btn primary" href="#/r/' + enc(ctx.setlist.id) + '/' + ni + '/vivo">Siguiente canción: ' + esc(C.sentenceCase(ns.title)) + icon('fwd') + '</a>';
+  }
+  el.innerHTML =
+    '<header class="lv-top">' +
+      '<button type="button" class="iconbtn" data-lv="close" aria-label="Salir del modo en vivo">' + icon('close') + '</button>' +
+      '<h2>' + esc(C.sentenceCase(song.title)) + '</h2>' +
+      '<span class="lv-key" title="Tono">' + esc(keyLabel(inf.key, sh)) + '</span>' +
+      '<span class="lv-pos">' + (st.i + 1) + '/' + st.steps.length + '</span>' +
+      '<button type="button" class="iconbtn lv-snd' + (st.sound ? ' on' : '') + '" data-lv="sound" aria-pressed="' + st.sound + '" aria-label="Sonido al avanzar">' + icon('speaker') + '</button>' +
+    '</header>' +
+    '<div class="lv-main">' +
+      '<div class="lv-text">' + (sec ? '<p class="lv-sec">' + esc(sec) + '</p>' : '') +
+        '<div class="lv-lines song">' + lineHTML(step.li, 'cur') + (nli >= 0 ? lineHTML(nli, 'fade') : '') + '</div></div>' +
+      '<button type="button" class="lv-now" data-lv="next" aria-label="Ahora ' + esc(fmt(step.c)) + '. Toca para pasar al siguiente acorde">' +
+        '<span class="lv-label">Ahora</span>' +
+        '<span class="lv-chord">' + esc(C.splitTok(fmt(step.c)).core) + '</span>' +
+        pianoSVG(cur.v, nm.names, { noBass: true, lo: st.lo, hi: st.hi, cls: 'lv-piano', label: 'Mano derecha' }) +
+        '<span class="lv-bass">Mano izquierda <b>' + esc(nm.bass) + '</b></span>' +
+      '</button>' +
+      '<div class="lv-next">' + (nxt
+        ? '<span class="lv-label">Luego</span><b>' + esc(C.splitTok(fmt(nextStep.c)).core) + '</b>' +
+          pianoSVG(nxt.v, voiceNames(nxt.v, nxt.en, st.spell).names, { noBass: true, lo: st.lo, hi: st.hi, cls: 'lv-mini', label: 'Acorde siguiente' })
+        : endHTML) + '</div>' +
+    '</div>' +
+    '<nav class="lv-nav"><button type="button" class="btn" data-lv="prev"' + (st.i ? '' : ' disabled') + '>' + icon('back') + 'Anterior</button>' +
+      '<button type="button" class="btn primary" data-lv="next"' + (nxt ? '' : ' disabled') + '>Siguiente' + icon('fwd') + '</button></nav>';
+  var chEl = el.querySelector('.lv-line.cur [data-i="' + step.n + '"]');
+  if (chEl) chEl.classList.add('now');
+  fixCollisions(el.querySelector('.lv-lines'));
+}
+function liveGo(to) {
+  var st = liveState; if (!st) return;
+  var i = Math.max(0, Math.min(st.steps.length - 1, to));
+  if (i === st.i) return;
+  st.i = i; drawLive();
+  var cur = st.vo[i];
+  if (st.sound && cur && cur.v) playNotes([cur.v.left].concat(cur.v.right));
+  announce('Ahora ' + C.splitTok(fmtFor(info(st.song).key, songShift(st.song))(st.steps[i].c)).core);
+}
+function onLiveTap(e) {
+  var st = liveState; if (!st) return;
+  var jump = e.target.closest('.lv-lines [data-i]');
+  if (jump) { var n = +jump.getAttribute('data-i'); for (var k = 0; k < st.steps.length; k++) if (st.steps[k].n === n) { liveGo(k); return; } }
+  var b = e.target.closest('[data-lv]'); if (!b || b.disabled) return;
+  var a = b.getAttribute('data-lv');
+  if (a === 'next') liveGo(st.i + 1);
+  else if (a === 'prev') liveGo(st.i - 1);
+  else if (a === 'close') closeLive(false);
+  else if (a === 'sound') {
+    st.sound = !st.sound; LS.set('cfp.liveSound', st.sound); drawLive();
+    if (st.sound) { var v = st.vo[st.i].v; playNotes([v.left].concat(v.right)); }
+  }
+}
+/* Teclado y pedales Bluetooth (envían flechas, Av Pág/Re Pág o espacio). Va antes que los atajos de la canción. */
+document.addEventListener('keydown', function (e) {
+  var st = liveState; if (!st || sheetRoot.firstChild) return;
+  var k = e.key;
+  if (k === ' ' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === 'Enter') liveGo(st.i + 1);
+  else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') liveGo(st.i - 1);
+  else if (k === 'Home') liveGo(0);
+  else if (k === 'Escape') closeLive(false);
+  else return;
+  e.preventDefault(); e.stopImmediatePropagation();
+}, true);
+
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
-  var h = location.hash.replace(/^#\/?/, '');
+  var raw = location.hash, live = /\/vivo$/.test(raw);
+  var r = parseHashFrom(raw.replace(/\/vivo$/, ''));
+  r.live = live; r.key = raw.replace(/\/vivo$/, '');
+  return r;
+}
+function parseHashFrom(hash) {
+  var h = hash.replace(/^#\/?/, '');
   if (!h) return { name: 'home' };
   var p = h.split('/').map(function (x) { try { return decodeURIComponent(x); } catch (e) { return x; } });
   if (p[0] === 's' && p[1]) return { name: 'song', id: p[1] };
@@ -2928,14 +3258,17 @@ function render() {
   if (route.name === 'home') homeState.scroll = window.scrollY;
   if (sheetState) sheetState.onClose = null;
   closeSheet(true);
+  var fromSameSong = (route.name === 'song' || route.name === 'setsong') && !route.live && route.key === r.key;
+  closeLive(true);
   if (r.name !== 'edit') { editorState = null; document.body.classList.remove('ed-chords'); }
   route = r;
   if (r.name === 'home') { renderHome(); return; }
-  if (r.name === 'song') renderSong(r.id);
+  if (r.name === 'song') { renderSong(r.id); if (r.live) openLive(fromSameSong); }
   else if (r.name === 'setsong') {
     var sl = getSetlist(r.set), it = sl && sl.items[r.idx];
     if (!it) { location.hash = sl ? '#/r/' + enc(r.set) : '#/r'; return; }
     renderSong(it.id, r.set, r.idx);
+    if (r.live) openLive(fromSameSong);
   }
   else if (r.name === 'sets') renderSetlists();
   else if (r.name === 'set') renderSetlist(r.id);
