@@ -411,6 +411,12 @@ body.live-open { overflow: hidden; }
 .lv-tempo .btn { min-height: 40px; min-width: 48px; padding: 0; font-size: 1.3rem; }
 .lv-tempo output { min-width: 4rem; text-align: center; font: 700 1.1rem var(--chord-font); color: var(--ink); }
 .lv-cta { margin: .75rem 0 0; }
+.lv-cta { display: flex; gap: .5rem; flex-wrap: wrap; }
+.btn.ez-cta { background: #2e9e5b; border-color: #2e9e5b; color: #fff; }
+.upd-banner { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); z-index: 60; width: min(94vw, 34rem);
+  display: flex; align-items: center; gap: .7rem; padding: .7rem .8rem; border-radius: 14px; background: var(--ink); color: var(--paper); box-shadow: 0 8px 28px rgba(0,0,0,.25); }
+.upd-banner span { flex: 1; font-weight: 600; }
+
 .rec-setup { padding: .3rem 0; }
 .rc-row { display: flex; gap: .4rem; }
 .rc-row input { flex: 1; min-width: 0; }
@@ -1819,6 +1825,14 @@ function keyLabel(key, shift) {
 /* Formateador de acordes para un desplazamiento dado (en semitonos respecto al original). */
 function fmtFor(key, eff) {
   var spell = spellFor(key, eff), keep = C.mod12(eff) === 0 && prefs.spell === 'auto';
+  if (prefs.notation === 'num') {
+    var base = key.minor ? key.pc + 3 : key.pc;       // el número no cambia al transponer ni con cejilla
+    return function (tok) {
+      if (!C.isChordTok(tok)) return tok;
+      var p = C.splitTok(tok), sc = C.simpleChord(p.core);
+      return sc ? p.pre + C.numLabel(C.mod12(sc.root - base), sc.suf) + p.post : tok;
+    };
+  }
   return function (tok) { return C.transposeTok(tok, { shift: eff, spell: spell, notation: prefs.notation, keep: keep }); };
 }
 function songFmt(song) { var inf = info(song); return fmtFor(inf.key, songShift(song) - songCapo(song)); }
@@ -2098,7 +2112,8 @@ function renderSong(id, setId, idx) {
     '<h1>' + esc(C.sentenceCase(song.title)) + '</h1>' +
     ((song.author || song.momento) ? '<p class="meta">' + (song.momento ? '<span class="pill">' + esc(C.sentenceCase(song.momento)) + '</span>' : '') + esc(C.nameCase(song.author || '')) + '</p>' : '') +
     '<p class="keyline">' + keyLineHTML(song) + '</p>' +
-    (inf.seq.length ? '<p class="lv-cta"><a class="btn primary" href="' + esc(liveHash()) + '">' + icon('keys') + 'Tocar en vivo</a></p>' : '') +
+    (inf.seq.length ? '<p class="lv-cta"><a class="btn primary" href="' + esc(liveHash()) + '">' + icon('keys') + 'Tocar en vivo</a>' +
+      '<button type="button" class="btn ez-cta' + (easyOn() ? ' on' : '') + '" data-act="easylive">' + icon('keys') + 'Modo fácil</button></p>' : '') +
     ((song.style || song.bpm) ? '<p class="style">' + esc([song.style, song.bpm ? song.bpm + ' bpm' : ''].filter(Boolean).join(', ')) + '</p>' : '') +
   '</header>';
   var refs = song.refs || [];
@@ -2308,10 +2323,11 @@ function openViewSheet() {
     setting('Acordes', seg('chords', [['1', 'Mostrar'], ['0', 'Solo letra']], prefs.chords ? '1' : '0')) +
     setting('Alineación', seg('align', [['center', 'Centro'], ['left', 'Izquierda']], prefs.align)) +
     setting('Tema', seg('theme', [['auto', 'Auto'], ['light', 'Papel'], ['dark', 'Escenario']], prefs.theme)) +
-    setting('Nombres de notas', seg('notation', [['en', 'C D E'], ['es', 'Do Re Mi']], prefs.notation)) +
+    setting('Nombres de notas', seg('notation', [['en', 'C D E'], ['es', 'Do Re Mi'], ['num', '1 4 5']], prefs.notation)) +
     setting('Alteraciones', seg('spell', [['auto', 'Auto'], ['sharp', 'C#'], ['flat', 'Db']], prefs.spell)) +
     setting('Velocidad al desplazar', '<div class="seg"><button type="button" data-v="speed-" aria-label="Más lento">−</button><button type="button" disabled id="v-speed">' + prefs.speed + '</button><button type="button" data-v="speed+" aria-label="Más rápido">+</button></div>') +
     setting('Pantalla encendida al tocar', seg('awake', [['1', 'Sí'], ['0', 'No']], prefs.awake ? '1' : '0')) +
+    '<p class="help">«1 4 5» muestra los acordes en números según el tono (1 = la nota del tono), simplificados, como en el modo fácil: sirve para aprender.</p>' +
     '<p class="help">En «Auto» las alteraciones siguen la tonalidad: Fa y Sib se escriben con bemoles, Re y La con sostenidos. En el tono original se respeta lo que está escrito en el cancionero.</p>';
   openSheet('Vista', body, function (el) {
     el.addEventListener('click', function (e) {
@@ -2560,7 +2576,8 @@ function openHomeMenu() {
       openPrintSheet(allSongs().map(function (s) { return { song: s, shift: s.play || 0 }; }), 'Cancionero ' + bookTitle(), fileName(bookTitle())); } },
     { id: 'backup', icon: 'download', label: 'Copias y archivos', sub: n ? n + (n === 1 ? ' cambio' : ' cambios') + ' en este equipo' : '', run: openBackupSheet },
     { id: 'view', icon: 'gear', label: 'Vista y ajustes', run: openViewSheet },
-    { id: 'help', icon: 'text', label: 'Cómo se usa', run: openHelp }
+    { id: 'help', icon: 'text', label: 'Cómo se usa', run: openHelp },
+    { id: 'ver', icon: 'download', label: 'Versión y actualizaciones', sub: 'versión ' + APP_VERSION, run: openVersionSheet }
   ];
   if (!isStandalone()) items.splice(3, 0, { id: 'install', icon: 'install', label: 'Instalar en este equipo', sub: 'funciona sin internet', run: openInstall });
   if (n && isGroup()) items.unshift({ id: 'pub', icon: 'publish', label: 'Publicar para todos', sub: n + (n === 1 ? ' cambio' : ' cambios'), run: openPublishSheet });
@@ -2568,6 +2585,7 @@ function openHomeMenu() {
 }
 function openHelp() {
   openSheet('Cómo se usa', '<div class="help">' +
+    '<p><b>Modo fácil (para aprender).</b> En cada canción, el botón verde «Modo fácil» abre el modo en vivo con los acordes en números (Do = 1), siempre en Do y simplificados. Arriba aparece cuánto transponer el teclado para sonar con la banda. Dentro del modo en vivo, el botón «Fácil» lo activa o lo cambia.</p>' +
     '<p><b>Cambiar de tono.</b> En cada canción usa − y + (medio tono) o toca el tono para elegirlo. Los acordes cambian en su mismo lugar sobre la letra.</p>' +
     '<p><b>Guitarra con cejilla.</b> Si el piano toca en un tono difícil para la guitarra, toca «Cejilla»: te sugiere el traste y te muestra las formas que debes tocar. El tono que suena no cambia.</p>' +
     '<p><b>Piano.</b> Toca cualquier acorde para ver qué teclas se presionan, con los dedos de la mano derecha y el bajo de la izquierda, y escucharlo.</p>' +
@@ -2577,6 +2595,39 @@ function openHelp() {
     '<p><b>Canciones nuevas.</b> Escribe cada acorde entre corchetes antes de su sílaba, por ejemplo <code>Yo le al[D]abo</code>, o pega una canción de internet con los acordes encima.</p>' +
     '<p><b>Compartir cambios.</b> Lo que cambias se guarda en este equipo. Quien administra el cancionero lo publica para todos subiendo el archivo canciones.json a GitHub. Los demás le envían sus cambios como archivo.</p>' +
     '<p><b>Tu propio cancionero.</b> En «Cancioneros» puedes crear uno vacío o abrir uno que te envíen. Se guarda solo en tu equipo y lo compartes como archivo.</p></div>');
+}
+
+/* ---------- versión y actualizaciones ---------- */
+function openVersionSheet() {
+  openSheet('Versión y actualizaciones', '<p class="tl-res"><b style="font-size:1.6rem">' + esc(APP_VERSION) + '</b></p>' +
+    '<p class="help">Esta es la versión del programa que tiene este equipo. Cuando subas una actualización a GitHub, con internet la app la busca sola y te avisa con «Hay una versión nueva». También puedes buscarla aquí.</p>' +
+    '<div class="btnrow"><button type="button" class="btn primary" data-x="upd">Buscar actualización</button></div><p class="help" id="upd-r"></p>', function (el) {
+    el.querySelector('[data-x="upd"]').addEventListener('click', function () {
+      var r = el.querySelector('#upd-r'); r.textContent = 'Buscando…';
+      checkUpdate(true).then(function (v) { r.textContent = v ? 'Hay una versión nueva: ' + v + '. Toca «Actualizar» abajo.' : 'Ya tienes la última versión.'; })
+        .catch(function () { r.textContent = 'Sin conexión: no se pudo buscar.'; });
+    });
+  });
+}
+/* Compara la versión de este equipo con la del servidor (sin cachés). Devuelve la versión nueva o null. */
+function checkUpdate(manual) {
+  if (!/^https?:$/.test(location.protocol)) return Promise.resolve(null);
+  var reg = 'serviceWorker' in navigator ? navigator.serviceWorker.getRegistration().then(function (r) { return r && r.update().catch(function () {}); }).catch(function () {}) : Promise.resolve();
+  return reg.then(function () { return fetch('index.html?v=' + Date.now(), { cache: 'no-store' }); })
+    .then(function (res) { if (!res.ok) throw new Error('red'); return res.text(); })
+    .then(function (t) {
+      var m = /var APP_VERSION = '(\d{4}-\d\d-\d\d \d\d:\d\d)'/.exec(t);   // solo una fecha real (no este mismo patrón)
+      if (m && m[1] !== APP_VERSION) { showUpdateBanner(m[1]); return m[1]; }
+      return null;
+    });
+}
+function showUpdateBanner(v) {
+  if (document.getElementById('upd-banner')) return;
+  var d = document.createElement('div');
+  d.id = 'upd-banner'; d.className = 'upd-banner'; d.setAttribute('role', 'status');
+  d.innerHTML = '<span>Hay una versión nueva de la app' + (v ? ' (' + esc(v) + ')' : '') + '.</span><button type="button" class="btn primary">Actualizar</button>';
+  d.querySelector('button').addEventListener('click', function () { location.reload(); });
+  document.body.appendChild(d);
 }
 
 /* parte 4: editor, archivos, impresión, compartir y publicar */
@@ -5217,6 +5268,7 @@ function openMidiInputs() {
   }).catch(function () { toast('No se pudo usar MIDI. Usa Chrome en la laptop o en Android y conecta el teclado.', 6000); });
 }
 
+var APP_VERSION = '2026-09-26 22:17';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
@@ -5309,6 +5361,7 @@ app.addEventListener('click', function (e) {
     case 'edsave': saveEditor(); break;
     case 'edcancel': cancelEditor(); break;
     case 'edpaste': openPasteSheet(); break;
+      case 'easylive': prefs.easy = prefs.easy || {}; prefs.easy.on = true; savePrefs(); location.hash = liveHash(); break;
     case 'eddelete': deleteSong(); break;
     case 'edrestore': restoreSong(); break;
   }
@@ -5361,7 +5414,12 @@ window.addEventListener('offline', refreshChrome);
 window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); install.evt = e; refreshChrome(); });
 window.addEventListener('appinstalled', function () { install.evt = null; LS.set('cfp.installHidden', true); refreshChrome(); toast('Cancionero instalado.'); });
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-  window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () { /* sin modo sin internet */ }); });
+  var hadController = !!navigator.serviceWorker.controller;
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () { /* sin modo sin internet */ });
+    setTimeout(function () { if (navigator.onLine !== false) checkUpdate(false).catch(function () {}); }, 2500);   // ¿hay una versión nueva en GitHub?
+  });
+  navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadController) showUpdateBanner(''); hadController = true; });
 }
 if (window.matchMedia) {
   try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyPrefs); } catch (e) { /* navegador antiguo */ }
@@ -5370,7 +5428,7 @@ if (window.matchMedia) {
 openBookData();
 render();
 fetchRemote().then(function (res) { if (res === 'nuevo') afterRemoteUpdate(); else refreshChrome(); });
-window.__cancionero = { fixCollisions: fixCollisions, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), startB: liveState.startB, bpm: liveState.bpm, tl: liveState.tl } : null; }, grid: function () { return gridState ? JSON.parse(JSON.stringify(gridState.tl)) : null; }, _setV1: function (marks, end) { var st = liveState, song = clone(st.song); song.timeline = { v: 1, video: '', start: 0, sig: seqSig(st.steps), steps: marks, end: end }; local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id]; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
+window.__cancionero = { fixCollisions: fixCollisions, version: function () { return APP_VERSION; }, setPref: function (k, v) { prefs[k] = v; savePrefs(); applyPrefs(); render(); }, openVersion: function () { openVersionSheet(); }, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), startB: liveState.startB, bpm: liveState.bpm, tl: liveState.tl } : null; }, grid: function () { return gridState ? JSON.parse(JSON.stringify(gridState.tl)) : null; }, _setV1: function (marks, end) { var st = liveState, song = clone(st.song); song.timeline = { v: 1, video: '', start: 0, sig: seqSig(st.steps), steps: marks, end: end }; local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id]; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
 })();
 
 
