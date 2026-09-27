@@ -361,7 +361,7 @@ body.live-open { overflow: hidden; }
 .lv-next .btn { margin-left: auto; }
 .lv-meter { margin: 0; text-align: center; font-size: .85rem; color: var(--muted); }
 .lv-main.roll { gap: .3rem; }
-.live:not(.rec) .lv-main.roll { display: flex; flex-direction: column; }
+.live:not(.rec) .lv-main.roll { display: grid; }   /* la vista del rodillo es una cuadrícula (ver el bloque «un solo diseño») */
 .lv-rhead { flex: none; display: flex; align-items: center; gap: .7rem; justify-content: center; flex-wrap: wrap; cursor: pointer; }
 .lv-rhead .lv-chord { font-size: clamp(2.4rem, 11vw, 4.2rem); }
 .lv-then { font: 600 .95rem var(--ui-font); color: var(--muted); display: inline-flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
@@ -373,18 +373,6 @@ body.live-open { overflow: hidden; }
 .lv-rot { display: none; margin: 0; text-align: center; font-size: .78rem; color: var(--muted); }
 
 @media (orientation: landscape) { .lv-main.roll .lv-line.fade, .lv-main.roll .lv-sec { display: none; } .lv-main.roll .lv-lines { font-size: 16px; } }
-@media (orientation: landscape) and (min-width: 640px) {
-  .live:not(.rec) .lv-main.roll { display: grid; grid-template-columns: minmax(170px, 28%) 1fr; grid-template-rows: auto minmax(0, 1fr) auto; gap: .3rem .8rem; }
-  .live:not(.rec) .lv-main.roll .lv-text { grid-column: 1; grid-row: 1; }
-  .live:not(.rec) .lv-main.roll .lv-rhead { grid-column: 1; grid-row: 2; flex-direction: column; align-items: flex-start; justify-content: center; gap: .15rem; }
-  .live:not(.rec) .lv-main.roll .lv-rhead .lv-label { display: none; }
-  .live:not(.rec) .lv-main.roll .lv-rhead .lv-chord { font-size: min(3rem, 12vh); }
-  .live:not(.rec) .lv-main.roll .lv-roll { grid-column: 2; grid-row: 1 / span 2; min-height: 0; }
-  .live:not(.rec) .lv-main.roll .lv-kb1 { grid-column: 2; grid-row: 3; }
-  .live:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 30vh; }
-  .live:not(.rec) .lv-main.roll .lv-meter { grid-column: 1; grid-row: 3; }
-  .live:not(.rec) .lv-main.roll .lv-lines .ln.hc { line-height: 2.1; }
-}
 
 .lv-meter { display: flex; align-items: center; justify-content: center; gap: .5rem; flex-wrap: wrap; }
 .lv-lvl { width: 56px; height: 7px; border-radius: 4px; background: var(--rule); overflow: hidden; }
@@ -414,10 +402,6 @@ body.live-open { overflow: hidden; }
 .live.imm .lv-top, .live.imm .lv-nav, .live.imm .lv-text, .live.imm .lv-rhead, .live.imm .lv-meter, .live.imm .lv-rot { display: none !important; }
 .live.imm .lv-main { padding: 0; gap: 0; }
 .live.imm .lv-roll { border-radius: 0; }
-.live.imm .lv-kb1 svg { max-height: 42vh; }
-@media (orientation: landscape) and (min-width: 640px) {
-  .live.imm:not(.rec) .lv-main.roll { display: flex; flex-direction: column; }
-}
 .lv-imm { position: absolute; top: calc(.45rem + env(safe-area-inset-top, 0px)); left: .5rem; right: .5rem; z-index: 3; display: flex; align-items: center; justify-content: center; pointer-events: none; }
 .lv-imm .imm-btns { position: absolute; right: 0; top: 0; display: flex; gap: .45rem; }
 .lv-imm > * { pointer-events: auto; }
@@ -433,12 +417,6 @@ body.live-open { overflow: hidden; }
 .lv-notes { display: inline-flex; align-items: baseline; gap: .35rem; font: 700 1.5rem/1 var(--chord-font); padding-left: .5rem; border-left: 2px solid var(--rule); }
 .lv-notes small { font: 600 .75rem var(--ui-font); color: var(--muted); }
 .lv-main.ez-super .lv-line.fade, .lv-main.ez-super .lv-sec { display: none; }
-.lv-main.ez-super .lv-kb1 svg { max-height: 38vh; }
-.lv-main.ez-easy .lv-kb1 svg { max-height: 30vh; }
-@media (orientation: landscape) and (min-width: 640px) {
-  .live:not(.rec) .lv-main.roll.ez-easy .lv-kb1 svg { max-height: 40vh; }
-  .live:not(.rec) .lv-main.roll.ez-super .lv-kb1 svg { max-height: 46vh; }
-}
 
 .upd-banner { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); z-index: 60; width: min(94vw, 34rem);
   display: flex; align-items: center; gap: .7rem; padding: .7rem .8rem; border-radius: 14px; background: var(--ink); color: var(--paper); box-shadow: 0 8px 28px rgba(0,0,0,.25); }
@@ -583,15 +561,12 @@ body.live-open { overflow: hidden; }
 .lv-beats i.done { background: color-mix(in srgb, var(--chord) 40%, var(--rule)); }
 .lv-beats i.on { background: var(--chord); transform: scaleY(1.45); }
 .lv-beats-t { width: 7.5rem; font: 700 .85rem var(--ui-font); color: var(--muted); white-space: nowrap; }
-.lv-main.roll .lv-text { flex: none; height: 108px; overflow: hidden; }
-.lv-rhead { flex-wrap: nowrap; overflow: hidden; min-height: 3.4rem; }
 .lv-rhead .lv-then { white-space: nowrap; }
 .lv-keytr { border: 0; cursor: pointer; }
 .lv-keytr b { color: #fff; background: var(--accent); border-radius: 6px; padding: 0 .3rem; margin-left: .15rem; font-size: .9rem; }
 /* ---------- video de YouTube: nunca más chico que 200 × 200 px (regla de YouTube) ---------- */
 .lv-video { min-height: 200px; max-height: none; }
 @media (orientation: landscape) and (min-width: 640px) {
-  .live:not(.rec) .lv-main.roll .lv-text { height: 88px; }
   .live.with-video { display: grid; grid-template-columns: max(356px, 38%) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; }
   .live.with-video .lv-top, .live.with-video .lv-nav { grid-column: 1 / -1; }
   .live.with-video .lv-video { grid-column: 1; grid-row: 2; align-self: start; width: 100%; height: auto; aspect-ratio: 16 / 9; min-height: 200px; }
@@ -599,38 +574,57 @@ body.live-open { overflow: hidden; }
   .live.with-video.imm .lv-video { grid-row: 1 / span 2; }
   .live.with-video.imm .lv-main { grid-row: 1 / span 2; }
 }
-/* ---------- tamaño del teclado en «solo piano» ---------- */
-.live.imm.kb-s .lv-kb1 svg { max-height: 24vh; }
-.live.imm.kb-m .lv-kb1 svg { max-height: 32vh; }
-.live.imm.kb-l .lv-kb1 svg { max-height: 44vh; }
+/* ====== modo en vivo, vista del rodillo: un solo diseño (vertical, horizontal, solo piano y con video) ======
+   El teclado siempre ocupa todo el ancho; su alto lo calcula la app (fitKb) o lo elige el usuario con la barrita. */
+.lv-main.roll { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  grid-template-areas: "text" "head" "roll" "kb" "meter"; gap: .3rem; }
+.lv-main.roll .lv-text { grid-area: text; height: 108px; overflow: hidden; }
+.lv-main.roll .lv-rhead { grid-area: head; display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: .6rem; min-height: 3rem; }
+.lv-main.roll .lv-rhead .lv-then { white-space: nowrap; }
+.lv-main.roll .lv-roll { grid-area: roll; min-height: 60px; }
+.lv-main.roll .lv-kb1 { grid-area: kb; display: flex; flex-direction: column; align-items: stretch; }
+.lv-main.roll .lv-kb1 svg { width: 100%; max-width: none; height: auto; max-height: none; }
+.lv-main.roll .lv-meter { grid-area: meter; }
+.lv-main.roll .lv-rot { display: none !important; }
+.lv-main.roll .lv-kb1 { position: relative; }
+.lv-grip { position: absolute; left: 50%; top: -11px; transform: translateX(-50%); width: 76px; height: 22px; z-index: 2; display: grid; place-items: center; cursor: ns-resize; touch-action: none; }   /* sobre el borde: no ocupa espacio */
+.lv-grip i { width: 48px; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--muted) 55%, transparent); box-shadow: 0 0 0 2px var(--paper); }
+.lv-grip:hover i, .lv-grip:active i { background: var(--muted); }
+.lv-lines .ch.now { padding: 0 .3em; min-width: 1.5em; text-align: center; border-radius: 6px; }   /* el «1» marcado no parece «0» */
+.lv-bars i { position: relative; overflow: hidden; }
+.lv-bars i b { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--chord); }
+.lv-bars i.on { background: var(--rule); }
+.lv-bars i.done b { width: 100%; }
 @media (orientation: landscape) and (min-width: 640px) {
-  .live.imm.kb-s:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 28vh; }
-  .live.imm.kb-m:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 40vh; }
-  .live.imm.kb-l:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 62vh; }
-}
-/* ---------- con el video en horizontal: a la derecha una sola columna (acorde, rodillo y teclado a todo el ancho) ---------- */
-@media (orientation: landscape) and (min-width: 640px) {
-  .live.with-video:not(.rec) .lv-main.roll { display: flex; flex-direction: column; gap: .25rem; }
-  .live.with-video:not(.rec) .lv-main.roll .lv-text { height: 46px; }
-  .live.with-video:not(.rec) .lv-main.roll .lv-lines { font-size: 15px; }
-  .live.with-video:not(.rec) .lv-main.roll .lv-rhead { flex-direction: row; align-items: center; justify-content: flex-start; gap: .55rem; min-height: 2.6rem; }
-  .live.with-video:not(.rec) .lv-main.roll .lv-rhead .lv-label { display: none; }
-  .live.with-video:not(.rec) .lv-main.roll .lv-rhead .lv-chord { font-size: 2.1rem; }
-  .live.with-video:not(.rec) .lv-rot { display: none !important; }
-  .live.with-video:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 34vh; }
-}
-/* con el video en un celular girado hay poco alto: se prioriza video, rodillo y teclado */
-@media (orientation: landscape) and (min-width: 640px) and (max-height: 520px) {
+  /* arriba una fila: letra a la izquierda, acorde y tiempos a la derecha; debajo rodillo y teclado a todo el ancho */
+  .live:not(.rec) .lv-main.roll { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: "text head" "roll roll" "kb kb" "meter meter"; gap: .25rem .8rem; }
+  /* cada parte en su lugar (las reglas de la vista clásica de dos teclados no deben mover estas) */
+  .live:not(.rec) .lv-main.roll .lv-text { grid-area: text; height: 42px; align-self: center; }
+  .live:not(.rec) .lv-main.roll .lv-rhead { grid-area: head; }
+  .live:not(.rec) .lv-main.roll .lv-roll { grid-area: roll; }
+  .live:not(.rec) .lv-main.roll .lv-kb1 { grid-area: kb; }
+  .live:not(.rec) .lv-main.roll .lv-meter { grid-area: meter; }
+  .live:not(.rec) .lv-main.roll .lv-lines .ln { white-space: nowrap; }
+  .live:not(.rec) .lv-main.roll .lv-rhead { justify-content: flex-end; min-height: 2.6rem; }
+  .live:not(.rec) .lv-main.roll .lv-rhead .lv-chord { font-size: 2.3rem; }
+  .live:not(.rec):not(.imm) .lv-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+  .live:not(.rec):not(.imm) .lv-nav > .lv-row3 { flex: 1 1 320px; }
+  .live:not(.rec):not(.imm) .lv-nav > .lv-tempo, .live:not(.rec):not(.imm) .lv-nav > .lv-vol { flex: 0 1 auto; }
+  .live:not(.rec):not(.imm) .lv-nav .btn { min-height: 44px; }
+  /* con el video: video a la izquierda (tamaño mínimo de YouTube), a la derecha acorde, rodillo y teclado */
+  .live.with-video:not(.rec) .lv-main.roll { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto auto; grid-template-areas: "head" "roll" "kb" "meter"; }
   .live.with-video:not(.rec) .lv-main.roll .lv-text { display: none; }
-  .live.with-video:not(.rec) .lv-main.roll .lv-roll { min-height: 70px; }
-  .live.with-video:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 30vh; }
-  .live.with-video:not(.rec):not(.imm) .lv-nav { grid-template-columns: minmax(0, 1fr) minmax(150px, 34%); align-items: center; }
-  .live.with-video:not(.rec) .lv-nav .btn { min-height: 44px; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-rhead { justify-content: flex-start; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-rhead .lv-label { display: none; }
+  .live.with-video:not(.rec):not(.imm) .lv-nav > .lv-vol { flex: 1 1 180px; }
 }
-/* horizontal: una sola línea de letra (altura fija, para que nada salte) y teclado de súper fácil algo más bajo, para que todo quepa */
-@media (orientation: landscape) and (min-width: 640px) {
-  .live:not(.rec) .lv-main.roll .lv-text { height: 44px; }
-  .live:not(.rec) .lv-main.roll.ez-super .lv-kb1 svg { max-height: 40vh; }
+/* solo piano: rodillo y teclado, nada más */
+.live.imm:not(.rec) .lv-main.roll, .live.with-video.imm:not(.rec) .lv-main.roll { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; grid-template-areas: "roll" "kb"; gap: 0; }
+.lv-imm button { width: 40px; height: 40px; background: color-mix(in srgb, var(--ink) 55%, transparent); }
+@media (orientation: landscape) and (max-height: 520px) {
+  .live:not(.imm) .lv-top { min-height: 0; padding-top: .15rem; padding-bottom: .15rem; }
+  .live:not(.imm) .lv-top .iconbtn { width: 40px; height: 40px; }
 }
 
 </style>
@@ -2465,8 +2459,8 @@ function playNotes(midis) {
   });
 }
 /* Posición de cada tecla (en las unidades del dibujo): la usan el teclado y el rodillo, así las notas caen justo sobre su tecla. */
-function kbLayout(lo, hi, minWhites) {
-  var BLACK = { 1: 1, 3: 1, 6: 1, 8: 1, 10: 1 }, W = 30, BW = 18, x = 0, keys = {};
+function kbLayout(lo, hi, minWhites, ww) {
+  var BLACK = { 1: 1, 3: 1, 6: 1, 8: 1, 10: 1 }, W = ww || 30, BW = W * 0.6, x = 0, keys = {};
   while (C.mod12(lo) !== 0 && C.mod12(lo) !== 5) lo--;          // empezar en Do o Fa
   while (C.mod12(hi) !== 4 && C.mod12(hi) !== 11) hi++;         // terminar en Mi o Si
   var whitesIn = function (a, b) { var n = 0; for (var q = a; q <= b; q++) if (!BLACK[C.mod12(q)]) n++; return n; };
@@ -2479,8 +2473,8 @@ function kbLayout(lo, hi, minWhites) {
 function pianoSVG(v, names, opts) {
   opts = opts || {};
   var right = v.right, left = opts.noBass ? null : v.left, all = right.concat(left !== null ? [left] : []);
-  var H = 132, BW = 18, BH = 82, W = 30, whites = [], blacks = [];
-  var lay = kbLayout(opts.lo != null ? opts.lo : Math.min.apply(null, all), opts.hi != null ? opts.hi : Math.max.apply(null, all), opts.minWhites), x = lay.width;
+  var H = 132, W = opts.ww || 30, BW = W * 0.6, BH = 82, f = opts.fs || 1, whites = [], blacks = [];   // f: letra más grande si el teclado es bajo
+  var lay = kbLayout(opts.lo != null ? opts.lo : Math.min.apply(null, all), opts.hi != null ? opts.hi : Math.max.apply(null, all), opts.minWhites, W), x = lay.width;
   var fingers = v.fingers || (right.length === 3 ? [1, 3, 5] : right.length === 4 ? [1, 2, 3, 5] : right.length === 2 ? [1, 5] : [1, 2, 3, 4, 5]);
   for (var m = lay.lo; m <= lay.hi; m++) {
     var ri = right.indexOf(m), isL = left !== null && m === left, k = { m: m, cls: ri >= 0 ? 'rh' : (isL ? 'lh' : ''), f: ri >= 0 ? fingers[ri] : (isL ? 5 : ''), x: lay.keys[m].x };
@@ -2489,14 +2483,14 @@ function pianoSVG(v, names, opts) {
   var s = '<svg class="piano' + (opts.cls ? ' ' + opts.cls : '') + '" viewBox="0 0 ' + x + ' ' + (H + 2) + '" role="img" aria-label="' + esc(opts.label || 'Teclado del piano') + '">';
   whites.forEach(function (k) {
     s += '<rect class="wk' + (k.cls ? ' ' + k.cls : '') + '" data-m="' + k.m + '"' + (k.cls && opts.color ? ' style="fill:' + opts.color(k.m) + '"' : '') + ' x="' + (k.x + 0.5) + '" y="0.5" width="' + (W - 1) + '" height="' + H + '" rx="3"/>';
-    if (k.cls) s += '<text class="lbl-w" x="' + (k.x + W / 2) + '" y="' + (H - (opts.noFingers ? 16 : 34)) + '" style="font-size:' + (opts.noFingers ? 17 : 14) + 'px">' + esc(names[k.m] || '') + '</text>' +
-      (opts.noFingers ? '' : '<text class="lbl-w" x="' + (k.x + W / 2) + '" y="' + (H - 12) + '" style="font-size:13px;opacity:.92">' + k.f + '</text>');
-    else if (C.mod12(k.m) === 0) s += '<text x="' + (k.x + W / 2) + '" y="' + (H - 12) + '" fill="#8d93ad" style="font-size:' + (opts.cLabel ? 15 : 12) + 'px">' + esc(opts.cLabel || (C.noteName(0, 'sharp', prefs.notation) + (k.m === 60 ? '4' : ''))) + '</text>';
+    if (k.cls) s += '<text class="lbl-w" x="' + (k.x + W / 2) + '" y="' + (H - (opts.noFingers ? 16 : 34)) + '" style="font-size:' + (opts.noFingers ? 17 : 14) * f + 'px">' + esc(names[k.m] || '') + '</text>' +
+      (opts.noFingers ? '' : '<text class="lbl-w" x="' + (k.x + W / 2) + '" y="' + (H - 12) + '" style="font-size:' + 13 * f + 'px;opacity:.92">' + k.f + '</text>');
+    else if (C.mod12(k.m) === 0) s += '<text x="' + (k.x + W / 2) + '" y="' + (H - 12) + '" fill="#8d93ad" style="font-size:' + (opts.cLabel ? 15 : 12) * f + 'px">' + esc(opts.cLabel || (C.noteName(0, 'sharp', prefs.notation) + (k.m === 60 ? '4' : ''))) + '</text>';
   });
   blacks.forEach(function (k) {
     s += '<rect class="bk' + (k.cls ? ' ' + k.cls : '') + '" data-m="' + k.m + '"' + (k.cls && opts.color ? ' style="fill:' + opts.color(k.m) + '"' : '') + ' x="' + k.x + '" y="0.5" width="' + BW + '" height="' + BH + '" rx="2"/>';
-    if (k.cls) s += '<text class="lbl-w" x="' + (k.x + BW / 2) + '" y="' + (BH - (opts.noFingers ? 10 : 26)) + '" style="font-size:11px">' + esc(names[k.m] || '') + '</text>' +
-      (opts.noFingers ? '' : '<text class="lbl-w" x="' + (k.x + BW / 2) + '" y="' + (BH - 9) + '" style="font-size:12px">' + k.f + '</text>');
+    if (k.cls) s += '<text class="lbl-w" x="' + (k.x + BW / 2) + '" y="' + (BH - (opts.noFingers ? 10 : 26)) + '" style="font-size:' + 11 * f + 'px">' + esc(names[k.m] || '') + '</text>' +
+      (opts.noFingers ? '' : '<text class="lbl-w" x="' + (k.x + BW / 2) + '" y="' + (BH - 9) + '" style="font-size:' + 12 * f + 'px">' + k.f + '</text>');
   });
   return s + '</svg>';
 }
@@ -3854,7 +3848,7 @@ function buildLive(song, pushed, mode) {
     startB: tl ? C.tlStarts(tl.steps) : null, vtimes: tl && tl.video ? C.tlVideoTimes(tl.steps, tl.bpm) : null,
     bpm: tl ? (saved || tl.bpm) : null, bpb: tl ? tl.beats : 4, stale: !!song.timeline && !tl, easy: ez, minWhites: superLv ? 7 : 14,
     vo: vo, i: 0, rLo: b.rLo, rHi: b.rHi, lLo: b.lLo, lHi: b.lHi, spell: spell,
-    kbSize: LS.get('cfp.kbSize', 'm'), sound: !!LS.get('cfp.liveSound', false), click: !!LS.get('cfp.liveClick', false), pushed: !!pushed, mode: mode, imm: !!LS.get('cfp.liveImm', false),
+    sound: !!LS.get('cfp.liveSound', false), click: !!LS.get('cfp.liveClick', false), pushed: !!pushed, mode: mode, imm: !!LS.get('cfp.liveImm', false),
     playing: false, counting: false, t0: 0, beat0: 0, nextClick: null, raf: 0 };
 }
 function openLive(pushed) {
@@ -3869,6 +3863,7 @@ function openLive(pushed) {
     '<div class="lv-main" id="lv-main"></div><nav class="lv-nav" id="lv-nav"></nav>';
   document.body.appendChild(el); document.body.classList.add('live-open');
   el.addEventListener('click', onLiveTap);
+  el.addEventListener('pointerdown', onGrip);
   el.addEventListener('input', function (e) { if (e.target.getAttribute('data-lvvol')) setVideoVolume(+e.target.value); });
   enterFull(); keepAwake(true);
   if (st.mode === 'video') showVideo(st.tl.video.id, st.tl.video.start).catch(videoFailed);
@@ -3917,7 +3912,8 @@ function stepBeats(i) { var st = liveState; return st.startB ? st.startB[i + 1] 
 /* Pulsos del acorde actual: 1-2-3-4. Con más de 12 se muestra como texto. */
 function beatsHTML() {
   var st = liveState; if (!st.tl || (st.mode !== 'auto' && st.mode !== 'video')) return '';
-  var n = Math.ceil(stepBeats(st.i)); if (n > 16) return '<span class="lv-beats lv-beats-t" id="lv-beats"></span>';
+  var n = Math.ceil(stepBeats(st.i));
+  if (n > 16) { var hb = ''; for (var q = 0; q < Math.ceil(n / st.bpb); q++) hb += '<i><b></b></i>'; return '<span class="lv-beats lv-bars" id="lv-beats" aria-hidden="true">' + hb + '</span>'; }
   var h = ''; for (var k = 0; k < n; k++) h += '<i' + (k && k % st.bpb === 0 ? ' class="bar"' : '') + '></i>';
   return '<span class="lv-beats" id="lv-beats" aria-hidden="true">' + h + '</span>';
 }
@@ -3964,7 +3960,6 @@ function drawLive() {
   var keepCv = lid('lv-roll'); if (keepCv && keepCv.parentNode) keepCv.parentNode.removeChild(keepCv);   // se reutiliza: uno nuevo nace en blanco
   lid('lv-main').className = 'lv-main' + (rollView ? ' roll' : '') + (st.easy ? ' ez-' + st.easy.cfg.level : '');
   lid('live').classList.toggle('imm', !!st.imm);
-  ['s', 'm', 'l'].forEach(function (z) { lid('live').classList.toggle('kb-' + z, st.kbSize === z); });
   lid('lv-main').innerHTML = (st.imm ? immHTML(nowName) : '') + textH + (rollView ? rollHTML(cur, nowName, nextName, endHTML) : classic) + meterH + practiceH +
     (st.counting ? '<div class="lv-count" id="lv-count"></div>' : '');
   if (keepCv) { var ph = lid('lv-roll'); if (ph) ph.parentNode.replaceChild(keepCv, ph); }
@@ -3973,7 +3968,7 @@ function drawLive() {
   if (chEl) chEl.classList.add('now');
   sizeKeyboards();
   fixCollisions(lid('lv-main').querySelector('.lv-lines'));
-  if (rollView) { RC = null; cancelAnimationFrame(st.rollRaf); st.rollRaf = 0; rollTick(); }   // se dibuja ya, sin esperar al cuadro siguiente
+  if (rollView) { RC = null; fitKb(); cancelAnimationFrame(st.rollRaf); st.rollRaf = 0; rollTick(); }   // se dibuja ya, sin esperar al cuadro siguiente
   if (midi.inp) midiKeys();
 }
 function navHTML() {
@@ -4041,7 +4036,11 @@ function scheduleClicks() {
 }
 function updateBeats(inStep) {
   var box = lid('lv-beats'); if (!box) return;
-  if (box.classList.contains('lv-beats-t')) { box.textContent = 'Tiempo ' + (Math.floor(inStep) + 1) + ' de ' + Math.ceil(stepBeats(liveState.i)); return; }
+  if (box.classList.contains('lv-bars')) {
+    var bpb = liveState.bpb, kk = Math.floor(inStep + 1e-6), bar = Math.floor(kk / bpb);
+    Array.prototype.forEach.call(box.children, function (d, q) { d.classList.toggle('done', q < bar); d.classList.toggle('on', q === bar); d.firstChild.style.width = q < bar ? '100%' : q === bar ? Math.round(100 * (kk % bpb + 1) / bpb) + '%' : '0'; });
+    return;
+  }
   var k = Math.floor(inStep);
   Array.prototype.forEach.call(box.children, function (d, q) { d.classList.toggle('done', q < k); d.classList.toggle('on', q === k); });
 }
@@ -4155,7 +4154,7 @@ function openLiveMore() {
     { id: 'full', icon: 'full', label: document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa', run: function () { if (document.fullscreenElement) exitFull(); else enterFull(); } },
     { id: 'view', icon: 'keys', label: prefs.liveView === 'hands' ? 'Ver el piano como rodillo' : 'Ver el piano en dos teclados', sub: prefs.liveView === 'hands' ? 'un teclado, las notas bajan' : 'derecha arriba, izquierda abajo', run: function () { prefs.liveView = prefs.liveView === 'hands' ? 'roll' : 'hands'; savePrefs(); drawLive(); } }
   ];
-  items.unshift({ id: 'kbs', icon: 'keys', label: 'Tamaño del teclado: ' + KB_NAMES[st.kbSize], sub: 'más teclado o más espacio para lo que viene', run: cycleKb });
+  items.unshift({ id: 'kbs', icon: 'keys', label: 'Teclado: volver al tamaño automático', sub: 'arrastra la barrita sobre el teclado para cambiar su alto', run: function () { resetKb(); } });
   items.unshift({ id: 'vol', icon: 'speaker', label: 'Volumen', sub: 'video y sonidos de la app', run: openVolumeSheet });
   items.unshift({ id: 'imm', icon: 'full', label: st.imm ? 'Salir de «solo piano»' : 'Solo piano (pantalla completa)', sub: 'solo las teclas y lo que viene', run: function () { setImm(!st.imm); } });
   items.unshift({ id: 'easy', icon: 'keys', label: st.easy ? 'Modo fácil: activado' : 'Modo fácil (para aprender)', sub: 'números, tocar en Do, acordes simples', run: openEasySheet });
@@ -4180,6 +4179,7 @@ function openLiveHelp() {
     '<p><b>Escuchando (en prueba).</b> El celular oye a la banda y avanza cuando reconoce el acorde siguiente. Funciona mejor cerca de la guitarra y con poco ruido; en una laptop con la guitarra conectada a la interfaz de audio, mejor todavía.</p></div>');
 }
 function onLiveTap(e) {
+  if (e.target.closest && e.target.closest('[data-lvgrip]')) return;          // la barrita del teclado no avanza
   var st = liveState; if (!st) return;
   if (sugState) { onSugTap(e); return; }
   if (gridState) { onGridTap(e); return; }
@@ -4200,7 +4200,6 @@ function onLiveTap(e) {
     case 'modes': openLiveModes(); break;
     case 'input': openEarInputs(); break;
     case 'imm': setImm(!st.imm); break;
-    case 'kbsize': cycleKb(); break;
     case 'immoff': setImm(false); break;
     case 'easy': openEasySheet(); break;
     case 'midi': openMidiInputs(); break;
@@ -4246,7 +4245,7 @@ function rollHTML(cur, nowName, nextName, endHTML) {
       (st.easy && st.easy.cfg.colors && cur.v.right.length > 1 ? '<span class="lv-notes"><small>teclas</small>' + cur.v.right.map(function (m) { return '<b style="color:' + ezColor(m) + '">' + C.EZ_NUMS[C.mod12(m)] + '</b>'; }).join(' ') + '</span>' : '') + beatsHTML() +
       (nextName ? '<span class="lv-then">Luego <b>' + nextName + '</b></span>' : '<span class="lv-then">' + endHTML + '</span>') + '</div>' +
     '<div class="lv-roll" data-lv="tapnow"><canvas id="lv-roll" aria-hidden="true"></canvas></div>' +
-    '<div class="lv-kb1" data-lv="tapnow">' + pianoSVG(cur.v, names, { lo: st.lLo, hi: st.rHi, cls: 'kb-one', minWhites: st.minWhites || 14, color: st.easy && st.easy.cfg.colors ? ezColor : null, noBass: !!cur.v.hideLeft, noFingers: !!(st.easy && st.easy.cfg.nums), cLabel: st.easy && st.easy.cfg.nums ? '1' : '', label: 'Teclado: mano derecha en rojo, mano izquierda en azul' }) + '</div>' +
+    '<div class="lv-kb1" data-lv="tapnow"><div class="lv-grip" data-lvgrip="1" role="separator" aria-orientation="horizontal" aria-label="Arrastra para cambiar el alto del teclado; dos toques: tamaño automático"><i></i></div>' + pianoSVG(cur.v, names, (st.lastKb = { v: cur.v, names: names, opts: { ww: st.ww || 30, fs: st.kbFs || 1, lo: st.lLo, hi: st.rHi, cls: 'kb-one', minWhites: st.minWhites || 14, color: st.easy && st.easy.cfg.colors ? ezColor : null, noBass: !!cur.v.hideLeft, noFingers: !!(st.easy && st.easy.cfg.nums), cLabel: st.easy && st.easy.cfg.nums ? '1' : '', label: 'Teclado: mano derecha en rojo, mano izquierda en azul' }}).opts) + '</div>' +
     '<p class="lv-rot">Gira el celular para ver el piano más grande.</p>';
 }
 function rollGeom() {
@@ -4292,7 +4291,7 @@ function drawRoll(g) {
   cv.style.width = W + 'px'; cv.style.height = H + 'px'; cv.style.left = Math.round(kr.left + (kr.width - vb.width * sc) / 2 - box.left) + 'px';
   if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
   var ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
-  var lay = st.kbLay || (st.kbLay = kbLayout(st.lLo, st.rHi, st.minWhites || 14)), sx = W / lay.width, col = RC || (RC = rollColors()), now = st.rollPos, ppu = H / g.span;
+  var lay = st.kbLay || (st.kbLay = kbLayout(st.lLo, st.rHi, st.minWhites || 14, st.ww || 30)), sx = W / lay.width, col = RC || (RC = rollColors()), now = st.rollPos, ppu = H / g.span;
   var hint = main.querySelector('.lv-rot'); if (hint) hint.style.display = W / (lay.width / 30) < 20 ? 'block' : 'none';   // teclas muy angostas: sugerir girar
   ctx.globalAlpha = 1; ctx.fillStyle = col.rule;
   for (var m = lay.lo; m <= lay.hi; m++) if (C.mod12(m) === 0 && lay.keys[m]) ctx.fillRect(Math.round(lay.keys[m].x * sx), 0, 1, H);   // cada Do
@@ -4333,7 +4332,6 @@ function immHTML(nowName) {
   if (timed) play = '<button type="button" data-lv="play" aria-label="' + (st.playing || st.counting ? 'Pausa' : 'Empezar') + '">' + icon(st.playing || st.counting ? 'pause' : 'play') + '</button>';
   else if (st.mode === 'listen') play = '<button type="button" data-lv="play" aria-label="' + (ear ? 'Dejar de escuchar' : 'Escuchar') + '">' + icon(ear ? 'pause' : 'mic') + '</button>';
   return '<div class="lv-imm"><span class="imm-btns"><span class="imm-ch" aria-live="polite">' + nowName + '</span>' + play +
-    '<button type="button" data-lv="kbsize" aria-label="Tamaño del teclado: ' + KB_NAMES[st.kbSize] + '. Cambiar">' + icon('keys') + '</button>' +
     '<button type="button" data-lv="immoff" aria-label="Salir de solo piano">' + icon('close') + '</button></span></div>';
 }
 /* ---------- volumen ---------- */
@@ -4350,13 +4348,41 @@ function openVolumeSheet() {
   });
 }
 
-var KB_NAMES = { s: 'pequeño', m: 'mediano', l: 'grande' };
-/* Tamaño del teclado: más pequeño deja más espacio para ver lo que viene (útil en horizontal). */
-function cycleKb() {
-  var st = liveState; if (!st) return;
-  st.kbSize = st.kbSize === 's' ? 'm' : st.kbSize === 'm' ? 'l' : 's'; LS.set('cfp.kbSize', st.kbSize);
-  drawLive(); toast('Teclado ' + KB_NAMES[st.kbSize] + '.', 1800);
+/* ---------- alto del teclado: automático o el que el usuario arrastra (se recuerda por orientación y por «solo piano») ---------- */
+function kbKey() { return 'cfp.kbH.' + (innerWidth > innerHeight ? 'h' : 'v') + (liveState && liveState.imm ? 'i' : ''); }
+function kbFrac() { var v = LS.get(kbKey(), null); if (v != null && +v > 0) return +v; return innerWidth > innerHeight ? (liveState && liveState.imm ? 0.4 : 0.34) : null; }
+function resetKb() { try { localStorage.removeItem(kbKey()); } catch (e) { /* nada */ } if (fitKb(true)) { cancelAnimationFrame(liveState.rollRaf); liveState.rollRaf = 0; rollTick(); } toast('Teclado en tamaño automático.', 1800); }
+/* El teclado llena todo el ancho: se elige el alto y se calcula el ancho de cada tecla (sin deformar números ni letras). */
+function fitKb(force) {
+  var st = liveState, main = lid('lv-main'), box = main && main.querySelector('.lv-kb1'); if (!st || !box || !st.lastKb) return false;
+  var whites = kbLayout(st.lLo, st.rHi, st.minWhites || 14, 30).width / 30, Wc = box.clientWidth, H = main.clientHeight;
+  if (!Wc || !H) return false;
+  var f = kbFrac(), hk = f ? f * H : Wc * 134 / (30 * whites);
+  hk = Math.max(56, Math.min(hk, H * 0.72));
+  var ww = Math.max(14, Math.min(240, Wc * 134 / (hk * whites))), fs = Math.max(1, Math.min(1.8, 12 / (14 * hk / 134)));   // números de al menos ~12 px
+  if (!force && st.ww && Math.abs(ww - st.ww) < 0.3 && Math.abs(fs - (st.kbFs || 1)) < 0.03) return false;
+  st.ww = ww; st.kbFs = fs; st.kbLay = null;
+  var o = st.lastKb, svg = box.querySelector('svg.kb-one'); o.opts.ww = ww; o.opts.fs = fs;
+  if (svg) svg.outerHTML = pianoSVG(o.v, o.names, o.opts);
+  if (midi.inp) midiKeys();
+  return true;
 }
+var gripTap = 0;
+function onGrip(e) {
+  var g = e.target.closest && e.target.closest('[data-lvgrip]'); if (!g || !liveState) return;
+  e.preventDefault(); e.stopPropagation();
+  var now = Date.now(); if (now - gripTap < 350) { gripTap = 0; resetKb(); return; } gripTap = now;
+  var main = lid('lv-main'), svg = main.querySelector('svg.kb-one'), y0 = e.clientY, h0 = svg ? svg.getBoundingClientRect().height : 100, H = main.clientHeight;
+  try { g.setPointerCapture(e.pointerId); } catch (x) { /* nada */ }
+  var move = function (ev) {
+    var h = Math.max(56, Math.min(H * 0.72, h0 - (ev.clientY - y0)));
+    LS.set(kbKey(), Math.round(1000 * h / H) / 1000);
+    if (fitKb(true)) { cancelAnimationFrame(liveState.rollRaf); liveState.rollRaf = 0; rollTick(); }
+  };
+  var up = function () { g.removeEventListener('pointermove', move); g.removeEventListener('pointerup', up); g.removeEventListener('pointercancel', up); };
+  g.addEventListener('pointermove', move); g.addEventListener('pointerup', up); g.addEventListener('pointercancel', up);
+}
+window.addEventListener('resize', function () { if (liveState && lid('live') && fitKb(true)) { cancelAnimationFrame(liveState.rollRaf); liveState.rollRaf = 0; rollTick(); } });
 
 /* parte 7: grabar el recorrido (con un video de YouTube o mientras la banda toca) y reproductor de YouTube */
 var recState = null;
@@ -5451,7 +5477,7 @@ function openMidiInputs() {
   }).catch(function () { toast('No se pudo usar MIDI. Usa Chrome en la laptop o en Android y conecta el teclado.', 6000); });
 }
 
-var APP_VERSION = '2026-09-27 06:43';
+var APP_VERSION = '2026-09-27 11:59';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
