@@ -411,6 +411,22 @@ body.live-open { overflow: hidden; }
 .lv-tempo .btn { min-height: 40px; min-width: 48px; padding: 0; font-size: 1.3rem; }
 .lv-tempo output { min-width: 4rem; text-align: center; font: 700 1.1rem var(--chord-font); color: var(--ink); }
 .lv-cta { margin: .75rem 0 0; }
+.live.imm .lv-top, .live.imm .lv-nav, .live.imm .lv-text, .live.imm .lv-rhead, .live.imm .lv-meter, .live.imm .lv-rot { display: none !important; }
+.live.imm .lv-main { padding: 0; gap: 0; }
+.live.imm .lv-roll { border-radius: 0; }
+.live.imm .lv-kb1 svg { max-height: 42vh; }
+@media (orientation: landscape) and (min-width: 640px) {
+  .live.imm:not(.rec) .lv-main.roll { display: flex; flex-direction: column; }
+}
+.lv-imm { position: absolute; top: calc(.45rem + env(safe-area-inset-top, 0px)); left: .5rem; right: .5rem; z-index: 3; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.lv-imm .imm-btns { position: absolute; right: 0; top: 0; display: flex; gap: .45rem; }
+.lv-imm > * { pointer-events: auto; }
+.lv-imm .sp { flex: 1; pointer-events: none; }
+.lv-imm .imm-ch { align-self: center; font: 700 1.6rem/1 var(--chord-font); color: var(--chord); background: color-mix(in srgb, var(--paper) 55%, transparent); padding: .25rem .55rem; border-radius: 10px; pointer-events: none; text-shadow: 0 0 6px var(--paper); }
+.lv-imm button { width: 46px; height: 46px; border-radius: 50%; border: 0; background: color-mix(in srgb, var(--ink) 72%, transparent); color: #fff; display: grid; place-items: center; }
+.lv-vol { display: flex; align-items: center; gap: .6rem; font-weight: 600; color: var(--muted); }
+.lv-vol input { flex: 1; }
+
 .lv-cta { display: flex; gap: .5rem; flex-wrap: wrap; }
 .btn.ez-cta { background: #2e9e5b; border-color: #2e9e5b; color: #fff; }
 .btn.sz-cta { background: #f57c00; border-color: #f57c00; color: #fff; }
@@ -557,6 +573,11 @@ body.live-open { overflow: hidden; }
   .hero { padding: 2rem 1.5rem 1rem; }
   .hero h1 { font-size: 2.8rem; }
   .ctrl { padding: .45rem .8rem; gap: .45rem; }
+}
+
+/* solo piano en horizontal: sin nada más en pantalla, el teclado toma más altura (va al final para ganar a las reglas de dos columnas) */
+@media (orientation: landscape) and (min-width: 640px) {
+  .live.imm:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 62vh; }
 }
 
 </style>
@@ -2361,7 +2382,14 @@ function openViewSheet() {
 }
 
 /* ---------- piano ---------- */
-var AC = null;
+var AC = null, AC_OUT = null;
+/* Salida común de los sonidos de la app (piano, clic, cuenta): un solo volumen. */
+function audioOut() {
+  var ac = audio(); if (!ac) return null;
+  if (!AC_OUT) { AC_OUT = ac.createGain(); AC_OUT.gain.value = +LS.get('cfp.appVol', 0.8); AC_OUT.connect(ac.destination); }
+  return AC_OUT;
+}
+function setAppVolume(v) { v = Math.max(0, Math.min(1, v)); LS.set('cfp.appVol', v); if (AC_OUT) AC_OUT.gain.value = v; }
 function audio() {
   try {
     if (!AC) { var A = window.AudioContext || window.webkitAudioContext; if (!A) return null; AC = new A(); }
@@ -2379,7 +2407,7 @@ function playNotes(midis) {
     var peak = 0.24 / Math.sqrt(midis.length);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0005, t + 1.8);
     var g2 = ac.createGain(); g2.gain.value = 0.18;
-    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(ac.destination);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(audioOut() || ac.destination);
     o.start(t); o2.start(t); o.stop(t + 1.9); o2.stop(t + 1.9);
   });
 }
@@ -2468,7 +2496,7 @@ function metroTick() {
     var acc = metro.beat % metro.beats === 0, t = metro.next, o = ac.createOscillator(), g = ac.createGain();
     o.frequency.value = acc ? 1650 : 1050;
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(acc ? 0.55 : 0.35, t + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
-    o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.06);
+    o.connect(g); g.connect(audioOut() || ac.destination); o.start(t); o.stop(t + 0.06);
     (function (b, when) { setTimeout(function () { metroDot(b); }, Math.max(0, (when - ac.currentTime) * 1000)); })(metro.beat % metro.beats, t);
     metro.next += 60 / metro.bpm; metro.beat++;
   }
@@ -3773,7 +3801,7 @@ function buildLive(song, pushed, mode) {
     startB: tl ? C.tlStarts(tl.steps) : null, vtimes: tl && tl.video ? C.tlVideoTimes(tl.steps, tl.bpm) : null,
     bpm: tl ? (saved || tl.bpm) : null, bpb: tl ? tl.beats : 4, stale: !!song.timeline && !tl, easy: ez, minWhites: superLv ? 7 : 14,
     vo: vo, i: 0, rLo: b.rLo, rHi: b.rHi, lLo: b.lLo, lHi: b.lHi, spell: spell,
-    sound: !!LS.get('cfp.liveSound', false), click: !!LS.get('cfp.liveClick', false), pushed: !!pushed, mode: mode,
+    sound: !!LS.get('cfp.liveSound', false), click: !!LS.get('cfp.liveClick', false), pushed: !!pushed, mode: mode, imm: !!LS.get('cfp.liveImm', false),
     playing: false, counting: false, t0: 0, beat0: 0, nextClick: null, raf: 0 };
 }
 function openLive(pushed) {
@@ -3788,6 +3816,7 @@ function openLive(pushed) {
     '<div class="lv-main" id="lv-main"></div><nav class="lv-nav" id="lv-nav"></nav>';
   document.body.appendChild(el); document.body.classList.add('live-open');
   el.addEventListener('click', onLiveTap);
+  el.addEventListener('input', function (e) { if (e.target.getAttribute('data-lvvol')) setVideoVolume(+e.target.value); });
   enterFull(); keepAwake(true);
   if (st.mode === 'video') showVideo(st.tl.video.id, st.tl.video.start).catch(videoFailed);
   drawLive();
@@ -3866,8 +3895,9 @@ function drawLive() {
     '<span class="lv-pos">' + (st.i + 1) + '/' + st.path.length + '</span>' +
     '<button type="button" class="lv-ez' + (st.easy ? ' on' : '') + '" data-lv="easy" aria-pressed="' + !!st.easy + '">Fácil</button>' +
     '<button type="button" class="lv-mode" data-lv="modes" aria-label="Cómo avanza: ' + MODE_NAMES[st.mode] + '. Cambiar">' + esc(MODE_NAMES[st.mode]) + ' ▾</button>' +
+    '<button type="button" class="iconbtn" data-lv="imm" aria-label="Solo piano, pantalla completa" title="Solo piano">' + icon('full') + '</button>' +
     '<button type="button" class="iconbtn" data-lv="more" aria-label="Más opciones">' + icon('more') + '</button>';
-  var rollView = prefs.liveView !== 'hands', nowName = esc(C.splitTok(fmt(step.c)).core), nextName = nstep ? esc(C.splitTok(fmt(nstep.c)).core) : '';
+  var rollView = prefs.liveView !== 'hands' || !!st.imm, nowName = esc(C.splitTok(fmt(step.c)).core), nextName = nstep ? esc(C.splitTok(fmt(nstep.c)).core) : '';
   var textH = '<div class="lv-text">' + (sec ? '<p class="lv-sec">' + esc(sec) + '</p>' : '') +
     '<div class="lv-lines song">' + line(step.li, 'cur') + (nli >= 0 ? line(nli, 'fade') : '') + '</div></div>';
   var classic = '<div class="lv-now" data-lv="tapnow" role="button" tabindex="0" aria-label="Ahora ' + nowName + '">' +
@@ -3877,15 +3907,18 @@ function drawLive() {
   var practiceH = st.mode === 'practice' ? '<div class="lv-meter"><span id="lv-midi">' + midiStatus() + '</span><button type="button" class="linkbtn" data-lv="midi">Teclado</button><span class="lv-good" id="lv-good"></span></div>' : '';
   var meterH = st.mode === 'listen' ? '<div class="lv-meter"><span class="lv-lvl" title="Nivel de entrada"><i id="lv-lvl"></i></span><span id="lv-meter" aria-live="off">' +
     (ear ? 'Escuchando…' : 'Toca «Escuchar». Funciona mejor con la guitarra conectada a la laptop.') + '</span><button type="button" class="linkbtn" data-lv="input">Entrada</button></div>' : '';
+  var keepCv = lid('lv-roll'); if (keepCv && keepCv.parentNode) keepCv.parentNode.removeChild(keepCv);   // se reutiliza: uno nuevo nace en blanco
   lid('lv-main').className = 'lv-main' + (rollView ? ' roll' : '') + (st.easy ? ' ez-' + st.easy.cfg.level : '');
-  lid('lv-main').innerHTML = textH + (rollView ? rollHTML(cur, nowName, nextName, endHTML) : classic) + meterH + practiceH +
+  lid('live').classList.toggle('imm', !!st.imm);
+  lid('lv-main').innerHTML = (st.imm ? immHTML(nowName) : '') + textH + (rollView ? rollHTML(cur, nowName, nextName, endHTML) : classic) + meterH + practiceH +
     (st.counting ? '<div class="lv-count" id="lv-count"></div>' : '');
+  if (keepCv) { var ph = lid('lv-roll'); if (ph) ph.parentNode.replaceChild(keepCv, ph); }
   lid('lv-nav').innerHTML = navHTML();
   var chEl = lid('lv-main').querySelector('.lv-line.cur [data-i="' + step.n + '"]');
   if (chEl) chEl.classList.add('now');
   sizeKeyboards();
   fixCollisions(lid('lv-main').querySelector('.lv-lines'));
-  if (rollView) { RC = null; rollKick(); }
+  if (rollView) { RC = null; cancelAnimationFrame(st.rollRaf); st.rollRaf = 0; rollTick(); }   // se dibuja ya, sin esperar al cuadro siguiente
   if (midi.inp) midiKeys();
 }
 function navHTML() {
@@ -3898,6 +3931,7 @@ function navHTML() {
   if (st.mode === 'listen') label = ear ? icon('pause') + 'Dejar de escuchar' : icon('mic') + 'Escuchar';
   else label = st.playing || st.counting ? icon('pause') + 'Pausa' : icon('play') + (st.i ? 'Seguir' : 'Empezar');
   var h = '<div class="lv-row lv-row3">' + prev + '<button type="button" class="btn primary" data-lv="play">' + label + '</button>' + next + '</div>';
+  if (st.mode === 'video') h += '<label class="lv-vol"><span>Volumen del video</span><input type="range" min="0" max="100" step="5" value="' + (+LS.get('cfp.videoVol', 60)) + '" data-lvvol="1" aria-label="Volumen del video"></label>';
   if (st.mode === 'auto') h += '<div class="lv-tempo"><button type="button" class="btn" data-lv="slower" aria-label="Más lento">−</button>' +
     '<output>' + Math.round(st.bpm) + '</output><span>bpm</span><button type="button" class="btn" data-lv="faster" aria-label="Más rápido">+</button>' +
     '<button type="button" class="btn lv-clk' + (st.click ? ' on' : '') + '" data-lv="click" aria-pressed="' + st.click + '">' + icon('metro') + 'Clic</button></div>';
@@ -3936,7 +3970,7 @@ function clickAt(when, accent) {
   var o = ac.createOscillator(), g = ac.createGain();
   o.frequency.value = accent ? 1650 : 1100;
   g.gain.setValueAtTime(0.0001, when); g.gain.exponentialRampToValueAtTime(accent ? 0.5 : 0.32, when + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, when + 0.05);
-  o.connect(g); g.connect(ac.destination); o.start(when); o.stop(when + 0.06);
+  o.connect(g); g.connect(audioOut() || ac.destination); o.start(when); o.stop(when + 0.06);
 }
 /* Clic con el reloj de audio: cada pulso se programa un poco antes, así suena exacto aunque la pantalla se atrase. */
 function scheduleClicks() {
@@ -4066,6 +4100,8 @@ function openLiveMore() {
     { id: 'full', icon: 'full', label: document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa', run: function () { if (document.fullscreenElement) exitFull(); else enterFull(); } },
     { id: 'view', icon: 'keys', label: prefs.liveView === 'hands' ? 'Ver el piano como rodillo' : 'Ver el piano en dos teclados', sub: prefs.liveView === 'hands' ? 'un teclado, las notas bajan' : 'derecha arriba, izquierda abajo', run: function () { prefs.liveView = prefs.liveView === 'hands' ? 'roll' : 'hands'; savePrefs(); drawLive(); } }
   ];
+  items.unshift({ id: 'vol', icon: 'speaker', label: 'Volumen', sub: 'video y sonidos de la app', run: openVolumeSheet });
+  items.unshift({ id: 'imm', icon: 'full', label: st.imm ? 'Salir de «solo piano»' : 'Solo piano (pantalla completa)', sub: 'solo las teclas y lo que viene', run: function () { setImm(!st.imm); } });
   items.unshift({ id: 'easy', icon: 'keys', label: st.easy ? 'Modo fácil: activado' : 'Modo fácil (para aprender)', sub: 'números, tocar en Do, acordes simples', run: openEasySheet });
   if (st.mode === 'practice' || midi.inp) items.push({ id: 'midi', icon: 'keys', label: 'Teclado MIDI', sub: midi.inp ? midi.inp.name : 'elegir teclado', run: openMidiInputs });
   if (st.mode === 'listen') {
@@ -4107,6 +4143,8 @@ function onLiveTap(e) {
     case 'close': closeLive(false); break;
     case 'modes': openLiveModes(); break;
     case 'input': openEarInputs(); break;
+    case 'imm': setImm(!st.imm); break;
+    case 'immoff': setImm(false); break;
     case 'easy': openEasySheet(); break;
     case 'midi': openMidiInputs(); break;
     case 'more': openLiveMore(); break;
@@ -4129,7 +4167,7 @@ document.addEventListener('keydown', function (e) {
   if (k === ' ' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === 'Enter') jumpTo(st.i + 1);
   else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') jumpTo(st.i - 1);
   else if (k === 'Home') jumpTo(0);
-  else if (k === 'Escape') closeLive(false);
+  else if (k === 'Escape') { if (st.imm) setImm(false); else closeLive(false); }
   else return;
   e.preventDefault(); e.stopImmediatePropagation();
 }, true);
@@ -4224,6 +4262,34 @@ function drawRoll(g) {
   ctx.globalAlpha = 1; ctx.fillStyle = col.chord; ctx.fillRect(0, H - 3, W, 3);   // línea de «ahora»
 }
 
+/* ---------- solo piano: nada más que las teclas y lo que viene ---------- */
+function setImm(on) {
+  var st = liveState; if (!st) return;
+  st.imm = !!on; LS.set('cfp.liveImm', st.imm);
+  if (st.imm) enterFull();
+  drawLive();
+}
+function immHTML(nowName) {
+  var st = liveState, timed = st.mode === 'auto' || st.mode === 'video', play = '';
+  if (timed) play = '<button type="button" data-lv="play" aria-label="' + (st.playing || st.counting ? 'Pausa' : 'Empezar') + '">' + icon(st.playing || st.counting ? 'pause' : 'play') + '</button>';
+  else if (st.mode === 'listen') play = '<button type="button" data-lv="play" aria-label="' + (ear ? 'Dejar de escuchar' : 'Escuchar') + '">' + icon(ear ? 'pause' : 'mic') + '</button>';
+  return '<div class="lv-imm"><span class="imm-btns"><span class="imm-ch" aria-live="polite">' + nowName + '</span>' + play +
+    '<button type="button" data-lv="immoff" aria-label="Salir de solo piano">' + icon('close') + '</button></span></div>';
+}
+/* ---------- volumen ---------- */
+function openVolumeSheet() {
+  var av = Math.round(100 * (+LS.get('cfp.appVol', 0.8))), vv = +LS.get('cfp.videoVol', 60);
+  openSheet('Volumen', '<div class="field"><label for="vol-v">Video de YouTube: <output id="vol-vo">' + vv + '</output></label><input type="range" id="vol-v" min="0" max="100" step="5" value="' + vv + '"></div>' +
+    '<div class="field"><label for="vol-a">Sonidos de la app (piano, clic y cuenta): <output id="vol-ao">' + av + '</output></label><input type="range" id="vol-a" min="0" max="100" step="5" value="' + av + '"></div>' +
+    '<p class="help">El piano que suena en Ableton o Analog Lab se ajusta en esos programas o en la perilla de la interfaz.</p>', function (el) {
+    el.addEventListener('input', function (e) {
+      if (e.target.id === 'vol-v') { setVideoVolume(+e.target.value); el.querySelector('#vol-vo').textContent = e.target.value; var inl = lid('lv-nav') && lid('lv-nav').querySelector('[data-lvvol]'); if (inl) inl.value = e.target.value; }
+      if (e.target.id === 'vol-a') { setAppVolume(e.target.value / 100); el.querySelector('#vol-ao').textContent = e.target.value; }
+    });
+    el.addEventListener('change', function (e) { if (e.target.id === 'vol-a') playNotes([60, 64, 67]); });
+  });
+}
+
 /* parte 7: grabar el recorrido (con un video de YouTube o mientras la banda toca) y reproductor de YouTube */
 var recState = null;
 var yt = { player: null, id: '', ready: null };
@@ -4254,7 +4320,7 @@ function showVideo(id, start) {
       yt.id = id;
       yt.player = new YT.Player('lv-yt', { videoId: id, width: '100%', height: '100%',
         playerVars: { start: Math.floor(start || 0), playsinline: 1, rel: 0, modestbranding: 1 },
-        events: { onReady: function () { done = true; res(yt.player); }, onError: function () { if (!done) rej(new Error('video')); } } });
+        events: { onReady: function () { done = true; setVideoVolume(+LS.get('cfp.videoVol', 60), true); res(yt.player); }, onError: function () { if (!done) rej(new Error('video')); } } });
       setTimeout(function () { if (!done) rej(new Error('tiempo')); }, 20000);
     });
   });
@@ -4470,6 +4536,12 @@ function recKey(k) {
   }
   if (k === 'Escape') { closeRec(); return true; }
   return false;
+}
+
+function setVideoVolume(v, quiet) {
+  v = Math.max(0, Math.min(100, Math.round(v)));
+  if (!quiet) LS.set('cfp.videoVol', v);
+  if (yt.player && typeof yt.player.setVolume === 'function') { try { yt.player.setVolume(v); } catch (e) { /* nada */ } }
 }
 
 /* parte 8: modo «escuchando»
@@ -4798,7 +4870,7 @@ function gridClose() {
 /* ---------- escuchar: clic con acento en el tiempo 1 y los acordes en su lugar (reloj de audio) ---------- */
 function chordAt(when, notes, len) {
   var ac = AC; if (!ac) return;
-  var out = ac.createGain(); out.gain.value = 0.16; out.connect(ac.destination);
+  var out = ac.createGain(); out.gain.value = 0.16; out.connect(audioOut() || ac.destination);
   notes.forEach(function (m, q) {
     var f = 440 * Math.pow(2, (m - 69) / 12), o = ac.createOscillator(), g = ac.createGain();
     o.type = 'triangle'; o.frequency.value = f;
@@ -5311,7 +5383,7 @@ function openMidiInputs() {
   }).catch(function () { toast('No se pudo usar MIDI. Usa Chrome en la laptop o en Android y conecta el teclado.', 6000); });
 }
 
-var APP_VERSION = '2026-09-26 22:41';
+var APP_VERSION = '2026-09-26 22:59';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
