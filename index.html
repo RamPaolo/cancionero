@@ -575,9 +575,62 @@ body.live-open { overflow: hidden; }
   .ctrl { padding: .45rem .8rem; gap: .45rem; }
 }
 
-/* solo piano en horizontal: sin nada más en pantalla, el teclado toma más altura (va al final para ganar a las reglas de dos columnas) */
+
+/* ---------- tamaños estables: la pantalla no cambia de tamaño al cambiar de acorde ---------- */
+.lv-beats { width: 7.5rem; flex: none; display: flex; gap: 3px; align-items: center; }
+.lv-beats i { flex: 1 1 0; width: auto; height: 11px; border-radius: 3px; background: var(--rule); transform: none; }
+.lv-beats i.bar { margin-left: 4px; }
+.lv-beats i.done { background: color-mix(in srgb, var(--chord) 40%, var(--rule)); }
+.lv-beats i.on { background: var(--chord); transform: scaleY(1.45); }
+.lv-beats-t { width: 7.5rem; font: 700 .85rem var(--ui-font); color: var(--muted); white-space: nowrap; }
+.lv-main.roll .lv-text { flex: none; height: 108px; overflow: hidden; }
+.lv-rhead { flex-wrap: nowrap; overflow: hidden; min-height: 3.4rem; }
+.lv-rhead .lv-then { white-space: nowrap; }
+.lv-keytr { border: 0; cursor: pointer; }
+.lv-keytr b { color: #fff; background: var(--accent); border-radius: 6px; padding: 0 .3rem; margin-left: .15rem; font-size: .9rem; }
+/* ---------- video de YouTube: nunca más chico que 200 × 200 px (regla de YouTube) ---------- */
+.lv-video { min-height: 200px; max-height: none; }
 @media (orientation: landscape) and (min-width: 640px) {
-  .live.imm:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 62vh; }
+  .live:not(.rec) .lv-main.roll .lv-text { height: 88px; }
+  .live.with-video { display: grid; grid-template-columns: max(356px, 38%) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .live.with-video .lv-top, .live.with-video .lv-nav { grid-column: 1 / -1; }
+  .live.with-video .lv-video { grid-column: 1; grid-row: 2; align-self: start; width: 100%; height: auto; aspect-ratio: 16 / 9; min-height: 200px; }
+  .live.with-video .lv-main { grid-column: 2; grid-row: 2; min-height: 0; }
+  .live.with-video.imm .lv-video { grid-row: 1 / span 2; }
+  .live.with-video.imm .lv-main { grid-row: 1 / span 2; }
+}
+/* ---------- tamaño del teclado en «solo piano» ---------- */
+.live.imm.kb-s .lv-kb1 svg { max-height: 24vh; }
+.live.imm.kb-m .lv-kb1 svg { max-height: 32vh; }
+.live.imm.kb-l .lv-kb1 svg { max-height: 44vh; }
+@media (orientation: landscape) and (min-width: 640px) {
+  .live.imm.kb-s:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 28vh; }
+  .live.imm.kb-m:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 40vh; }
+  .live.imm.kb-l:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 62vh; }
+}
+/* ---------- con el video en horizontal: a la derecha una sola columna (acorde, rodillo y teclado a todo el ancho) ---------- */
+@media (orientation: landscape) and (min-width: 640px) {
+  .live.with-video:not(.rec) .lv-main.roll { display: flex; flex-direction: column; gap: .25rem; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-text { height: 46px; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-lines { font-size: 15px; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-rhead { flex-direction: row; align-items: center; justify-content: flex-start; gap: .55rem; min-height: 2.6rem; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-rhead .lv-label { display: none; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-rhead .lv-chord { font-size: 2.1rem; }
+  .live.with-video:not(.rec) .lv-rot { display: none !important; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 34vh; }
+}
+/* con el video en un celular girado hay poco alto: se prioriza video, rodillo y teclado */
+@media (orientation: landscape) and (min-width: 640px) and (max-height: 520px) {
+  .live.with-video:not(.rec) .lv-main.roll .lv-text { display: none; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-roll { min-height: 70px; }
+  .live.with-video:not(.rec) .lv-main.roll .lv-kb1 svg { max-height: 30vh; }
+  .live.with-video:not(.rec):not(.imm) .lv-nav { grid-template-columns: minmax(0, 1fr) minmax(150px, 34%); align-items: center; }
+  .live.with-video:not(.rec) .lv-nav .btn { min-height: 44px; }
+}
+/* horizontal: una sola línea de letra (altura fija, para que nada salte) y teclado de súper fácil algo más bajo, para que todo quepa */
+@media (orientation: landscape) and (min-width: 640px) {
+  .live:not(.rec) .lv-main.roll .lv-text { height: 44px; }
+  .live:not(.rec) .lv-main.roll.ez-super .lv-kb1 svg { max-height: 40vh; }
 }
 
 </style>
@@ -3801,7 +3854,7 @@ function buildLive(song, pushed, mode) {
     startB: tl ? C.tlStarts(tl.steps) : null, vtimes: tl && tl.video ? C.tlVideoTimes(tl.steps, tl.bpm) : null,
     bpm: tl ? (saved || tl.bpm) : null, bpb: tl ? tl.beats : 4, stale: !!song.timeline && !tl, easy: ez, minWhites: superLv ? 7 : 14,
     vo: vo, i: 0, rLo: b.rLo, rHi: b.rHi, lLo: b.lLo, lHi: b.lHi, spell: spell,
-    sound: !!LS.get('cfp.liveSound', false), click: !!LS.get('cfp.liveClick', false), pushed: !!pushed, mode: mode, imm: !!LS.get('cfp.liveImm', false),
+    kbSize: LS.get('cfp.kbSize', 'm'), sound: !!LS.get('cfp.liveSound', false), click: !!LS.get('cfp.liveClick', false), pushed: !!pushed, mode: mode, imm: !!LS.get('cfp.liveImm', false),
     playing: false, counting: false, t0: 0, beat0: 0, nextClick: null, raf: 0 };
 }
 function openLive(pushed) {
@@ -3864,8 +3917,8 @@ function stepBeats(i) { var st = liveState; return st.startB ? st.startB[i + 1] 
 /* Pulsos del acorde actual: 1-2-3-4. Con más de 12 se muestra como texto. */
 function beatsHTML() {
   var st = liveState; if (!st.tl || (st.mode !== 'auto' && st.mode !== 'video')) return '';
-  var n = Math.ceil(stepBeats(st.i)); if (n > 12) return '<span class="lv-beats lv-beats-t" id="lv-beats"></span>';
-  var h = ''; for (var k = 0; k < n; k++) h += '<i></i>';
+  var n = Math.ceil(stepBeats(st.i)); if (n > 16) return '<span class="lv-beats lv-beats-t" id="lv-beats"></span>';
+  var h = ''; for (var k = 0; k < n; k++) h += '<i' + (k && k % st.bpb === 0 ? ' class="bar"' : '') + '></i>';
   return '<span class="lv-beats" id="lv-beats" aria-hidden="true">' + h + '</span>';
 }
 function drawLive() {
@@ -3891,7 +3944,8 @@ function drawLive() {
   lid('lv-top').innerHTML =
     '<button type="button" class="iconbtn" data-lv="close" aria-label="Salir del modo en vivo">' + icon('close') + '</button>' +
     '<h2>' + esc(C.sentenceCase(song.title)) + '</h2>' +
-    '<span class="lv-key" title="Tono">' + esc(keyLabel(inf.key, sh)) + '</span>' +
+    (st.easy && st.easy.keyboard ? '<button type="button" class="lv-key lv-keytr" data-lv="easy" title="Tono de la banda y cuánto transponer el teclado">' + esc(keyLabel(inf.key, sh)) + ' <b>' + (st.easy.keyboard > 0 ? '+' : '−') + Math.abs(st.easy.keyboard) + '</b></button>'
+      : '<span class="lv-key" title="Tono">' + esc(keyLabel(inf.key, sh)) + '</span>') +
     '<span class="lv-pos">' + (st.i + 1) + '/' + st.path.length + '</span>' +
     '<button type="button" class="lv-ez' + (st.easy ? ' on' : '') + '" data-lv="easy" aria-pressed="' + !!st.easy + '">Fácil</button>' +
     '<button type="button" class="lv-mode" data-lv="modes" aria-label="Cómo avanza: ' + MODE_NAMES[st.mode] + '. Cambiar">' + esc(MODE_NAMES[st.mode]) + ' ▾</button>' +
@@ -3910,6 +3964,7 @@ function drawLive() {
   var keepCv = lid('lv-roll'); if (keepCv && keepCv.parentNode) keepCv.parentNode.removeChild(keepCv);   // se reutiliza: uno nuevo nace en blanco
   lid('lv-main').className = 'lv-main' + (rollView ? ' roll' : '') + (st.easy ? ' ez-' + st.easy.cfg.level : '');
   lid('live').classList.toggle('imm', !!st.imm);
+  ['s', 'm', 'l'].forEach(function (z) { lid('live').classList.toggle('kb-' + z, st.kbSize === z); });
   lid('lv-main').innerHTML = (st.imm ? immHTML(nowName) : '') + textH + (rollView ? rollHTML(cur, nowName, nextName, endHTML) : classic) + meterH + practiceH +
     (st.counting ? '<div class="lv-count" id="lv-count"></div>' : '');
   if (keepCv) { var ph = lid('lv-roll'); if (ph) ph.parentNode.replaceChild(keepCv, ph); }
@@ -3988,7 +4043,7 @@ function updateBeats(inStep) {
   var box = lid('lv-beats'); if (!box) return;
   if (box.classList.contains('lv-beats-t')) { box.textContent = 'Tiempo ' + (Math.floor(inStep) + 1) + ' de ' + Math.ceil(stepBeats(liveState.i)); return; }
   var k = Math.floor(inStep);
-  Array.prototype.forEach.call(box.children, function (d, q) { d.className = q < k ? 'done' : (q === k ? 'on' : ''); });
+  Array.prototype.forEach.call(box.children, function (d, q) { d.classList.toggle('done', q < k); d.classList.toggle('on', q === k); });
 }
 function loop() {
   var st = liveState; if (!st || !st.playing) return;
@@ -4100,6 +4155,7 @@ function openLiveMore() {
     { id: 'full', icon: 'full', label: document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa', run: function () { if (document.fullscreenElement) exitFull(); else enterFull(); } },
     { id: 'view', icon: 'keys', label: prefs.liveView === 'hands' ? 'Ver el piano como rodillo' : 'Ver el piano en dos teclados', sub: prefs.liveView === 'hands' ? 'un teclado, las notas bajan' : 'derecha arriba, izquierda abajo', run: function () { prefs.liveView = prefs.liveView === 'hands' ? 'roll' : 'hands'; savePrefs(); drawLive(); } }
   ];
+  items.unshift({ id: 'kbs', icon: 'keys', label: 'Tamaño del teclado: ' + KB_NAMES[st.kbSize], sub: 'más teclado o más espacio para lo que viene', run: cycleKb });
   items.unshift({ id: 'vol', icon: 'speaker', label: 'Volumen', sub: 'video y sonidos de la app', run: openVolumeSheet });
   items.unshift({ id: 'imm', icon: 'full', label: st.imm ? 'Salir de «solo piano»' : 'Solo piano (pantalla completa)', sub: 'solo las teclas y lo que viene', run: function () { setImm(!st.imm); } });
   items.unshift({ id: 'easy', icon: 'keys', label: st.easy ? 'Modo fácil: activado' : 'Modo fácil (para aprender)', sub: 'números, tocar en Do, acordes simples', run: openEasySheet });
@@ -4144,6 +4200,7 @@ function onLiveTap(e) {
     case 'modes': openLiveModes(); break;
     case 'input': openEarInputs(); break;
     case 'imm': setImm(!st.imm); break;
+    case 'kbsize': cycleKb(); break;
     case 'immoff': setImm(false); break;
     case 'easy': openEasySheet(); break;
     case 'midi': openMidiInputs(); break;
@@ -4187,15 +4244,14 @@ function rollHTML(cur, nowName, nextName, endHTML) {
   return '<div class="lv-rhead" data-lv="tapnow" role="button" tabindex="0" aria-label="Ahora ' + nowName + '">' +
       '<span class="lv-label">Ahora</span><span class="lv-chord"' + (st.easy && st.easy.cfg.colors && cur.v.right.length === 1 ? ' style="color:' + ezColor(cur.v.right[0]) + '"' : '') + '>' + nowName + '</span>' +
       (st.easy && st.easy.cfg.colors && cur.v.right.length > 1 ? '<span class="lv-notes"><small>teclas</small>' + cur.v.right.map(function (m) { return '<b style="color:' + ezColor(m) + '">' + C.EZ_NUMS[C.mod12(m)] + '</b>'; }).join(' ') + '</span>' : '') + beatsHTML() +
-      (nextName ? '<span class="lv-then">Luego <b>' + nextName + '</b></span>' : '<span class="lv-then">' + endHTML + '</span>') + easyBadge() + '</div>' +
+      (nextName ? '<span class="lv-then">Luego <b>' + nextName + '</b></span>' : '<span class="lv-then">' + endHTML + '</span>') + '</div>' +
     '<div class="lv-roll" data-lv="tapnow"><canvas id="lv-roll" aria-hidden="true"></canvas></div>' +
     '<div class="lv-kb1" data-lv="tapnow">' + pianoSVG(cur.v, names, { lo: st.lLo, hi: st.rHi, cls: 'kb-one', minWhites: st.minWhites || 14, color: st.easy && st.easy.cfg.colors ? ezColor : null, noBass: !!cur.v.hideLeft, noFingers: !!(st.easy && st.easy.cfg.nums), cLabel: st.easy && st.easy.cfg.nums ? '1' : '', label: 'Teclado: mano derecha en rojo, mano izquierda en azul' }) + '</div>' +
     '<p class="lv-rot">Gira el celular para ver el piano más grande.</p>';
 }
 function rollGeom() {
   var st = liveState;
-  if (st.tl && (st.mode === 'auto' || st.mode === 'listen')) return { starts: st.startB, span: Math.max(6, 2 * st.bpb), bar: st.bpb };
-  if (st.tl && st.mode === 'video') { var v = st.vtimes, n = v.length; return { starts: v.concat([v[n - 1] + stepBeats(n - 1) * 60 / st.tl.bpm]), span: 5, bar: 0 }; }
+  if (st.tl && (st.mode === 'auto' || st.mode === 'listen' || st.mode === 'video')) return { starts: st.startB, span: Math.max(6, 2 * st.bpb), bar: st.bpb };
   var s = [0]; st.path.forEach(function (k, i) { s.push(s[i] + (st.startB ? st.startB[i + 1] - st.startB[i] : 4)); });
   return { starts: s, span: 12, bar: 0 };
 }
@@ -4206,7 +4262,10 @@ function rollLive() {
 function rollTarget(g) {
   var st = liveState;
   if (st.mode === 'auto' && st.playing) return beatNow();
-  if (st.mode === 'video' && st.playing && yt.player && yt.player.getCurrentTime) return yt.player.getCurrentTime() - st.tl.video.start;
+  if (st.mode === 'video' && st.playing && yt.player && yt.player.getCurrentTime) {                // tiempo del video -> tiempo musical
+    var t = yt.player.getCurrentTime() - st.tl.video.start, k = indexAtVideo(t), a = st.vtimes[k], z = k + 1 < st.vtimes.length ? st.vtimes[k + 1] : a + stepBeats(k) * 60 / st.tl.bpm;
+    return st.startB[k] + Math.max(0, Math.min(0.999, (t - a) / Math.max(0.05, z - a))) * stepBeats(k);
+  }
   if (st.mode === 'listen' && rollLive()) return Math.max(g.starts[st.i], Math.min(beatNow(), g.starts[st.i + 1] - 0.05));   // espera al oído
   return g.starts[st.i];
 }
@@ -4274,6 +4333,7 @@ function immHTML(nowName) {
   if (timed) play = '<button type="button" data-lv="play" aria-label="' + (st.playing || st.counting ? 'Pausa' : 'Empezar') + '">' + icon(st.playing || st.counting ? 'pause' : 'play') + '</button>';
   else if (st.mode === 'listen') play = '<button type="button" data-lv="play" aria-label="' + (ear ? 'Dejar de escuchar' : 'Escuchar') + '">' + icon(ear ? 'pause' : 'mic') + '</button>';
   return '<div class="lv-imm"><span class="imm-btns"><span class="imm-ch" aria-live="polite">' + nowName + '</span>' + play +
+    '<button type="button" data-lv="kbsize" aria-label="Tamaño del teclado: ' + KB_NAMES[st.kbSize] + '. Cambiar">' + icon('keys') + '</button>' +
     '<button type="button" data-lv="immoff" aria-label="Salir de solo piano">' + icon('close') + '</button></span></div>';
 }
 /* ---------- volumen ---------- */
@@ -4288,6 +4348,14 @@ function openVolumeSheet() {
     });
     el.addEventListener('change', function (e) { if (e.target.id === 'vol-a') playNotes([60, 64, 67]); });
   });
+}
+
+var KB_NAMES = { s: 'pequeño', m: 'mediano', l: 'grande' };
+/* Tamaño del teclado: más pequeño deja más espacio para ver lo que viene (útil en horizontal). */
+function cycleKb() {
+  var st = liveState; if (!st) return;
+  st.kbSize = st.kbSize === 's' ? 'm' : st.kbSize === 'm' ? 'l' : 's'; LS.set('cfp.kbSize', st.kbSize);
+  drawLive(); toast('Teclado ' + KB_NAMES[st.kbSize] + '.', 1800);
 }
 
 /* parte 7: grabar el recorrido (con un video de YouTube o mientras la banda toca) y reproductor de YouTube */
@@ -4310,7 +4378,7 @@ function loadYT() {
 function showVideo(id, start) {
   var box = lid('lv-video');
   if (!box || !id) return Promise.reject(new Error('sin video'));
-  box.hidden = false;
+  box.hidden = false; lid('live').classList.add('with-video');
   if (yt.player && yt.id === id) return Promise.resolve(yt.player);
   destroyPlayer();
   box.innerHTML = '<div id="lv-yt"></div>';
@@ -4326,7 +4394,7 @@ function showVideo(id, start) {
   });
 }
 function hideVideo() {
-  var box = lid('lv-video'); if (box) box.hidden = true;
+  var box = lid('lv-video'); if (box) box.hidden = true; if (lid('live')) lid('live').classList.remove('with-video');
   if (yt.player) { try { yt.player.pauseVideo(); } catch (e) { /* nada */ } }
 }
 function destroyPlayer() {
@@ -5383,7 +5451,7 @@ function openMidiInputs() {
   }).catch(function () { toast('No se pudo usar MIDI. Usa Chrome en la laptop o en Android y conecta el teclado.', 6000); });
 }
 
-var APP_VERSION = '2026-09-26 22:59';
+var APP_VERSION = '2026-09-27 06:43';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
