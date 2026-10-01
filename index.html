@@ -690,6 +690,157 @@ body.live-open { overflow: hidden; }
 /* el encabezado del inicio: una regla genérica «.grow» (de la cuadrícula de compases) lo ponía en fila y amontonaba el subtítulo */
 .hero .grow { display: block; min-height: 0; }
 
+/* ---------- ¿quién va a tocar? ---------- */
+.quien { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: calc(1.5rem + env(safe-area-inset-top)) 1rem calc(1.5rem + env(safe-area-inset-bottom)); background: radial-gradient(circle at 50% 0, var(--wash) 0, var(--paper) 72%); }
+.quien h1 { font-family: var(--lyric-font); font-size: clamp(1.7rem, 6vw, 2.4rem); margin: 0 0 1.4rem; text-align: center; }
+.quien-l { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(8.4rem, 11rem)); gap: .8rem; justify-content: center; width: 100%; max-width: 48rem; }
+.quien-b { width: 100%; display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: 1.1rem .6rem 1rem; border: 2px solid var(--rule); border-radius: 22px; background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; box-shadow: 0 3px 0 var(--rule); transition: transform .12s, border-color .12s, box-shadow .12s; }
+.quien-b:hover, .quien-b:focus-visible { border-color: var(--c); box-shadow: 0 3px 0 var(--c); transform: translateY(-2px); }
+.quien-b:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--c); }
+.quien-av { position: relative; display: grid; place-items: center; width: 5.4rem; height: 5.4rem; border-radius: 50%; background: var(--c); color: #fff; font-family: var(--lyric-font); font-size: 2.6rem; font-weight: 700; }
+.quien-av .badge { position: absolute; top: -.15rem; right: -.15rem; }
+.quien-n { font-family: var(--lyric-font); font-size: 1.25rem; font-weight: 700; }
+.quien-s { font-size: .85rem; color: var(--muted); text-align: center; line-height: 1.2; }
+.quien-f { margin-top: 1.4rem; }
+.badge { display: inline-block; min-width: 1.4rem; height: 1.4rem; padding: 0 .35rem; border-radius: 999px; background: var(--chord); color: #fff; font: 700 .8rem/1.4rem var(--ui-font); font-style: normal; text-align: center; }
+.who-row { display: flex; flex-wrap: wrap; gap: .5rem; margin: .2rem 0 .9rem; }
+.chip-b { display: inline-flex; align-items: center; gap: .35rem; padding: .4rem .8rem; border: 1.5px solid var(--rule); border-radius: 999px; color: var(--ink); text-decoration: none; font-weight: 600; font-size: .9rem; background: var(--paper); }
+.chip-b .i { width: 1.1rem; height: 1.1rem; }
+/* ---------- espacio del alumno ---------- */
+.kid { max-width: 46rem; margin: 0 auto; padding: 0 1rem calc(5.4rem + env(safe-area-inset-bottom)); }
+.kid-h { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: .6rem; padding: calc(.6rem + env(safe-area-inset-top)) 0 .6rem; background: var(--paper); border-bottom: 1.5px solid var(--rule); margin-bottom: .9rem; }
+.kid-h .avatar { width: 2.7rem; height: 2.7rem; font-size: 1.3rem; }
+.kid-t { flex: 1; min-width: 0; }
+.kid-t h1 { margin: 0; font-family: var(--lyric-font); font-size: 1.45rem; line-height: 1.1; }
+.kid-t p { margin: .1rem 0 0; color: var(--muted); font-size: .85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kid-tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: grid; grid-template-columns: repeat(5, 1fr); background: var(--paper); border-top: 1.5px solid var(--rule); padding: .3rem max(.25rem, env(safe-area-inset-left)) calc(.3rem + env(safe-area-inset-bottom)) max(.25rem, env(safe-area-inset-right)); }
+.kid-tabs a { position: relative; display: flex; flex-direction: column; align-items: center; gap: .12rem; padding: .35rem .1rem; color: var(--muted); text-decoration: none; font-size: .72rem; font-weight: 700; border-radius: 12px; text-align: center; line-height: 1.1; }
+.kid-tabs a .i { width: 1.5rem; height: 1.5rem; }
+.kid-tabs a[aria-current="page"] { color: var(--c); }
+.kid-tabs a[aria-current="page"]::before { content: ''; position: absolute; top: -.32rem; left: 28%; right: 28%; height: 3px; border-radius: 3px; background: var(--c); }
+.today { padding: 1rem 1.1rem 1.1rem; border-radius: 20px; background: color-mix(in srgb, var(--c) 11%, var(--paper)); border: 2px solid color-mix(in srgb, var(--c) 32%, var(--paper)); margin-bottom: 1rem; }
+.today-k { margin: 0; font-size: .76rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--c); }
+.today h2 { margin: .15rem 0 .1rem; font-family: var(--lyric-font); font-size: 1.4rem; }
+.today-s { margin: 0 0 .4rem; color: var(--muted); }
+.today .btn.big { margin-top: .8rem; display: flex; width: max-content; }
+.btn.big { min-height: 3.1rem; padding: .6rem 1.5rem; font-size: 1.1rem; }
+.week { margin: 0 0 1.1rem; }
+.week-t { margin: 0 0 .45rem; font-weight: 600; }
+.week-t .i { width: 1rem; height: 1rem; color: #f2b400; vertical-align: -2px; }
+.week ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: .4rem; max-width: 22rem; }
+.week li { display: grid; place-items: center; aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--rule); color: var(--muted); font-weight: 800; font-size: .85rem; }
+.week li.on { background: var(--c); border-color: var(--c); color: #fff; }
+.week li.hoy { outline: 2px dashed var(--c); outline-offset: 2px; }
+.kcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .8rem; margin-bottom: 1rem; }
+.kcard { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: .85rem; row-gap: .15rem; align-items: center; text-align: left; padding: .9rem; border: 2px solid var(--rule); border-radius: 18px; background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
+.kcard:hover, .kcard:focus-visible { border-color: var(--c); }
+.kcard-i { grid-row: 1 / 3; display: grid; place-items: center; width: 2.9rem; height: 2.9rem; border-radius: 14px; background: color-mix(in srgb, var(--c) 15%, var(--paper)); color: var(--c); }
+.kcard-t { font-family: var(--lyric-font); font-weight: 700; font-size: 1.08rem; }
+.kcard-d { color: var(--muted); font-size: .86rem; line-height: 1.3; }
+.kstats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-bottom: 1rem; }
+.kstats div { display: flex; flex-direction: column; align-items: center; padding: .8rem .3rem; border-radius: 16px; background: var(--wash); text-align: center; }
+.kstats b { font-family: var(--chord-font); font-size: 2.4rem; line-height: 1; color: var(--c); }
+.kstats b small { font-size: 1.1rem; color: var(--muted); }
+.kstats span { font-size: .8rem; color: var(--muted); line-height: 1.2; }
+.klog { list-style: none; padding: 0; }
+.klog li { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .5rem 0; border-bottom: 1px solid var(--rule); }
+.kid-search { display: flex; margin-bottom: .6rem; }
+.kmine .i { width: .95rem; height: .95rem; color: #f2b400; fill: #f2b400; vertical-align: -2px; }
+.kid-st { font-family: var(--lyric-font); font-size: 1.55rem; margin: .1rem 0 .2rem; }
+.kid-sub { color: var(--muted); margin: 0 0 .7rem; }
+.kid-song { margin-top: 1rem; }
+.pill { display: inline-flex; align-items: center; gap: .3rem; padding: .4rem .85rem; border-radius: 999px; background: var(--wash); font-weight: 600; font-size: .9rem; }
+.pill .i { width: 1rem; height: 1rem; color: #f2b400; fill: #f2b400; }
+.note-box { display: flex; gap: .55rem; align-items: flex-start; padding: .7rem .9rem; border-radius: 14px; background: var(--wash); border: 1.5px solid var(--rule); margin: 0 0 .9rem; line-height: 1.35; }
+.note-box .i { flex: none; margin-top: .1rem; }
+.kid-dec.ok { border-color: #2e9d5b; background: color-mix(in srgb, #2e9d5b 10%, var(--paper)); }
+.kid-dec.no { border-color: var(--label); }
+.chk { display: flex; gap: .6rem; align-items: flex-start; padding: .5rem 0; line-height: 1.3; cursor: pointer; }
+.chk input { width: 1.25rem; height: 1.25rem; margin-top: .05rem; accent-color: var(--c, var(--accent)); flex: none; }
+/* ---------- juegos, video y metrónomo ---------- */
+.drill { position: fixed; inset: 0; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: calc(.5rem + env(safe-area-inset-top)) calc(.8rem + env(safe-area-inset-right)) calc(1rem + env(safe-area-inset-bottom)) calc(.8rem + env(safe-area-inset-left)); background: var(--paper); overflow-y: auto; }
+.dr-top { width: 100%; max-width: 46rem; display: flex; align-items: center; gap: .5rem; }
+.dr-top h2 { flex: 1; margin: 0; font-family: var(--lyric-font); font-size: 1.25rem; }
+.dr-score { font-weight: 700; color: var(--muted); }
+.dr-ask { display: flex; flex-direction: column; align-items: center; margin-top: .3rem; }
+.dr-q { font-family: var(--lyric-font); font-size: 1.3rem; }
+.dr-n { font-family: var(--chord-font); font-size: clamp(4.5rem, 22vw, 8rem); line-height: 1; color: var(--c, var(--accent)); }
+.dr-tag { font-size: .8rem; font-weight: 700; padding: .15rem .6rem; border-radius: 999px; background: var(--ink); color: var(--paper); }
+.dr-kb { width: 100%; max-width: 40rem; }
+.dr-svg { width: 100%; height: auto; display: block; max-height: 34vh; }
+.dr-svg .dw { fill: #fff; stroke: #1e2447; stroke-width: 1.5; }
+.dr-svg .db { fill: #1e2447; }
+.dr-svg .dw.on, .dr-svg .db.on { fill: var(--c, var(--accent)); }
+.dr-svg .dn { font: 700 17px var(--chord-font); fill: #62688a; text-anchor: middle; }
+.dr-svg .dn.on { fill: #fff; }
+.dr-fb { min-height: 1.6em; margin: 0; font-size: 1.15rem; font-weight: 600; text-align: center; }
+.dr-fb.ok { color: #2e9d5b; }
+.dr-act { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .6rem; }
+.dr-in { display: inline-flex; align-items: center; gap: .45rem; font-weight: 600; color: var(--muted); }
+.dr-stars { display: flex; justify-content: center; gap: .4rem; margin: .5rem 0; }
+.dr-stars .i { width: 3rem; height: 3rem; color: var(--rule); }
+.dr-stars i.on .i { color: #f2b400; fill: #f2b400; }
+.oido-lvl { display: inline-block; width: 4.5rem; height: .45rem; border-radius: 999px; background: var(--rule); overflow: hidden; vertical-align: middle; }
+.oido-lvl i { display: block; height: 100%; width: 0; background: #2e9d5b; transition: width .08s linear; }
+.vp-in { width: 100%; max-width: 46rem; display: flex; gap: .5rem; }
+.vp-in input { flex: 1; min-width: 0; }
+.vp-box { width: 100%; max-width: 46rem; aspect-ratio: 16 / 9; background: #000; border-radius: 14px; overflow: hidden; flex: none; }
+.vp-box > div, .vp-box iframe { width: 100%; height: 100%; }
+.vp-ctl { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; max-width: 46rem; }
+.vp-ctl [aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.metro { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: .5rem 0; }
+.metro output { font-family: var(--chord-font); font-size: 3.2rem; min-width: 4ch; text-align: center; }
+/* ---------- propuestas y grupo ---------- */
+.inbox-b { display: flex; align-items: center; gap: .6rem; padding: .75rem 1rem; margin: 0 0 1rem; border-radius: 14px; background: var(--accent); color: var(--accent-ink); text-decoration: none; }
+.inbox-b span { flex: 1; }
+.prop { border: 2px solid var(--rule); border-radius: 18px; padding: .9rem; margin: 0 0 1rem; background: var(--paper); }
+.prop header { display: flex; gap: .6rem; align-items: center; margin-bottom: .6rem; }
+.prop header small { display: block; color: var(--muted); }
+.dif { border-collapse: collapse; margin: .3rem 0 .6rem; }
+.dif th { text-align: left; padding: .25rem .6rem .25rem 0; font-weight: 600; }
+.dif td { padding: .25rem .3rem; }
+.dif .i { width: 1rem; height: 1rem; color: var(--muted); }
+.prop del, .dl.del { color: var(--chord); text-decoration: line-through; }
+.prop ins { color: #2e7d4f; text-decoration: none; font-weight: 700; }
+.dif-l { margin: .25rem 0; }
+.dif-src { font: .86rem/1.4 ui-monospace, Menlo, Consolas, monospace; background: var(--wash); border-radius: 12px; padding: .5rem .6rem; max-height: 18rem; overflow: auto; white-space: pre-wrap; margin: .4rem 0 .7rem; }
+.dl.add { background: color-mix(in srgb, #2e9d5b 16%, transparent); }
+.dl.del { background: color-mix(in srgb, var(--chord) 12%, transparent); }
+.dl.gap { color: var(--muted); }
+.grupo-l { list-style: none; padding: 0; }
+.grupo-l li { display: flex; align-items: center; gap: .6rem; padding: .55rem 0; border-bottom: 1px solid var(--rule); }
+.grupo-l .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.grupo-l .sub { color: var(--muted); font-size: .85rem; }
+.join-t { font-size: 1.15rem; }
+/* ---------- modo en vivo: barra plegable, oído y voz ---------- */
+.lv-mini, .lv-navtog { display: none !important; }
+.lv-oidom { display: flex; align-items: center; justify-content: center; gap: .55rem; flex-wrap: wrap; padding: .25rem .5rem; font-weight: 600; }
+#lv-oido.ok { color: #2e9d5b; }
+#lv-oido.bad { color: var(--label); }
+.lv-mic.on { background: #2e9d5b; color: #fff; border-color: #2e9d5b; }
+.lv-vozb { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom) + 5.6rem); z-index: 6; padding: .3rem .85rem; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: .85rem; font-weight: 600; pointer-events: none; opacity: .92; white-space: nowrap; }
+.lv-hint .btn.sm { padding: .35rem .85rem; min-height: 2.4rem; }
+@media (orientation: landscape) and (min-width: 640px) {
+  .live .lv-navtog { display: inline-grid !important; flex: none; align-self: center; }
+  .live.navhide .lv-nav { display: none !important; }
+  .live.navhide .lv-mini { display: inline-flex !important; gap: .1rem; align-items: center; }
+  .live .lv-band { display: none; }
+  .lv-vozb { bottom: calc(env(safe-area-inset-bottom) + .6rem); }
+}
+@media (max-width: 480px) {
+  .live .lv-top h2 { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.1; font-size: .98rem; }
+  .live .lv-step .lvl-name { display: none; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .kid-tabs { grid-template-columns: repeat(5, auto); justify-content: space-evenly; }
+  .kid-tabs a { flex-direction: row; gap: .35rem; font-size: .8rem; padding: .3rem .6rem; }
+  .kid { padding-bottom: calc(3.4rem + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 480px) { .live .lv-tempo { flex-wrap: wrap; justify-content: center; row-gap: .4rem; } .quien-av { width: 4.6rem; height: 4.6rem; font-size: 2.2rem; } }
+@media (max-width: 420px) { .quien-l { grid-template-columns: repeat(2, minmax(0, 1fr)); } .quien-l li:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - .4rem); } }
+.quien-l li { display: grid; } .quien-b { height: 100%; }
+
 </style>
 </head>
 <body>
@@ -1842,6 +1993,109 @@ body.live-open { overflow: hidden; }
     };
   }
 
+
+  /* ---------- oír el piano de casa por el micrófono (sin cable) ----------
+     No reconoce cualquier sonido: tras cada golpe de tecla mira qué apareció de nuevo, descuenta lo que ya sonaba
+     (la nota anterior que todavía suena) y lo compara con la nota o el acorde que tocaba y con las demás notas.
+     Entrada por cuadro: energía por nota (12 valores), nivel máximo en dB y la hora en ms. */
+  /* Molde de una o varias notas de piano tal como las oye el celular: con sus armónicos dentro de 100-2600 Hz
+     (los graves casi sin la fundamental). reg: la nota más grave de la zona donde toca el alumno. */
+  function pianoTpl(pcs, reg) {
+    var t = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    pcs.forEach(function (p) {
+      var m = reg != null ? reg + mod12(p - reg) : 60 + mod12(p), f0 = 440 * Math.pow(2, (m - 69) / 12);
+      for (var h = 1; h <= 16; h++) {
+        var f = h * f0; if (f < 100) continue; if (f > 2600) break;
+        t[mod12(m + Math.round(12 * Math.log(h) / Math.LN2))] += (f0 < 150 && h === 1 ? 0.35 : 1) / h;
+      }
+    });
+    t = t.map(Math.sqrt);
+    var n = Math.sqrt(dot12(t, t)) || 1;
+    return t.map(function (x) { return x / n; });
+  }
+  function hearCreate(opt) {
+    opt = opt || {};
+    var OK = opt.ok || 0.8, BAD = opt.bad || 0.84, REL = opt.rel || 0.3, KEEP = opt.keep || 0.97;
+    var S = { cands: [], tgt: [], allow: {}, hist: [], pre: null, noise: null, onT: -1e9, lastOn: -1e9, fr: 99, ok: 0, bad: 0, done: true, hit: false, heard: null, vp: null, dbg: null };
+    function skey(a) { return a.slice().sort(function (x, y) { return x - y; }).join(','); }
+    function target(pcs, allow, reg, now) {
+      var tg = [];
+      (pcs || []).forEach(function (p) { p = mod12(p); if (tg.indexOf(p) < 0) tg.push(p); });
+      S.tgt = tg; S.allow = {}; S.reg = reg;
+      tg.concat(allow || []).forEach(function (p) { S.allow[mod12(p)] = 1; });
+      var seen = {}, list = [];
+      var add = function (a, kind) {
+        var k = skey(a); if (seen[k]) return; seen[k] = 1;
+        list.push({ pcs: a, kind: kind, t: pianoTpl(a, reg), okish: a.every(function (p) { return S.allow[p]; }) });
+      };
+      if (tg.length) add(tg, 'tgt');
+      for (var r = 0; r < 12; r++) add([r], 'note');
+      if (tg.length >= 2) for (r = 0; r < 12; r++) {
+        add([r, mod12(r + 4), mod12(r + 7)], 'chord'); add([r, mod12(r + 3), mod12(r + 7)], 'chord');
+        add(tg.map(function (p) { return mod12(p - tg[0] + r); }), 'shape');
+      }
+      S.cands = list; S.ok = S.bad = 0;
+      // un golpe de hace muy poco que no fue acierto se juzga otra vez con la nota nueva (la tocó un poquito antes)
+      S.done = !(now != null && now - S.onT < 350 && !S.hit && S.pre);
+    }
+    function frame(f) {
+      var raw = [], tot = 0, p, out = null, H = S.hist;
+      // ruido de fondo por nota: lo mínimo de los últimos 3 segundos (entre nota y nota el piano se apaga; el ventilador no)
+      S.ring = S.ring || []; S.ring.push(f.raw.slice()); if (S.ring.length > 60) S.ring.shift();
+      for (p = 0; p < 12; p++) {
+        var nf = f.raw[p];
+        for (var q = 0; q < S.ring.length; q++) if (S.ring[q][p] < nf) nf = S.ring[q][p];
+        raw[p] = Math.max(0, f.raw[p] - nf); tot += raw[p];
+      }
+      if (S.noise == null) S.noise = f.peak;
+      var loud = f.peak > S.noise + 9;
+      S.noise = f.peak < S.noise ? S.noise * 0.6 + f.peak * 0.4 : S.noise + Math.min(0.03, (f.peak - S.noise) * 0.002);
+      var prev = H.length ? H[H.length - 1] : null, base = H.length >= 3 ? H[H.length - 3] : H[0], rs1 = 0, rs3 = 0, rmax = 0;
+      if (prev) for (p = 0; p < 12; p++) {
+        var d1 = raw[p] - prev[p], d3 = raw[p] - base[p];
+        if (d1 > 0) rs1 += d1;
+        if (d3 > 0) { rs3 += d3; if (d3 > rmax) rmax = d3; }
+      }
+      var rel = tot > 0 ? rs3 / tot : 0, rel1 = tot > 0 ? rs1 / tot : 0, conc = rs3 > 0 ? rmax / rs3 : 0;
+      // golpe: mucho sonido nuevo respecto de hace 150 ms, que todavía está subiendo, y concentrado en pocas notas
+      var onset = !!prev && loud && rel > REL && rel1 > 0.1 && conc > 0.16 && f.t - S.lastOn > 200;
+      if (onset) {
+        S.pre = (H.length >= 4 ? H[H.length - 4] : H[0]).slice();
+        S.onT = f.t; S.lastOn = f.t; S.fr = 0; S.done = false; S.ok = S.bad = 0; S.hit = false; S.vp = null;
+        out = { type: 'onset', t: f.t };
+      }
+      H.push(raw.slice()); if (H.length > 5) H.shift();
+      if (!S.done && S.pre && S.fr < 14) {
+        S.fr++;
+        var keep = Math.pow(KEEP, S.fr + 4), v = [], nn = 0;
+        for (p = 0; p < 12; p++) { var e = raw[p] - S.pre[p] * keep; v[p] = e > 0 ? Math.sqrt(e) : 0; nn += v[p] * v[p]; }
+        nn = Math.sqrt(nn);
+        if (nn > 0) {
+          for (p = 0; p < 12; p++) v[p] /= nn;
+          var stable = S.vp ? dot12(v, S.vp) : 0; S.vp = v;
+          var sT = -1, bO = -1, bestO = null, bN = -1, bestN = null;
+          S.cands.forEach(function (c) {
+            var sc = dot12(v, c.t);
+            if (c.kind === 'tgt') sT = sc; else if (sc > bO) { bO = sc; bestO = c; }
+            if (c.kind === 'note' && sc > bN) { bN = sc; bestN = c; }
+          });
+          if (opt.debug) S.dbg = { t: f.t, sT: sT, bO: bO, best: bestO && bestO.pcs, stable: stable };
+          if (bestN && bN >= 0.8 && stable > 0.85) S.heard = { pc: bestN.pcs[0], conf: bN, t: f.t };
+          if (S.tgt.length) {
+            var okNow = sT >= OK && sT >= bO - 0.01;
+            var badNow = !!bestO && !bestO.okish && bO >= BAD && bO - sT >= 0.08 && stable > 0.9;
+            S.ok = okNow ? S.ok + 1 : 0; S.bad = badNow ? S.bad + 1 : 0;
+            if ((S.ok >= 2 && stable > 0.85) || (okNow && sT >= 0.95 && S.fr >= 2)) { S.done = true; S.hit = true; out = { type: 'ok', t: S.onT, conf: sT }; }
+            else if (S.bad >= 3) { S.done = true; out = { type: 'bad', t: S.onT, conf: bO, pcs: bestO.pcs }; }
+          } else if (S.fr >= 2 && bestN && bN >= 0.85 && stable > 0.85) { S.done = true; out = { type: 'note', t: S.onT, pc: bestN.pcs[0], conf: bN }; }
+        }
+        if (!S.done && S.fr >= 14) S.done = true;
+      }
+      return out;
+    }
+    return { target: target, frame: frame, heard: function () { return S.heard; }, noise: function () { return S.noise; }, dbg: function () { return S.dbg; } };
+  }
+
   var api = {
     SHARP: SHARP, FLAT: FLAT, LATIN: LATIN, mod12: mod12, splitTok: splitTok, isChordTok: isChordTok, isChordCore: isChordCore,
     parseChord: parseChord, isMinorQual: isMinorQual, noteName: noteName, spellForKey: spellForKey, transposeTok: transposeTok,
@@ -1855,7 +2109,7 @@ body.live-open { overflow: hidden; }
     tlRound: tlRound, tlQuantize: tlQuantize, tlEstimateBpm: tlEstimateBpm, tlTapBpm: tlTapBpm, tlStarts: tlStarts, tlVideoTimes: tlVideoTimes,
     tempoFromSamples: tempoFromSamples, onsetEnvelope: onsetEnvelope, fftRadix2: fftRadix2, _tempoCfg: tempoFromEnvelope,
     simpleChord: simpleChord, numLabel: numLabel, EZ_NUMS: EZ_NUMS, followerCreate: followerCreate,
-    chordTemplate: chordTemplate, featureStream: featureStream, beatTrack: beatTrack, beatFeatures: beatFeatures, alignSteps: alignSteps, suggestTimeline: suggestTimeline
+    chordTemplate: chordTemplate, pianoTpl: pianoTpl, hearCreate: hearCreate, featureStream: featureStream, beatTrack: beatTrack, beatFeatures: beatFeatures, alignSteps: alignSteps, suggestTimeline: suggestTimeline
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Core = api;
@@ -3992,6 +4246,7 @@ function saveEditor() {
   if (!s.title) { toast('Escribe el título de la canción.'); $('f-title').focus(); return; }
   if (!s.src.trim()) { toast('La canción todavía no tiene letra.'); setMode('letra'); return; }
   s = cleanSong(s);
+  if (kidSongSave(s)) return;
   var base = baseSong(s.id);
   if (base && JSON.stringify(cleanSong(base)) === JSON.stringify(s)) delete local.songs[s.id]; else local.songs[s.id] = s;
   delete local.deleted[s.id]; saveLocal(); delete infoCache[s.id];
@@ -4006,6 +4261,7 @@ function cancelEditor() {
   else go();
 }
 function deleteSong() {
+  if (whoKid()) { toast('Solo quien dirige puede eliminar canciones.', 3500); return; }
   var s = editorState.s;
   confirmSheet('Eliminar canción', '¿Eliminar «' + esc(C.sentenceCase(s.title)) + '»?' + (baseSong(s.id) && isGroup() ? ' Se quita en este equipo, y para todos cuando publiques.' : ''), 'Eliminar', function () {
     if (baseSong(s.id)) local.deleted[s.id] = true;
@@ -4114,7 +4370,7 @@ function buildLive(song, pushed, mode) {
     b.lLo = b.rLo = ez.win; b.lHi = b.rHi = hiB; oneOct = hiB <= ez.win + 11;
   }
   mode = mode || LS.get('cfp.liveMode', 'manual');
-  if (stuLive) mode = stuLive.level >= 2 ? (tl ? 'auto' : 'manual') : (midi.inp ? 'practice' : 'manual');
+  if (stuLive) mode = stuLive.level >= 2 ? (tl ? 'auto' : 'manual') : (midi.inp || oidoActive() ? 'practice' : 'manual');
   if (sync.role === 'sigue') mode = 'sync';
   if (mode === 'sync' && sync.role !== 'sigue') mode = 'manual';
   if ((mode === 'auto' || mode === 'video') && !tl) mode = 'manual';
@@ -4137,8 +4393,8 @@ function openLive(pushed) {
   var el = document.createElement('div');
   el.id = 'live'; el.className = 'live'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Modo en vivo');
   el.innerHTML = '<header class="lv-top" id="lv-top"></header><div class="lv-video" id="lv-video" hidden><div id="lv-yt"></div></div>' +
-    '<div class="lv-main" id="lv-main"></div><nav class="lv-nav" id="lv-nav"></nav>';
-  document.body.appendChild(el); document.body.classList.add('live-open');
+    '<div class="lv-main" id="lv-main"></div><nav class="lv-nav" id="lv-nav"></nav><span class="lv-vozb" id="lv-vozb" hidden></span>';
+  document.body.appendChild(el); if (LS.get('cfp.navHide', false)) el.classList.add('navhide'); el.addEventListener('click', liveFullRetry, true); document.body.classList.add('live-open');
   el.addEventListener('click', onLiveTap);
   el.addEventListener('pointerdown', onGrip);
   el.addEventListener('input', function (e) { if (e.target.getAttribute('data-lvvol')) setVideoVolume(+e.target.value); });
@@ -4149,6 +4405,7 @@ function openLive(pushed) {
   if (st.mode === 'sync' && sync.pos) syncApplyPos(sync.pos);                 // la otra pantalla ya iba sonando
 }
 function closeLive(silent) {
+  oidoStop(); vozStop();
   var st = liveState, back = st ? songRouteHash() : '';
   if (st) { st.playing = false; st.counting = false; cancelAnimationFrame(st.raf); cancelAnimationFrame(st.rollRaf); }
   if (st && st.stu) { clearTimeout(stuHelpTimer); stuRun = null; }
@@ -4156,7 +4413,7 @@ function closeLive(silent) {
   var el = lid('live'); if (el) el.remove();
   document.body.classList.remove('live-open');
   liveState = null;
-  if (st) { stuLive = null; exitFull(); syncTick(); }
+  if (st) { if (stuLive && stuLive.t0) kidLog(stuLive.sid, (Date.now() - stuLive.t0) / 60000); stuLive = null; if (!prefs.fullAlways) exitFull(); syncTick(); }
   if (!silent && st) { if (st.pushed) history.back(); else location.replace(back); }
 }
 function nextLyricLine(lines, li) { for (var k = li + 1; k < lines.length; k++) if (lines[k].type === 'lyric' || lines[k].type === 'instr') return k; return -1; }
@@ -4234,7 +4491,7 @@ function drawLive() {
       '<div class="lv-head"><span class="lv-label">Ahora</span><span class="lv-chord">' + nowName + '</span>' + beatsHTML() + '</div>' +
       handsHTML(cur, false) + '</div>' +
     '<div class="lv-next">' + (nxt ? '<div class="lv-next-h"><span class="lv-label">Luego</span><b>' + nextName + '</b></div>' + handsHTML(nxt, true) : endHTML) + '</div>';
-  var practiceH = st.mode === 'practice' || (st.stu && midi.inp) ? '<div class="lv-meter"><span id="lv-midi">' + midiStatus() + '</span><button type="button" class="linkbtn" data-lv="midi">Teclado</button><span class="lv-good" id="lv-good"></span></div>' : '';
+  var practiceH = (st.mode === 'practice' && !oidoActive()) || (st.stu && midi.inp) ? '<div class="lv-meter"><span id="lv-midi">' + midiStatus() + '</span><button type="button" class="linkbtn" data-lv="midi">Teclado</button><span class="lv-good" id="lv-good"></span></div>' : '';
   var meterH = st.mode === 'listen' ? '<div class="lv-meter"><span class="lv-lvl" title="Nivel de entrada"><i id="lv-lvl"></i></span><span id="lv-meter" aria-live="off">' +
     (ear ? 'Escuchando…' : 'Toca «Escuchar». Funciona mejor con la guitarra conectada a la laptop.') + '</span><button type="button" class="linkbtn" data-lv="input">Entrada</button></div>' : '';
   var keepCv = lid('lv-roll'); if (keepCv && keepCv.parentNode) keepCv.parentNode.removeChild(keepCv);   // se reutiliza: uno nuevo nace en blanco
@@ -4244,7 +4501,7 @@ function drawLive() {
   lid('lv-main').innerHTML = (st.imm ? immHTML(nowName) : '') + textH + (rollView ? rollHTML(cur, nowName, nextName, endHTML) : classic) + meterH + practiceH +
     (st.counting ? '<div class="lv-count" id="lv-count"></div>' : '');
   if (keepCv) { var ph = lid('lv-roll'); if (ph) ph.parentNode.replaceChild(keepCv, ph); }
-  lid('lv-nav').innerHTML = navHTML();
+  lid('lv-nav').innerHTML = navHTML(); liveMiniDraw();
   var chEl = lid('lv-main').querySelector('.lv-line.cur [data-i="' + step.n + '"]');
   if (chEl) chEl.classList.add('now');
   sizeKeyboards();
@@ -4252,7 +4509,8 @@ function drawLive() {
   if (rollView) { RC = null; fitKb(); cancelAnimationFrame(st.rollRaf); st.rollRaf = 0; rollTick(); }   // se dibuja ya, sin esperar al cuadro siguiente
   if (midi.inp) midiKeys();
 }
-function navHTML() {
+function navHTML() { setTimeout(liveMiniDraw, 0); return navHTMLBase() + '<button type="button" class="iconbtn lv-navtog" data-lv="navtog" aria-label="Guardar los botones" title="Guardar los botones">' + icon('down') + '</button>'; }
+function navHTMLBase() {
   var st = liveState, last = st.path.length - 1, manual = st.mode === 'manual';
   if (st.stu) return stuNavHTML();
   if (st.mode === 'sync') return '<div class="lv-row lv-row3"><button type="button" class="btn" data-lv="prev"' + (st.i ? '' : ' disabled') + ' aria-label="Acorde anterior">' + icon('back') + '</button>' +
@@ -4272,6 +4530,7 @@ function navHTML() {
   return h;
 }
 function soundNow() {
+  if (oidoActive()) return;
   var st = liveState; if (!st || !st.sound || st.mode === 'listen') return;
   var v = st.vo[st.i].v; playNotes([v.left].concat(v.right));
 }
@@ -4303,6 +4562,7 @@ function indexAtVideo(t) {
   return lo;
 }
 function clickAt(when, accent) {
+  if (oidoActive()) { noiseClick(when, accent); return; }
   var ac = AC; if (!ac) return;
   var o = ac.createOscillator(), g = ac.createGain();
   o.frequency.value = accent ? 1650 : 1100;
@@ -4369,7 +4629,7 @@ function playLive() {
   if (st.mode === 'video') {
     showVideo(st.tl.video.id, st.tl.video.start).then(function (p) {
       if (!liveState) return;
-      p.seekTo(st.tl.video.start + (st.i ? st.vtimes[st.i] : Math.max(0, st.vtimes[0] - 2)), true); p.playVideo();
+      p.seekTo(st.tl.video.start + (st.i ? st.vtimes[st.i] : Math.max(0, st.vtimes[0] - 2)), true); p.playVideo(); if (liveState && liveState.vrate && p.setPlaybackRate) { try { p.setPlaybackRate(liveState.vrate); } catch (er) { /* nada */ } }
       st.playing = true; drawLive(); loop();
     }).catch(videoFailed);
     return;
@@ -4460,7 +4720,10 @@ function openLiveMore() {
   items.push({ id: 'grid', icon: 'list', label: st.tl ? 'Revisar los compases' : 'Hacer el recorrido sin grabar', run: function () { openGrid(st.tl || newTimeline()); } });
   items.push({ id: 'rec', icon: 'rec', label: st.tl ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', run: openRecorder });
   items.push({ id: 'sync', icon: 'share', label: 'Pantallas conectadas', sub: sync.role === 'guia' ? 'guiando la sala ' + sync.code : sync.role === 'sigue' ? 'siguiendo la sala ' + sync.code : 'que otros celulares sigan a este', run: openSyncSheet });
-  if (st.stu) items = items.filter(function (x) { return ['vol', 'kbs', 'imm', 'easy', 'midi', 'sync', 'snd', 'full', 'view'].indexOf(x.id) >= 0; });
+  items.push({ id: 'oido', icon: 'mic', label: oidoActive() ? 'Dejar de escuchar' : 'Que el celular me escuche', sub: 'sin cable: oye tu piano y avanza cuando aciertas', run: oidoToggleLive });
+  if (vozSupported()) items.push({ id: 'voz', icon: 'mic', label: voz ? 'Apagar la voz' : 'Mandar con la voz', sub: '«siguiente», «otra vez», «más lento», «pausa»…', run: vozToggle });
+  if (st.stu && st.tl && st.tl.video) items.push({ id: 'video', icon: 'video', label: st.mode === 'video' ? 'Volver al clic' : 'Con el video (más lento si quieres)', run: function () { stuVideoMode(st.mode !== 'video'); } });
+  if (st.stu) items = items.filter(function (x) { return ['vol', 'kbs', 'imm', 'easy', 'midi', 'sync', 'snd', 'full', 'view', 'voz', 'oido', 'video'].indexOf(x.id) >= 0; });
   items.push({ id: 'help', icon: 'text', label: 'Cómo funciona', run: openLiveHelp });
   menuSheet('En vivo', items);
 }
@@ -4507,6 +4770,9 @@ function onLiveTap(e) {
       break;
     case 'slower': setBpm(st.bpm - 2); break;
     case 'faster': setBpm(st.bpm + 2); break;
+    case 'oido': oidoToggleLive(); break;
+    case 'navtog': navToggle(); break;
+    case 'vrate': videoRate(+b.getAttribute('data-r')); break;
     case 'click': st.click = !st.click; LS.set('cfp.liveClick', st.click); st.nextClick = null; audio(); lid('lv-nav').innerHTML = navHTML(); break;
   }
 }
@@ -4715,6 +4981,27 @@ function onGrip(e) {
   g.addEventListener('pointermove', move); g.addEventListener('pointerup', up); g.addEventListener('pointercancel', up);
 }
 window.addEventListener('resize', function () { if (liveState && lid('live') && fitKb(true)) { cancelAnimationFrame(liveState.rollRaf); liveState.rollRaf = 0; rollTick(); } });
+
+/* Barra de abajo plegable en horizontal, controles mínimos arriba, y pantalla completa al primer toque. */
+function liveMiniDraw() {
+  var st = liveState, top = lid('lv-top'), el = lid('live'); if (!st || !top) return;
+  var old = top.querySelector('.lv-mini'); if (old) old.remove();
+  // solo existe cuando de verdad se ve: barra de abajo guardada y celular en horizontal
+  if (!el || !el.classList.contains('navhide') || !LAND_MQ.matches) return;
+  var playable = st.tl && (st.mode === 'auto' || st.mode === 'video'), on = st.playing || st.counting;
+  var more = top.querySelector('[data-lv="more"]');
+  (more || top).insertAdjacentHTML(more ? 'beforebegin' : 'beforeend', '<span class="lv-mini">' + (playable ? '<button type="button" class="iconbtn" data-lv="play" aria-label="' + (on ? 'Pausa' : 'Seguir') + '">' + icon(on ? 'pause' : 'play') + '</button>' : '') +
+    '<button type="button" class="iconbtn" data-lv="prev" aria-label="Anterior">' + icon('back') + '</button><button type="button" class="iconbtn" data-lv="next" aria-label="Siguiente">' + icon('fwd') + '</button>' +
+    '<button type="button" class="iconbtn" data-lv="navtog" aria-label="Mostrar los botones de abajo" title="Mostrar los botones">' + icon('up') + '</button></span>');
+}
+var LAND_MQ = window.matchMedia('(orientation: landscape) and (min-width: 640px)');
+if (LAND_MQ.addEventListener) LAND_MQ.addEventListener('change', function () { liveMiniDraw(); });
+function navToggle() {
+  var el = lid('live'); if (!el || !liveState) return;
+  var on = !el.classList.contains('navhide');
+  el.classList.toggle('navhide', on); LS.set('cfp.navHide', on); drawLive();
+}
+function liveFullRetry() { var st = liveState; if (st && !st.fullTried && !document.fullscreenElement) { st.fullTried = true; enterFull(); } }
 
 /* parte 7: grabar el recorrido (con un video de YouTube o mientras la banda toca) y reproductor de YouTube */
 var recState = null;
@@ -5843,6 +6130,7 @@ function midiMsg(e) {
   if (cmd === 0x90 && d[2] > 0) {
     if (!midiInZone(n)) return;
     midi.held[n] = performance.now(); if (midi.sound) playNotes([n]);
+  if (drill) { drillNote(n); return; }
     midiKeys();
     if (typeof stuNote === 'function') stuNote(n);
     midiCheck(n);
@@ -5885,6 +6173,10 @@ function midiCheck(n) {
   if (n != null && !ok[C.mod12(n)]) { if (typeof stuWrong === 'function') stuWrong(); return; }
   Object.keys(midi.held).forEach(function (m) { var pc = C.mod12(+m); held[pc] = 1; if (!ok[pc] && midi.held[m] >= t0) bad = true; });
   if (bad || !need.length || !need.every(function (p) { return held[p]; })) return;
+  practiceAdvance();
+}
+function practiceAdvance() {
+  var st = liveState; if (!st || st.pWait) return;
   st.pWait = true;
   if (typeof stuRight === 'function') stuRight();
   var g = lid('lv-good'); if (g) { g.textContent = '¡Bien!'; g.classList.remove('hit'); void g.offsetWidth; g.classList.add('hit'); }
@@ -5984,40 +6276,10 @@ function renderStudents() {
     : '<p class="empty">Crea un alumno para cada niño: su parte (bajo, agudos o acordes), su tono y sus canciones. Sus estrellas se guardan en este equipo.</p>') +
     '<p class="help">En el celular de cada niño, abre su alumno y marca «Este equipo es de…»: la app abrirá directo en sus canciones.</p></div>';
 }
-function renderStudent(sid) {
-  leaveSong();
-  var pr = getStudent(sid); if (!pr) { location.replace('#/a'); return; }
-  if (!liveState) stuLive = null;
-  var d = stuData(), rows = (pr.songs || []).map(function (id) {
-    var s = getSong(id); if (!s) return '';
-    var p = stuProg(pr, id), f = songFit(s, pr), tl = !!s.timeline;
-    return '<li class="stu-song"><a class="ttl" href="#/a/' + enc(sid) + '/' + enc(id) + '">' + (s.num ? esc(s.num) + '. ' : '') + esc(C.sentenceCase(s.title)) +
-      '<small>Escalón ' + p.step + ': ' + LEVELS[p.step].name + ' · acordes ' + esc(f.list.join(' ')) + (tl ? '' : ' · sin compases') + '</small></a>' +
-      starsHTML(p) + '<a class="btn primary play" href="#/a/' + enc(sid) + '/' + enc(id) + '" aria-label="Tocar ' + esc(C.sentenceCase(s.title)) + '">' + icon('play') + '</a></li>';
-  }).join('');
-  var m = Object.keys(masteredSet(pr)), learning = Object.keys(pr.chords || {}).filter(function (k) { return !pr.chords[k].mastered && pr.chords[k].seen; });
-  var sug = allSongs().filter(function (s) { return (pr.songs || []).indexOf(s.id) < 0 && info(s).seq.length; }).map(function (s) { return { s: s, f: songFit(s, pr) }; })
-    .filter(function (x) { return m.length ? x.f.cover >= 0.9 : x.f.n <= 3; })
-    .sort(function (a, b) { return a.f.n - b.f.n || b.f.cover - a.f.cover; }).slice(0, 6);
-  app.innerHTML = '<div class="page stu"><div class="page-h">' + btnIcon('back', 'Volver a los alumnos', 'data-go="#/a"') +
-    '<h1><span class="avatar" style="--c:' + esc(pr.color) + '">' + esc((pr.name || '?').charAt(0).toUpperCase()) + '</span>' + esc(pr.name) + '</h1>' +
-    btnIcon('gear', 'Ajustes de ' + pr.name, 'data-sact="edit"') + '</div>' +
-    '<p class="stu-desc">' + esc(stuDesc(pr)) + '</p>' +
-    '<div class="btnrow"><button type="button" class="btn" data-sact="follow">' + icon('share') + 'Seguir a otra pantalla</button></div>' +
-    '<h2 class="stu-h">Tus canciones</h2>' +
-    (rows ? '<ol class="list stu-list">' + rows + '</ol>' : '<p class="empty">Todavía no tiene canciones. Elige unas pocas para empezar: mejor 3 o 4 bien tocadas que muchas a medias.</p>') +
-    '<div class="btnrow"><button type="button" class="btn" data-sact="pick">' + icon('add') + 'Elegir canciones</button></div>' +
-    '<h2 class="stu-h">Acordes</h2><p class="stu-chords">' + (m.length ? 'Ya dominas: <b>' + esc(m.join(' · ')) + '</b>' : 'Todavía ninguno dominado.') +
-      (learning.length ? '<br>Practicando: ' + esc(learning.join(' · ')) : '') + '</p>' +
-    '<p class="help">Un acorde queda dominado cuando lo tocas bien tres veces seguidas a la primera, con el teclado conectado. Entonces la app deja de encenderlo y solo te ayuda si dudas o te equivocas.</p>' +
-    (sug.length ? '<h2 class="stu-h">' + (m.length ? 'Con tus acordes ya puedes tocar' : 'Las más fáciles para empezar') + '</h2><ul class="list stu-sug">' + sug.map(function (x) {
-      return '<li><span class="ttl">' + esc(C.sentenceCase(x.s.title)) + '<small>' + x.f.n + (x.f.n === 1 ? ' acorde: ' : ' acordes: ') + esc(x.f.list.join(' ')) + '</small></span>' +
-        '<button type="button" class="btn" data-sadd="' + esc(x.s.id) + '">' + icon('add') + 'Añadir</button></li>';
-    }).join('') + '</ul>' : '') +
-    '<p class="stu-foot"><a href="#/" data-sact="all">Ver todo el cancionero</a>' + (d.device === pr.id ? ' · Este equipo abre directo aquí.' : '') + '</p></div>';
-}
+function renderStudent(sid) { renderKid(sid, 'canciones'); }
 function openSongPicker(sid) {
   var pr = getStudent(sid); if (!pr) return;
+  var start = (pr.songs || []).slice();
   var list = allSongs().filter(function (s) { return info(s).seq.length; }).map(function (s) { return { s: s, f: songFit(s, pr) }; })
     .sort(function (a, b) { return a.f.n - b.f.n || b.f.cover - a.f.cover; });
   openSheet('Canciones de ' + pr.name, '<p class="help">Ordenadas de la más fácil a la más difícil para su parte. Marca las que va a practicar.</p><div class="field"><input id="sp-q" type="search" placeholder="Buscar" autocomplete="off"></div><ul class="menu pick" id="sp-l"></ul>', function (el) {
@@ -6036,7 +6298,7 @@ function openSongPicker(sid) {
       putStudent(p2); b.setAttribute('aria-pressed', String(k < 0));
     });
     draw();
-  }, { onClose: function () { if (route.name === 'student') renderStudent(sid); } });
+  }, { onClose: function () { kidSongsDone(sid, start); if (route.name === 'student') renderStudent(sid); } });
 }
 function openNewStudent() {
   var part = 'bajo';
@@ -6083,19 +6345,20 @@ function openStudentLive(sid, songId) {
   current.song = song; ctx.setlist = null; ctx.index = -1;
   var p = stuProg(pr, songId), lvl = p.step || 1;
   if (lvl >= 2 && !song.timeline) lvl = 1;
-  stuLive = { sid: sid, level: lvl };
+  stuLive = { sid: sid, level: lvl, t0: Date.now() };
   openLive(false);
   if (liveState) {
     liveState.stu = stuLive; setStuLevel(lvl, true);
     if (liveState.mode === 'sync' && sync.pos) syncApplyPos(sync.pos);      // ya iba sonando en la otra pantalla
   }
+  if (liveState && liveState.mode !== 'sync' && LS.get(OIDO_AUTO, false) && !midi.inp && !oidoActive()) oidoToggleLive();
 }
 /* Modo de avance para cada escalón: 1 espera al teclado (o avanza a mano); 2-4 avanzan solos al tempo. */
 function stuModeFor(lvl) {
   var st = liveState;
   if (st && st.mode === 'sync') return 'sync';
   if (lvl >= 2) return st && st.tl ? 'auto' : 'manual';
-  return midi.inp ? 'practice' : 'manual';
+  return midi.inp || oidoActive() ? 'practice' : 'manual';
 }
 function setStuLevel(n, quiet) {
   var st = liveState; if (!st || !st.stu) return;
@@ -6125,7 +6388,7 @@ function stuTopHTML() {
   return '<button type="button" class="iconbtn" data-lv="close" aria-label="Salir">' + icon('close') + '</button>' +
     '<h2><span class="avatar sm" style="--c:' + esc(pr.color) + '">' + esc(pr.name.charAt(0).toUpperCase()) + '</span>' + esc(C.sentenceCase(st.song.title)) + '</h2>' +
     (st.easy && st.easy.keyboard ? '<button type="button" class="lv-key lv-keytr" data-lv="easy" title="Tono de la banda y cuánto transponer el teclado">' + esc(keyLabel(inf.key, sh)) + ' <b>' + (st.easy.keyboard > 0 ? '+' : '−') + Math.abs(st.easy.keyboard) + '</b></button>' : '') +
-    '<button type="button" class="lv-step" data-lv="lvl" aria-label="Escalón ' + st.level + ': ' + LEVELS[st.level].name + '. Cambiar">' + '<span class="lvl-n">' + st.level + '</span>' + esc(LEVELS[st.level].name) + ' ▾</button>' +
+    '<button type="button" class="lv-step" data-lv="lvl" aria-label="Escalón ' + st.level + ': ' + LEVELS[st.level].name + '. Cambiar">' + '<span class="lvl-n">' + st.level + '</span><span class="lvl-name">' + esc(LEVELS[st.level].name) + '</span> ▾</button>' +
     (st.mode === 'sync' ? '<span class="lv-sync" title="Siguiendo a otra pantalla">' + icon('share') + '</span>' : '') +
     '<button type="button" class="iconbtn" data-lv="more" aria-label="Más opciones">' + icon('more') + '</button>';
 }
@@ -6134,19 +6397,27 @@ function stuNavHTML() {
   var prev = '<button type="button" class="btn" data-lv="prev"' + (st.i ? '' : ' disabled') + ' aria-label="Acorde anterior">' + icon('back') + '</button>';
   var next = '<button type="button" class="btn" data-lv="next"' + (st.i < last ? '' : ' disabled') + ' aria-label="Acorde siguiente">' + icon('fwd') + '</button>';
   if (st.mode === 'sync') return '<div class="lv-row lv-row3">' + prev + '<span class="lv-status">' + esc(syncStatusText()) + '</span>' + next + '</div>';
+  var mic = midi.inp ? '' : oidoActive() ? oidoMeterHTML() : '';
   if (st.mode === 'practice' || st.mode === 'manual') {
-    var mid = st.mode === 'practice' ? '<span class="lv-status">Toca el acorde para avanzar</span>'
+    var mid = st.mode === 'practice' ? '<span class="lv-status">' + (oidoActive() ? 'Toca y la app avanza' : 'Toca el acorde para avanzar') + '</span>'
       : (st.i === last ? '<button type="button" class="btn primary" data-lv="stuend">' + icon('star') + 'Terminé</button>'
         : '<button type="button" class="btn primary" data-lv="next">Siguiente' + icon('fwd') + '</button>');
-    var conn = !midi.inp && midiSupported() ? '<button type="button" class="linkbtn" data-lv="midi">Conectar el teclado</button>' : '';
-    return '<div class="lv-row lv-row3">' + prev + mid + next + '</div>' + (conn ? '<p class="lv-hint">' + conn + ' para que la app escuche lo que tocas.</p>' : '');
+    var conn = midi.inp || oidoActive() ? '' : '<p class="lv-hint"><button type="button" class="btn sm" data-lv="oido">' + icon('mic') + 'Que el celular me escuche</button>' +
+      (midiSupported() ? ' <button type="button" class="linkbtn" data-lv="midi">o conecta el teclado</button>' : '') + '</p>';
+    return '<div class="lv-row lv-row3">' + prev + mid + next + '</div>' + mic + conn;
   }
   var label = st.playing || st.counting ? icon('pause') + 'Pausa' : icon('play') + (st.i ? 'Seguir' : 'Empezar');
-  return '<div class="lv-row lv-row3">' + prev + '<button type="button" class="btn primary" data-lv="play">' + label + '</button>' + next + '</div>' +
+  var row = '<div class="lv-row lv-row3">' + prev + '<button type="button" class="btn primary" data-lv="play">' + label + '</button>' + next + '</div>';
+  if (st.mode === 'video') return row + '<div class="lv-tempo"><span>Velocidad</span>' + VRATES.map(function (r) {
+    return '<button type="button" class="btn lv-clk' + ((st.vrate || 1) === r ? ' on' : '') + '" data-lv="vrate" data-r="' + r + '">' + Math.round(r * 100) + ' %</button>';
+  }).join('') + '</div>';
+  return row +
     '<div class="lv-tempo"><button type="button" class="btn" data-lv="slower" aria-label="Más lento">−</button><output>' + Math.round(st.bpm) + '</output><span>bpm' +
-    (st.tl && Math.round(st.bpm) < Math.round(st.tl.bpm) ? ' (más lento que la banda: ' + Math.round(st.tl.bpm) + ')' : '') + '</span>' +
+    (st.tl && Math.round(st.bpm) < Math.round(st.tl.bpm) ? '<span class="lv-band"> (más lento que la banda: ' + Math.round(st.tl.bpm) + ')</span>' : '') + '</span>' +
     '<button type="button" class="btn" data-lv="faster" aria-label="Más rápido">+</button>' +
-    '<button type="button" class="btn lv-clk' + (st.click ? ' on' : '') + '" data-lv="click" aria-pressed="' + st.click + '">' + icon('metro') + 'Clic</button></div>';
+    '<button type="button" class="btn lv-clk' + (st.click ? ' on' : '') + '" data-lv="click" aria-pressed="' + st.click + '">' + icon('metro') + 'Clic</button>' +
+    (midi.inp ? '' : '<button type="button" class="btn lv-clk lv-mic' + (oidoActive() ? ' on' : '') + '" data-lv="oido" aria-pressed="' + oidoActive() + '" aria-label="Que el celular me escuche">' + icon('mic') + '</button>') +
+    '</div>' + mic;
 }
 
 /* ---------- ayuda que se retira sola ----------
@@ -6156,7 +6427,7 @@ var stuHelpTimer = 0;
 function stuPrepareFade() {
   var st = liveState; if (!st || !st.stu) return;
   var pr = liveProfile(), m = masteredSet(pr);
-  st.fade = {}; if ((st.level === 1 || st.level === 2) && midi.inp) st.vo.forEach(function (x) { if (m[x.key]) st.fade[x.key] = 1; });
+  st.fade = {}; if ((st.level === 1 || st.level === 2) && (midi.inp || oidoActive())) st.vo.forEach(function (x) { if (m[x.key]) st.fade[x.key] = 1; });
   stuOnIndex();
 }
 function stuHidden(i) {
@@ -6166,6 +6437,7 @@ function stuHidden(i) {
   return !(i === st.i && st.helpNow);
 }
 function stuOnIndex() {
+  if (oidoActive()) oidoTargetNow();
   var st = liveState; if (!st || !st.stu) return;
   clearTimeout(stuHelpTimer);
   st.firstTry = true; st.helpNow = false;
@@ -6183,7 +6455,7 @@ function stuStat(key, ok) {
   c.seen++;
   if (ok) { c.streak++; if (c.streak >= 3 && !c.mastered) { c.mastered = true; toast('¡Ya dominas el ' + key + '! Desde ahora la app no lo enciende: tú lo encuentras.', 3500); } }
   else { c.streak = 0; c.mastered = false; }
-  pr.chords[key] = c; putStudent(pr);
+  pr.chords[key] = c; (pr.chords && pr.chords[key] && (pr.chords[key].at = Date.now())), putStudent(pr);
 }
 /* Del teclado (práctica que espera): acierto o error en el acorde actual. */
 function stuRight() {
@@ -6223,13 +6495,13 @@ function stuEval() {
 /* Al cambiar de acorde tocando a tempo: el que terminó sin tocarse bien queda como «mal». */
 function stuStep(prev) {
   var st = liveState; if (!st || !st.stu) return;
-  if (stuRun && st.mode === 'auto' && prev >= 0 && !stuRun.marks[prev] && midi.inp) { stuRun.marks[prev] = 'mal'; stuStat(st.vo[prev].key, false); }
+  if (stuRun && st.mode === 'auto' && prev >= 0 && !stuRun.marks[prev] && (midi.inp || oidoActive())) { stuRun.marks[prev] = 'mal'; stuStat(st.vo[prev].key, false); }
   stuOnIndex();
   if (stuRun && st.mode === 'auto' && st.playing) stuEval();          // quizá ya lo tocó un poquito antes del cambio
 }
 function stuRunStart() {
   var st = liveState; if (!st || !st.stu) return;
-  stuRun = { level: st.level, marks: [], from: st.i, midi: !!midi.inp, song: st.song.id };
+  stuRun = { level: st.level, marks: [], from: st.i, midi: !!midi.inp || oidoActive(), song: st.song.id };
 }
 /* Fin de la canción: resultado, estrella y el escalón de la próxima vez. */
 function stuSongEnd(manual) {
@@ -6246,7 +6518,7 @@ function stuSongEnd(manual) {
   var body = '<div class="result">' + starsHTML(stuProg(pr, songId), true);
   if (measured) body += '<p class="res-big">' + ok + ' de ' + total + ' ' + (lvl === 1 ? 'a la primera' : 'a tiempo') + '</p>' +
     (late ? '<p class="help">' + late + (lvl === 1 ? ' después de intentar otra vez.' : ' un poco tarde.') + '</p>' : '');
-  else body += '<p class="res-big">¿Te salió bien?</p><p class="help">Sin el teclado conectado, la app no escucha lo que tocas: dilo tú, con honestidad.</p>';
+  else body += '<p class="res-big">¿Te salió bien?</p><p class="help">Sin el teclado ni el micrófono, la app no oye lo que tocas: dilo tú, con honestidad.</p>';
   body += '<div id="res-msg"></div><div class="btnrow" id="res-b"></div></div>';
   openSheet('¡Terminaste!', body, function (el) {
     var finish = function (passed) {
@@ -6514,7 +6786,1311 @@ function openSyncSheet(sid) {
   });
 }
 
-var APP_VERSION = '2026-09-29 18:30';
+/* parte 15: ¿quién va a tocar? — perfiles del equipo y el espacio de cada alumno
+   Pantalla de entrada con un botón grande por persona. Cada alumno tiene su espacio con cinco pestañas: sus canciones,
+   el cancionero, practicar, logros y ajustes. En el celular de un alumno unido al grupo, lo que cambia se prueba al
+   instante y le llega al director para que lo apruebe (parte 16). */
+var WHO_KEY = 'cfp.who';
+ICONS.trophy = '<path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H4.5a3.5 3.5 0 0 0 4 4M16 6h3.5a3.5 3.5 0 0 1-4 4M12 13v4M8 20h8M10 17h4"/>';
+ICONS.swap = '<path d="M7 8h12l-3.5-3.5M17 16H5l3.5 3.5"/>';
+ICONS.check = '<path d="M5 12.5l4.5 4.5L19 7"/>';
+ICONS.inbox = '<path d="M4 13l2.5-7h11L20 13v6H4v-6zM4 13h5l1 2h4l1-2h5"/>';
+ICONS.group = '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9.5" r="2.4"/><path d="M3.5 19c.6-3.3 2.8-5 5.5-5s4.9 1.7 5.5 5M14.5 14.6c.8-.4 1.6-.6 2.5-.6 2.2 0 3.8 1.4 4.3 4"/>';
+var CFG_FIELDS = ['part', 'home', 'notes', 'rhythm', 'oct', 'hands', 'shape', 'nums', 'colors', 'zone'];
+function whoGet() { try { return JSON.parse(sessionStorage.getItem(WHO_KEY) || 'null'); } catch (e) { return null; } }
+function whoSet(w) { try { if (w) sessionStorage.setItem(WHO_KEY, JSON.stringify(w)); else sessionStorage.removeItem(WHO_KEY); } catch (e) { /* nada */ } }
+function isDirDevice() { var g = grupoInfo(); return g ? g.role === 'dir' : !stuData().device; }
+function whoKid() {
+  var w = whoGet();
+  if (w) return w.k === 'a' ? getStudent(w.sid) : null;
+  var dev = stuData().device;
+  return dev && !isDirDevice() ? getStudent(dev) : null;
+}
+function needsApproval() { var g = grupoInfo(); return !!(g && g.role === 'alumno' && whoKid()); }
+function dirName() { var g = grupoInfo(); return (g && g.dirName) || LS.get('cfp.dirName', '') || ''; }
+function dirMsg() { return dirName() || 'tu profe'; }
+function cfgPick(pr) { var c = cfgNorm(pr), o = {}; CFG_FIELDS.forEach(function (k) { if (c[k] !== undefined) o[k] = c[k]; }); return o; }
+function deviceStudents() {
+  var d = stuData(), g = grupoInfo();
+  if (g && g.role === 'alumno') return d.list.filter(function (pr) { return (g.sids || []).indexOf(pr.id) >= 0; });
+  return d.list;
+}
+function pickerEntries() {
+  var out = deviceStudents().map(function (pr) { return { k: 'a', sid: pr.id, name: pr.name, color: pr.color, sub: PARTS[cfgNorm(pr).part] }; });
+  if (isDirDevice()) out.push({ k: 'd', name: dirName() || 'Director', color: '#1e2447', sub: 'Todo el cancionero' });
+  return out;
+}
+function autoWho() {
+  var dev = stuData().device;
+  if (dev && getStudent(dev) && !isDirDevice()) return { k: 'a', sid: dev };
+  if (!stuData().list.length) return { k: 'd' };
+  var e = pickerEntries();
+  if (e.length === 1) return e[0].k === 'a' ? { k: 'a', sid: e[0].sid } : { k: 'd' };
+  return null;
+}
+/* ---------- pantalla de entrada ---------- */
+function renderPicker() {
+  leaveSong(); stuLive = null; whoSet(null);
+  var e = pickerEntries();
+  if (!e.length) { whoSet({ k: 'd' }); location.replace('#/'); return; }
+  var nIn = typeof inboxCount === 'function' ? inboxCount() : 0;
+  app.innerHTML = '<div class="quien"><h1>¿Quién va a tocar?</h1><ul class="quien-l">' + e.map(function (x) {
+    return '<li><button type="button" class="quien-b" data-q="' + (x.k === 'd' ? 'd' : 'a:' + esc(x.sid)) + '" style="--c:' + esc(x.color || '#3a43c4') + '">' +
+      '<span class="quien-av">' + esc((x.name || '?').charAt(0).toUpperCase()) + (x.k === 'd' && nIn ? '<em class="badge">' + nIn + '</em>' : '') + '</span>' +
+      '<span class="quien-n">' + esc(x.name) + '</span><span class="quien-s">' + esc(x.sub || '') + '</span></button></li>';
+  }).join('') + '</ul>' + (isDirDevice() ? '<p class="quien-f"><button type="button" class="linkbtn" data-q="adm">Alumnos y grupo</button></p>' : '') + '</div>';
+  app.querySelector('.quien').addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-q]'); if (!b) return;
+    var q = b.getAttribute('data-q');
+    if (q === 'd' || q === 'adm') askPin(function () { whoSet({ k: 'd' }); location.hash = q === 'adm' ? '#/a' : '#/'; });
+    else { whoSet({ k: 'a', sid: q.slice(2) }); location.hash = '#/a/' + enc(q.slice(2)); }
+  });
+}
+function pinHash(p) { var h = 7; for (var i = 0; i < p.length; i++) h = (h * 31 + p.charCodeAt(i)) >>> 0; return 'p' + h.toString(36); }
+function askPin(then) {
+  var ph = LS.get('cfp.dirPin', ''); if (!ph) { then(); return; }
+  openSheet('Clave de ' + (dirName() || 'director'), '<div class="field"><label for="pin-i">Escribe la clave</label><input id="pin-i" type="password" inputmode="numeric" maxlength="8" autocomplete="off"></div>' +
+    '<p class="help" id="pin-m"></p><div class="btnrow"><button type="button" class="btn primary" data-x="ok">Entrar</button></div>', function (el) {
+    var inp = el.querySelector('#pin-i');
+    var go = function () { if (pinHash(inp.value) === ph) { closeSheet(true); then(); } else { el.querySelector('#pin-m').textContent = 'Esa no es la clave.'; inp.value = ''; inp.focus(); } };
+    setTimeout(function () { inp.focus(); }, 60);
+    el.querySelector('[data-x="ok"]').addEventListener('click', go);
+    inp.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') go(); });
+  });
+}
+function openPinSheet(after) {
+  var has = !!LS.get('cfp.dirPin', '');
+  openSheet(has ? 'Cambiar la clave' : 'Poner clave', '<p class="help">Una clave corta (4 números) para que los chicos no entren a tu perfil sin querer. No es una caja fuerte: es un seguro para niños.</p>' +
+    '<div class="field"><label for="pin-n">Clave nueva</label><input id="pin-n" type="password" inputmode="numeric" maxlength="8" autocomplete="off"></div>' +
+    '<div class="btnrow"><button type="button" class="btn primary" data-x="ok">Guardar</button>' + (has ? '<button type="button" class="btn" data-x="del">Quitar la clave</button>' : '') + '</div>', function (el) {
+    el.addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-x]'); if (!b) return;
+      if (b.getAttribute('data-x') === 'del') LS.set('cfp.dirPin', '');
+      else { var v = el.querySelector('#pin-n').value.trim(); if (v.length < 3) { toast('Usa al menos 3 números.'); return; } LS.set('cfp.dirPin', pinHash(v)); }
+      closeSheet(true); toast('Listo.'); if (after) after();
+    });
+  });
+}
+/* ---------- espacio del alumno ---------- */
+var KID_TABS = [['canciones', 'Mis canciones', 'star'], ['cancionero', 'Cancionero', 'book'], ['practicar', 'Practicar', 'keys'], ['logros', 'Logros', 'trophy'], ['ajustes', 'Ajustes', 'gear']];
+function kidHref(sid, tab) { return tab === 'canciones' ? '#/a/' + enc(sid) : '#/k/' + enc(sid) + '/' + tab; }
+function kidHeadHTML(pr, kid, back) {
+  var c = cfgNorm(pr), home = HOMES.filter(function (h) { return h[0] === c.home; })[0];
+  var sub = PARTS[c.part].replace(/ \(.*\)$/, '') + ' · ' + (c.home < 0 ? 'en el tono de la banda' : 'en ' + (home ? home[1] : 'Do')) + ' · ' + RHYTHMS[c.rhythm].replace(/ \(.*\)$/, '').toLowerCase();
+  var sw = !kid || pickerEntries().length > 1;
+  return '<header class="kid-h">' + (back ? btnIcon('back', 'Volver', 'data-go="' + back + '"') : kid ? '' : btnIcon('back', 'Volver a los alumnos', 'data-go="#/a"')) +
+    '<span class="avatar" style="--c:' + esc(pr.color) + '">' + esc((pr.name || '?').charAt(0).toUpperCase()) + '</span>' +
+    '<div class="kid-t"><h1>' + esc(pr.name) + '</h1><p>' + esc(sub) + '</p></div>' +
+    (sw ? btnIcon('swap', 'Cambiar de perfil', 'data-go="#/quien"') : '') + '</header>';
+}
+function kidTabsHTML(pr, tab) {
+  return '<nav class="kid-tabs" aria-label="Secciones">' + KID_TABS.map(function (t) {
+    return '<a href="' + kidHref(pr.id, t[0]) + '"' + (t[0] === tab ? ' aria-current="page"' : '') + '>' + icon(t[2]) + '<span>' + t[1] + '</span></a>';
+  }).join('') + '</nav>';
+}
+function renderKid(sid, tab) {
+  leaveSong();
+  var pr = getStudent(sid); if (!pr) { location.replace(whoKid() ? '#/quien' : '#/a'); return; }
+  if (!liveState) stuLive = null;
+  tab = tab || 'canciones';
+  if (KID_TABS.every(function (t) { return t[0] !== tab; })) tab = 'canciones';
+  var kid = !!whoKid(), body;
+  if (tab === 'canciones') body = kidSongsHTML(pr, kid);
+  else if (tab === 'cancionero') body = kidBookHTML(pr);
+  else if (tab === 'practicar') body = kidPracticeHTML(pr);
+  else if (tab === 'logros') body = kidLogrosHTML(pr);
+  else body = kidAjustesHTML(pr, kid);
+  app.innerHTML = '<div class="kid" style="--c:' + esc(pr.color) + '">' + kidHeadHTML(pr, kid) + '<main class="kid-b" id="kid-b">' + body + '</main>' + kidTabsHTML(pr, tab) + '</div>';
+  kidBind(pr, tab);
+}
+function kidNext(pr) {
+  var best = null;
+  (pr.songs || []).forEach(function (id, i) {
+    var s = getSong(id); if (!s) return;
+    var p = stuProg(pr, id), n = Object.keys(p.stars || {}).length; if (n >= 4) return;
+    var score = n * 10 + i * 0.1 + (p.last && Date.now() - p.last < 20 * 3600e3 ? 3 : 0);
+    if (!best || score < best.score) best = { s: s, p: p, score: score };
+  });
+  return best;
+}
+function kidSongsHTML(pr, kid) {
+  var sid = pr.id;
+  var rows = (pr.songs || []).map(function (id) {
+    var s = getSong(id); if (!s) return '';
+    var p = stuProg(pr, id), f = songFit(s, pr), tl = !!s.timeline;
+    return '<li class="stu-song"><a class="ttl" href="#/a/' + enc(sid) + '/' + enc(id) + '">' + (s.num ? esc(s.num) + '. ' : '') + esc(C.sentenceCase(s.title)) +
+      '<small>Escalón ' + p.step + ': ' + LEVELS[p.step].name + ' · acordes ' + esc(f.list.join(' ')) + (tl ? '' : ' · sin compases') + '</small></a>' +
+      starsHTML(p) + '<a class="btn primary play" href="#/a/' + enc(sid) + '/' + enc(id) + '" aria-label="Tocar ' + esc(C.sentenceCase(s.title)) + '">' + icon('play') + '</a></li>';
+  }).join('');
+  var m = Object.keys(masteredSet(pr)), learning = Object.keys(pr.chords || {}).filter(function (k) { return !pr.chords[k].mastered && pr.chords[k].seen; });
+  var sug = allSongs().filter(function (s) { return (pr.songs || []).indexOf(s.id) < 0 && info(s).seq.length; }).map(function (s) { return { s: s, f: songFit(s, pr) }; })
+    .filter(function (x) { return m.length ? x.f.cover >= 0.9 : x.f.n <= 3; })
+    .sort(function (a, b) { return a.f.n - b.f.n || b.f.cover - a.f.cover; }).slice(0, 5);
+  var nx = kidNext(pr);
+  var tip = kid && !LS.get('cfp.tip.' + sid, false) ? '<div class="note-box kid-tip">' + icon('star') + '<span><b>¡Hola, ' + esc(pr.name) + '!</b> Empieza con «Tocar» en «Para hoy». Si tu piano no tiene cable, dentro de la canción toca «Que el celular me escuche». En «Practicar» hay juegos para aprender las teclas. ' +
+    '<button type="button" class="linkbtn" data-k="tipok">Entendido</button></span></div>' : '';
+  return tip + (typeof propNoticesHTML === 'function' ? propNoticesHTML(sid) : '') +
+    (nx ? '<section class="today"><p class="today-k">' + (kid ? 'Para hoy' : 'Le toca') + '</p><h2>' + esc(C.sentenceCase(nx.s.title)) + '</h2>' +
+      '<p class="today-s">Escalón ' + nx.p.step + ': ' + esc(LEVELS[nx.p.step].name) + '</p>' + starsHTML(nx.p, true) +
+      '<a class="btn primary big" href="#/a/' + enc(sid) + '/' + enc(nx.s.id) + '">' + icon('play') + 'Tocar</a></section>' : '') +
+    weekHTML(pr) +
+    '<h2 class="stu-h">' + (kid ? 'Tus canciones' : 'Sus canciones') + '</h2>' +
+    (rows ? '<ol class="list stu-list">' + rows + '</ol>' : '<p class="empty">Todavía no hay canciones. Elige unas pocas para empezar: mejor 3 o 4 bien tocadas que muchas a medias.</p>') +
+    '<div class="btnrow"><button type="button" class="btn" data-sact="pick">' + icon('add') + 'Elegir canciones</button>' +
+    '<button type="button" class="btn" data-sact="follow">' + icon('share') + 'Seguir a otra pantalla</button></div>' +
+    '<h2 class="stu-h">Acordes</h2><p class="stu-chords">' + (m.length ? 'Ya dominas: <b>' + esc(m.join(' · ')) + '</b>' : 'Todavía ninguno dominado.') +
+    (learning.length ? '<br>Practicando: ' + esc(learning.join(' · ')) : '') + '</p>' +
+    (sug.length ? '<h2 class="stu-h">' + (m.length ? 'Con tus acordes ya puedes tocar' : 'Las más fáciles para empezar') + '</h2><ul class="list stu-sug">' + sug.map(function (x) {
+      return '<li><span class="ttl">' + esc(C.sentenceCase(x.s.title)) + '<small>' + x.f.n + (x.f.n === 1 ? ' acorde: ' : ' acordes: ') + esc(x.f.list.join(' ')) + '</small></span>' +
+        '<button type="button" class="btn" data-sadd="' + esc(x.s.id) + '">' + icon('add') + 'Añadir</button></li>';
+    }).join('') + '</ul>' : '');
+}
+function dayKey(dt) { return dt.getFullYear() + '-' + ('0' + (dt.getMonth() + 1)).slice(-2) + '-' + ('0' + dt.getDate()).slice(-2); }
+function weekDays(pr) {
+  var out = [], now = new Date(), dow = (now.getDay() + 6) % 7;
+  for (var k = 0; k < 7; k++) {
+    var dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dow + k), key = dayKey(dt);
+    out.push({ k: key, d: 'LMMJVSD'.charAt(k), min: (pr.log || {})[key] || 0, today: k === dow });
+  }
+  return out;
+}
+function weekHTML(pr) {
+  var w = weekDays(pr), n = w.filter(function (x) { return x.min >= 1; }).length;
+  return '<section class="week" aria-label="Días que practicó esta semana: ' + n + ' de 4"><p class="week-t">Esta semana: <b>' + n + '</b> de 4 días' + (n >= 4 ? ' ' + icon('star') : '') + '</p><ol>' +
+    w.map(function (x) { return '<li class="' + (x.min >= 1 ? 'on' : '') + (x.today ? ' hoy' : '') + '" title="' + x.k + ': ' + Math.round(x.min) + ' min"><span>' + x.d + '</span></li>'; }).join('') + '</ol></section>';
+}
+function kidLog(sid, min) {
+  if (!(min > 0.15)) return;
+  var pr = getStudent(sid); if (!pr) return;
+  pr.log = pr.log || {};
+  var k = dayKey(new Date());
+  pr.log[k] = Math.round(((pr.log[k] || 0) + Math.min(90, min)) * 10) / 10;
+  var ks = Object.keys(pr.log).sort(); while (ks.length > 70) delete pr.log[ks.shift()];
+  putStudent(pr);
+}
+function kidBookRows(pr, q) {
+  q = C.normalize(q || '');
+  var mine = pr.songs || [];
+  var list = allSongs().filter(function (s) { return info(s).seq.length && (!q || C.normalize((s.num || '') + ' ' + s.title + ' ' + (s.author || '')).indexOf(q) >= 0); });
+  if (!list.length) return '<li class="empty">No hay canciones con ese nombre.</li>';
+  return list.slice(0, 250).map(function (s) {
+    var f = songFit(s, pr), on = mine.indexOf(s.id) >= 0;
+    return '<li><a class="row" href="#/k/' + enc(pr.id) + '/c/' + enc(s.id) + '"><span class="txt"><span class="ttl">' + (s.num ? esc(s.num) + '. ' : '') + esc(C.sentenceCase(s.title)) +
+      (on ? ' <i class="kmine" title="En tus canciones">' + icon('star') + '</i>' : '') + '</span><span class="sub">' + f.n + (f.n === 1 ? ' acorde: ' : ' acordes: ') + esc(f.list.join(' ')) + '</span></span>' + icon('fwd') + '</a></li>';
+  }).join('');
+}
+function kidBookHTML(pr) {
+  return '<label class="search kid-search">' + icon('search') + '<input id="kq" type="search" placeholder="Buscar por título o número" autocomplete="off" aria-label="Buscar canción"></label>' +
+    '<ul class="list kid-book" id="kid-bl">' + kidBookRows(pr, '') + '</ul>' +
+    '<div class="btnrow"><a class="btn" href="#/e/nueva">' + icon('add') + (needsApproval() ? 'Proponer una canción nueva' : 'Nueva canción') + '</a></div>';
+}
+function renderKidSong(sid, id) {
+  leaveSong();
+  var pr = getStudent(sid), s = getSong(id);
+  if (!pr || !s) { location.replace(pr ? '#/k/' + enc(sid) + '/cancionero' : '#/'); return; }
+  var inf = info(s), sh = songShift(s), mine = (pr.songs || []).indexOf(id) >= 0, f = songFit(s, pr), kid = !!whoKid();
+  current.song = s; ctx.setlist = null; ctx.index = -1;
+  app.innerHTML = '<div class="kid" style="--c:' + esc(pr.color) + '">' + kidHeadHTML(pr, kid, '#/k/' + enc(sid) + '/cancionero') +
+    '<main class="kid-b"><h2 class="kid-st">' + (s.num ? esc(s.num) + '. ' : '') + esc(C.sentenceCase(s.title)) + '</h2>' +
+    '<p class="kid-sub">' + f.n + (f.n === 1 ? ' acorde para tu parte: ' : ' acordes para tu parte: ') + esc(f.list.join(' ')) + (s.timeline ? '' : ' · todavía sin compases') + '</p>' +
+    '<div class="btnrow"><a class="btn primary big" href="#/a/' + enc(sid) + '/' + enc(id) + '">' + icon('play') + 'Tocar</a>' +
+    (mine ? '<span class="pill">' + icon('star') + 'En tus canciones</span>' : '<button type="button" class="btn" data-k="add" data-id="' + esc(id) + '">' + icon('add') + 'Agregar a mis canciones</button>') +
+    '<button type="button" class="btn" data-k="nums" data-id="' + esc(id) + '">' + icon('share') + 'Mandar en números</button>' +
+    '<a class="btn" href="#/e/' + enc(id) + '">' + icon('edit') + (needsApproval() ? 'Proponer un cambio' : 'Editar') + '</a></div>' +
+    '<div class="song kid-song" id="song-body">' + bodyHTML(s, fmtFor(inf.key, sh, 'num')) + '</div></main>' + kidTabsHTML(pr, 'cancionero') + '</div>';
+  if (typeof fixCollisions === 'function') fixCollisions(lid('song-body'));
+  kidBind(pr, 'cancion');
+}
+function kidPracticeHTML(pr) {
+  var c = cfgNorm(pr);
+  var card = function (k, ic, t, d) { return '<button type="button" class="kcard" data-k="' + k + '"><span class="kcard-i">' + icon(ic) + '</span><span class="kcard-t">' + t + '</span><span class="kcard-d">' + d + '</span></button>'; };
+  return '<div class="kcards">' +
+    card('finder', 'mic', '¿Qué tecla es?', 'Toca una tecla y el celular te dice su número. Sirve también para probar el micrófono.') +
+    card('notas', 'keys', 'Juego de notas', 'La app te pide un número y tú lo encuentras. Primero con ayuda; cuando aciertas seguido, sin ayuda.') +
+    (c.part !== 'bajo' ? card('acordes', 'keys', 'Juego de acordes', 'Los acordes 1, 4, 5, 6m y 2m: las posiciones de casi todas tus canciones.') : '') +
+    card('video', 'video', 'Practicar con un video', 'Pega un enlace de YouTube, ponlo más lento y repite una parte hasta que salga.') +
+    card('metro', 'metro', 'Metrónomo', 'Para practicar a tempo, empezando lento.') +
+    card('midi', 'keys', midi.inp ? 'Teclado conectado' : 'Conectar el teclado (cable)', 'Si tu piano tiene USB, con un cable OTG al celular la app ve cada tecla que tocas.') +
+    '</div><p class="help">Sin cable también se puede: dentro de cada canción toca «Que el celular me escuche» y pon el celular cerca del piano. Poco y seguido: 10 a 15 minutos, cuatro o cinco días a la semana.</p>';
+}
+function kidLogrosHTML(pr) {
+  var tot = 0;
+  Object.keys(pr.prog || {}).forEach(function (id) { tot += Object.keys((pr.prog[id] || {}).stars || {}).length; });
+  var m = Object.keys(masteredSet(pr)), learning = Object.keys(pr.chords || {}).filter(function (k) { return !pr.chords[k].mastered && pr.chords[k].seen; });
+  var w = weekDays(pr), days = w.filter(function (x) { return x.min >= 1; }).length, mins = Math.round(w.reduce(function (a, x) { return a + x.min; }, 0)), g = pr.games || {};
+  var rows = (pr.songs || []).map(function (id) { var s = getSong(id); if (!s) return ''; return '<li><span class="ttl">' + esc(C.sentenceCase(s.title)) + '</span>' + starsHTML(stuProg(pr, id)) + '</li>'; }).join('');
+  return '<div class="kstats"><div><b>' + tot + '</b><span>estrellas</span></div><div><b>' + m.length + '</b><span>acordes dominados</span></div><div><b>' + days + '<small>/4</small></b><span>días esta semana</span></div></div>' +
+    weekHTML(pr) + '<p class="help">' + mins + (mins === 1 ? ' minuto' : ' minutos') + ' de práctica esta semana. Mejor poco y seguido: 10 a 15 minutos, cuatro o cinco días.</p>' +
+    (rows ? '<h2 class="stu-h">Estrellas por canción</h2><ul class="list klog">' + rows + '</ul>' : '') +
+    '<h2 class="stu-h">Acordes</h2><p class="stu-chords">' + (m.length ? 'Dominados: <b>' + esc(m.join(' · ')) + '</b>' : 'Todavía ninguno dominado.') + (learning.length ? '<br>Practicando: ' + esc(learning.join(' · ')) : '') + '</p>' +
+    (g.notas || g.acordes ? '<h2 class="stu-h">Juegos</h2><p class="stu-chords">' + (g.notas ? 'Notas: <b>' + g.notas + '/10</b> a la primera. ' : '') + (g.acordes ? 'Acordes: <b>' + g.acordes + '/10</b> a la primera.' : '') + '</p>' : '') +
+    '<p class="help">Cada canción tiene 4 estrellas: con ayuda, a tiempo, solo números y de memoria. La que más vale es la última: tocar sin mirar.</p>';
+}
+function chkHTML(id, on, label) { return '<label class="chk"><input type="checkbox" id="' + id + '"' + (on ? ' checked' : '') + '> <span>' + esc(label) + '</span></label>'; }
+function kidAjustesHTML(pr, kid) {
+  var g = grupoInfo(), appr = kid && needsApproval();
+  return (appr ? '<p class="note-box">' + icon('inbox') + '<span>Los cambios de cómo tocas los revisa ' + esc(dirMsg()) + '. Mientras tanto ya los puedes usar.</span></p>' : '') +
+    '<h2 class="stu-h">Cómo ' + (kid ? 'tocas' : 'toca') + '</h2><div id="kid-cfg">' + cfgEditorHTML(cfgNorm(pr)) + '</div>' +
+    '<h2 class="stu-h">Este equipo</h2>' +
+    (g && g.role === 'dir' ? '' : chkHTML('ka-dev', stuData().device === pr.id, 'Este equipo es de ' + pr.name + ' (abre directo en sus canciones)')) +
+    chkHTML('ka-oido', LS.get(OIDO_AUTO, false), 'Que el celular me escuche al practicar (sin cable)') +
+    (vozSupported() ? chkHTML('ka-voz', LS.get(VOZ_PREF, false), 'Mandar con la voz al tocar («siguiente», «otra vez», «más lento»)') : '') +
+    chkHTML('ka-full', !!prefs.fullAlways, 'Pantalla completa siempre (sin la barra de la batería)') +
+    '<div class="btnrow"><button type="button" class="btn" data-k="finder">' + icon('mic') + 'Probar el micrófono</button><button type="button" class="btn" data-k="midi">' + icon('keys') + 'Teclado (cable)</button></div>' +
+    '<h2 class="stu-h">Grupo</h2><p class="help">' + esc(grupoStatusText()) + '</p>' +
+    (kid ? '' : '<div class="btnrow"><button type="button" class="btn" data-k="invite">' + icon('share') + 'Invitar a ' + esc(pr.name) + ' (WhatsApp)</button>' +
+      '<button type="button" class="btn" data-sact="edit">' + icon('gear') + 'Nombre, color y borrar</button></div>');
+}
+function kidMidi() {
+  if (!midiSupported()) { toast('Este navegador no puede usar un teclado por cable. Usa «Que el celular me escuche».', 5000); return; }
+  midiConnect().then(function () { toast(midi.inp ? 'Teclado conectado.' : 'No encontré el teclado. Revisa el cable.', 3500); if (route.name === 'kidtab') render(); })
+    .catch(function () { toast('No se pudo conectar el teclado.', 3500); });
+}
+function kidBind(pr, tab) {
+  var root = app.querySelector('.kid'); if (!root) return;
+  root.addEventListener('click', function (e) {
+    var t = e.target, pick = t.closest('[data-sact="pick"]');
+    if (pick) { e.stopPropagation(); openSongPicker(pr.id); return; }
+    var add = t.closest('[data-sadd]');
+    if (add) { e.stopPropagation(); kidAddSong(pr.id, add.getAttribute('data-sadd')); renderKid(pr.id, 'canciones'); return; }
+    var b = t.closest('[data-k]'); if (!b) return;
+    var a = b.getAttribute('data-k');
+    if (a === 'finder') openDrill(pr.id, 'finder');
+    else if (a === 'notas' || a === 'acordes') openDrill(pr.id, a);
+    else if (a === 'video') openVideoPractice(pr.id);
+    else if (a === 'metro') openMetronome();
+    else if (a === 'midi') kidMidi();
+    else if (a === 'invite') grupoInviteKid(pr.id);
+    else if (a === 'tipok') { LS.set('cfp.tip.' + pr.id, true); var tp = b.closest('.kid-tip'); if (tp) tp.remove(); }
+    else if (a === 'add') { kidAddSong(pr.id, b.getAttribute('data-id')); renderKidSong(pr.id, b.getAttribute('data-id')); }
+    else if (a === 'nums') { var s = getSong(b.getAttribute('data-id')); if (s) openNumsShare(s); }
+  });
+  var q = root.querySelector('#kq');
+  if (q) q.addEventListener('input', function () { root.querySelector('#kid-bl').innerHTML = kidBookRows(pr, q.value); });
+  if (tab !== 'ajustes') return;
+  var box = root.querySelector('#kid-cfg');
+  if (box) cfgEditorBind(box, function () { return cfgNorm(getStudent(pr.id)); }, function (ne) { kidCfgChange(pr.id, ne); });
+  root.addEventListener('change', function (e) {
+    var t = e.target; if (!t || t.type !== 'checkbox') return;
+    if (t.id === 'ka-dev') { var d = stuData(); d.device = t.checked ? pr.id : (d.device === pr.id ? null : d.device); stuSave(d); }
+    else if (t.id === 'ka-oido') LS.set(OIDO_AUTO, t.checked);
+    else if (t.id === 'ka-voz') LS.set(VOZ_PREF, t.checked);
+    else if (t.id === 'ka-full') { prefs.fullAlways = t.checked; savePrefs(); if (t.checked) enterFull(); else exitFull(); }
+  });
+}
+/* Cambios que hace el alumno: en el celular de un alumno del grupo se prueban al instante y van como propuesta. */
+function kidCfgChange(sid, ne) {
+  var pr = getStudent(sid); if (!pr) return;
+  var before = cfgPick(pr);
+  Object.keys(ne || {}).forEach(function (k) { pr[k] = ne[k]; });
+  putStudent(pr);
+  if (needsApproval()) proposeCfg(sid, before, cfgPick(getStudent(sid)));
+  var h = app.querySelector('.kid-h'); if (h) h.outerHTML = kidHeadHTML(getStudent(sid), !!whoKid());
+}
+function kidSongsDone(sid, start) {
+  if (!needsApproval()) return;
+  var pr = getStudent(sid); if (!pr) return;
+  proposeSongs(sid, start, (pr.songs || []).slice());
+}
+function kidAddSong(sid, id) {
+  var pr = getStudent(sid); if (!pr || !id) return;
+  var start = (pr.songs || []).slice();
+  if (start.indexOf(id) >= 0) return;
+  pr.songs = start.concat([id]); putStudent(pr);
+  kidSongsDone(sid, start);
+  toast(needsApproval() ? 'Agregada. ' + dirMsg().charAt(0).toUpperCase() + dirMsg().slice(1) + ' lo va a revisar.' : 'Agregada a tus canciones.', 3000);
+}
+/* Editor: si quien escribe es un alumno del grupo, la canción se guarda en su celular y va como propuesta. */
+function kidSongSave(s) {
+  var kid = whoKid(); if (!kid || !needsApproval()) return false;
+  var cur = getSong(s.id), before = cur ? cleanSong(cur) : null;
+  local.songs[s.id] = s; delete local.deleted[s.id]; saveLocal(); delete infoCache[s.id];
+  proposeSong(kid.id, s, before);
+  editorState = null; document.body.classList.remove('ed-chords');
+  location.hash = '#/k/' + enc(kid.id) + '/c/' + enc(s.id);
+  toast('Guardada en tu celular. ' + dirMsg().charAt(0).toUpperCase() + dirMsg().slice(1) + ' la revisa para que llegue a todos.', 4500);
+  return true;
+}
+/* Pantalla completa siempre (si el alumno o el director lo eligió): se pide con el primer toque. */
+document.addEventListener('click', function () { if (prefs.fullAlways && !document.fullscreenElement) enterFull(); }, true);
+/* En el inicio del director: cambiar de perfil y entrar al grupo. */
+var _stuChipsG = stuChipsHTML;
+stuChipsHTML = function () {
+  return _stuChipsG.apply(this, arguments) + '<div class="who-row">' + (stuData().list.length ? '<a class="chip-b" href="#/quien">' + icon('swap') + 'Cambiar de perfil</a>' : '') +
+    '<a class="chip-b" href="#/grupo">' + icon('group') + 'Grupo' + (inboxCount() ? ' <em class="badge">' + inboxCount() + '</em>' : '') + '</a></div>';
+};
+
+/* parte 16: grupo conectado — perfiles, estrellas y propuestas que el director aprueba
+   Cada equipo se une con una invitación (enlace por WhatsApp). El director publica el «estado del grupo»: alumnos,
+   sus canciones y ajustes, sus decisiones y sus cambios del cancionero que aún no subió a GitHub; va firmado con una
+   clave que solo tienen sus equipos. Cada equipo publica las estrellas de sus alumnos. Lo que un alumno propone llega
+   al buzón del director. Todo viaja cifrado por los servidores públicos de las pantallas conectadas (dos a la vez). */
+var GRUPO_KEY = 'cfp.grupo.v1', INBOX_KEY = 'cfp.props.inbox', MINE_KEY = 'cfp.props.mine', DEC_KEY = 'cfp.props.dec', OV_KEY = 'cfp.g.ov';
+var GR = null, GROV = null, GRI;
+var TE8 = new TextEncoder(), TD8 = new TextDecoder();
+var CFG_NAMES = { part: 'Parte', home: 'Tono de práctica', notes: 'Notas', rhythm: 'Ritmo', oct: 'Octava', hands: 'Manos', shape: 'Forma', nums: 'Números en las teclas', colors: 'Colores', zone: 'Zona del teclado' };
+function grupoInfo() { if (GRI === undefined) GRI = LS.get(GRUPO_KEY, null); return GRI; }
+function grupoSave(g) { GRI = g; LS.set(GRUPO_KEY, g); }
+function devId() { var d = LS.get('cfp.devId', ''); if (!d) { d = 'd' + Math.random().toString(36).slice(2, 10); LS.set('cfp.devId', d); } return d; }
+function inboxCount() { return isDirDevice() ? LS.get(INBOX_KEY, []).length : 0; }
+/* Canciones que llegan del director a los celulares de los alumnos (sus cambios aún no publicados en GitHub). */
+function grOv() { if (!GROV) GROV = LS.get(OV_KEY, null) || { songs: {}, deleted: {} }; return GROV; }
+function grOvOn() { var g = grupoInfo(); return !!(g && g.role !== 'dir' && isGroup()); }
+function gSong(id) { return grOvOn() ? grOv().songs[id] || null : null; }
+function gDel(id) { return grOvOn() ? !!grOv().deleted[id] : false; }
+function gSongIds() { return grOvOn() ? Object.keys(grOv().songs) : []; }
+/* ---------- cifrado ---------- */
+function b64u(u8) { var s = ''; for (var i = 0; i < u8.length; i++) s += String.fromCharCode(u8[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function unb64u(s) { s = String(s).replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+function sha256(str) { return crypto.subtle.digest('SHA-256', TE8.encode(str)).then(function (b) { return new Uint8Array(b); }); }
+function grKeys() {
+  var g = grupoInfo(); if (!g) return Promise.reject(new Error('sin grupo'));
+  if (GR && GR.keys && GR.keys.secret === g.secret && (!g.priv || GR.keys.priv)) return Promise.resolve(GR.keys);
+  var k = { secret: g.secret }, EC = { name: 'ECDSA', namedCurve: 'P-256' };
+  return sha256('cfp-gid:' + g.secret).then(function (h) { k.gid = b64u(h).slice(0, 16).replace(/[^A-Za-z0-9]/g, 'x'); return sha256('cfp-aes:' + g.secret); })
+    .then(function (h) { return crypto.subtle.importKey('raw', h, 'AES-GCM', false, ['encrypt', 'decrypt']); })
+    .then(function (aes) { k.aes = aes; return crypto.subtle.importKey('jwk', { kty: 'EC', crv: 'P-256', x: g.x, y: g.y, ext: true }, EC, true, ['verify']); })
+    .then(function (pub) { k.pub = pub; return g.priv ? crypto.subtle.importKey('jwk', { kty: 'EC', crv: 'P-256', x: g.x, y: g.y, d: g.priv.d, ext: true }, EC, true, ['sign']) : null; })
+    .then(function (priv) { k.priv = priv; if (GR) GR.keys = k; return k; });
+}
+function gzipU8(u8) {
+  if (typeof CompressionStream === 'undefined') return Promise.resolve(null);
+  return new Response(new Blob([u8]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer().then(function (b) { return new Uint8Array(b); }).catch(function () { return null; });
+}
+function gunzipU8(u8) { return new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer().then(function (b) { return new Uint8Array(b); }); }
+function grEnc(obj) {
+  var raw = TE8.encode(JSON.stringify(obj));
+  return Promise.all([grKeys(), raw.length > 600 ? gzipU8(raw) : Promise.resolve(null)]).then(function (r) {
+    var z = r[1], body = z || raw, pt = new Uint8Array(1 + body.length), iv = crypto.getRandomValues(new Uint8Array(12));
+    pt[0] = z ? 1 : 0; pt.set(body, 1);
+    return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, r[0].aes, pt).then(function (ct) { var c = new Uint8Array(ct), out = new Uint8Array(12 + c.length); out.set(iv); out.set(c, 12); return b64u(out); });
+  });
+}
+function grDec(str) {
+  return grKeys().then(function (k) { var u = unb64u(str); return crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.slice(0, 12) }, k.aes, u.slice(12)); })
+    .then(function (pt) { var p = new Uint8Array(pt); return p[0] === 1 ? gunzipU8(p.slice(1)) : p.slice(1); })
+    .then(function (u) { return JSON.parse(TD8.decode(u)); });
+}
+function grSign(text) { return grKeys().then(function (k) { return crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, k.priv, TE8.encode(text)); }).then(function (s) { return b64u(new Uint8Array(s)); }); }
+function grVerify(text, sig) { return grKeys().then(function (k) { return crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, k.pub, unb64u(sig), TE8.encode(text)); }); }
+/* ---------- conexión ---------- */
+function grOnline() { return !!(GR && GR.links.some(function (L) { return L.c && L.c.isOpen(); })); }
+function grupoDisconnect() {
+  if (!GR) return;
+  GR.links.forEach(function (L) { L.dead = true; if (L.c) L.c.close(); });
+  GR.links = [];
+}
+function grupoConnect() {
+  var g = grupoInfo(); if (!g || !window.crypto || !crypto.subtle) return;
+  if (GR && GR.secret === g.secret && GR.role === g.role && GR.links.length) return;
+  grupoDisconnect();
+  GR = { secret: g.secret, role: g.role, links: [], out: {}, seen: LS.get('cfp.g.seen', {}), lastProg: {}, keys: null };
+  grKeys().then(function (k) {
+    var list = LS.get('cfp.sync.brokers', null) || SYNC_BROKERS;
+    list.slice(0, 2).forEach(function (u) { grLink(u, k.gid); });
+  }).catch(function () { /* navegador sin cifrado: sin grupo */ });
+}
+function grLink(url, gid) {
+  var L = { url: url, c: null, tries: 0, dead: false, base: 'cfp/v2/g/' + gid + '/' }, mine = GR;
+  var go = function () {
+    if (L.dead || GR !== mine) return;
+    L.c = mqttClient(url, 'cfg' + Math.random().toString(36).slice(2, 12), function (topic, payload) {
+      if (topic.indexOf(L.base) === 0) grIn(topic.slice(L.base.length), payload);
+    }, function (state) {
+      if (state === 'open') { L.tries = 0; grOnOpen(L); }
+      else if (!L.dead) { L.tries++; setTimeout(go, Math.min(30000, 2500 * L.tries)); }
+    });
+    var g = grupoInfo(); if (!g) return;
+    L.c.subscribe(L.base + 'estado');
+    if (g.role === 'dir') { L.c.subscribe(L.base + 'prog/+'); L.c.subscribe(L.base + 'buzon/+'); }
+    else (g.sids || []).forEach(function (s) { L.c.subscribe(L.base + 'prog/' + s); });
+  };
+  GR.links.push(L); go();
+}
+function grPub(kind, payload) {
+  if (!GR) return;
+  GR.out[kind] = payload;
+  GR.links.forEach(function (L) { if (L.c && L.c.isOpen()) L.c.publish(L.base + kind, payload, true); });
+}
+function grPubClear(kind) {
+  if (!GR) return;
+  delete GR.out[kind];
+  GR.links.forEach(function (L) { if (L.c && L.c.isOpen()) L.c.publish(L.base + kind, '', true); });
+}
+function grOnOpen(L) {
+  Object.keys(GR.out).forEach(function (kind) { L.c.publish(L.base + kind, GR.out[kind], true); });
+  var g = grupoInfo(); if (!g) return;
+  if (g.role === 'dir') { grStateDirty(true); stuData().list.forEach(function (pr) { grProgDirty(pr.id, true); }); }
+  else { (g.sids || []).forEach(function (s) { grProgDirty(s, true); }); grResendProps(); }
+  grRefreshView(true);
+}
+function grIn(kind, payload) {
+  if (!payload) return;
+  grDec(payload).then(function (msg) {
+    if (kind === 'estado') return grOnState(msg);
+    if (kind.indexOf('prog/') === 0) return grOnProg(kind.slice(5), msg);
+    if (kind.indexOf('buzon/') === 0) return grOnProp(kind.slice(6), msg);
+  }).catch(function () { /* de otro grupo o dañado */ });
+}
+function grRefreshView(soft) {
+  if (liveState || drill || vprac || sheetRoot.firstChild) return;
+  if (['home', 'student', 'kidtab', 'quien', 'grupo', 'props', 'students'].indexOf(route.name) < 0) return;
+  if (soft && route.name !== 'grupo') return;
+  clearTimeout(grRefreshView.t);
+  grRefreshView.t = setTimeout(function () { if (!liveState && !drill && !vprac && !sheetRoot.firstChild) render(); }, 120);
+}
+/* ---------- estado del grupo (lo publica el director) ---------- */
+function grBuildState() {
+  var g = grupoInfo(), songs, deleted;
+  if (isGroup()) { songs = local.songs; deleted = local.deleted; LS.set('cfp.g.lastSongs', { songs: songs, deleted: deleted }); }
+  else { var ls = LS.get('cfp.g.lastSongs', { songs: {}, deleted: {} }); songs = ls.songs; deleted = ls.deleted; }
+  return { v: 1, at: Date.now(), by: devId(), dirName: g.dirName || dirName(),
+    students: stuData().list.map(function (pr) { var o = cfgPick(pr); o.id = pr.id; o.name = pr.name; o.color = pr.color; o.songs = (pr.songs || []).slice(); return o; }),
+    songs: songs || {}, deleted: deleted || {}, dec: LS.get(DEC_KEY, {}), dataVersion: DATA.version || '' };
+}
+function grStateDirty(now) {
+  var g = grupoInfo(); if (!GR || !g || g.role !== 'dir') return;
+  clearTimeout(GR.st); GR.st = setTimeout(grStateSend, now ? 60 : 1500);
+}
+function grStateSend() {
+  var g = grupoInfo(); if (!GR || !g || g.role !== 'dir' || !g.priv) return;
+  var st = grBuildState(), body = JSON.stringify([st.students, st.songs, st.deleted, st.dec, st.dirName]);
+  if (GR.pubBody === body && GR.out.estado) return;
+  GR.pubBody = body;
+  var s = JSON.stringify(st);
+  grSign(s).then(function (sig) { return grEnc({ s: s, sig: sig }); }).then(function (x) {
+    var g2 = grupoInfo(); if (!g2) return;
+    g2.at = st.at; grupoSave(g2); grPub('estado', x);
+  }).catch(function () { /* nada */ });
+}
+function grOnState(msg) {
+  if (!msg || !msg.s || !msg.sig) return;
+  return grVerify(msg.s, msg.sig).then(function (ok) {
+    if (!ok) return;
+    var st = JSON.parse(msg.s), g = grupoInfo(); if (!g || !(st.at > (g.at || 0))) return;
+    g.at = st.at; if (st.dirName) g.dirName = st.dirName; grupoSave(g);
+    if (st.by === devId()) return;
+    grApplyState(st, g);
+  });
+}
+function grApplyState(st, g) {
+  var mine = g.role === 'dir' ? null : (g.sids || []);
+  (st.students || []).forEach(function (s) {
+    if (mine && mine.indexOf(s.id) < 0) return;
+    var pr = getStudent(s.id) || { id: s.id, prog: {}, chords: {} };
+    ['name', 'color'].concat(CFG_FIELDS).forEach(function (k) { if (s[k] !== undefined) pr[k] = s[k]; });
+    pr.songs = (s.songs || []).slice();
+    grReapplyPending(pr);
+    _putStudentG(pr);
+  });
+  if (g.role === 'dir') {
+    grMergeDirSongs(st);
+    var dec = LS.get(DEC_KEY, {}); Object.keys(st.dec || {}).forEach(function (k) { dec[k] = st.dec[k]; }); LS.set(DEC_KEY, dec);
+    LS.set(INBOX_KEY, LS.get(INBOX_KEY, []).filter(function (p) { return !dec[p.id]; }));
+  } else {
+    LS.set(OV_KEY, { songs: st.songs || {}, deleted: st.deleted || {}, at: st.at }); GROV = null; infoCache = {};
+    grDecisions(st.dec || {});
+    if (st.dataVersion && DATA.version && st.dataVersion > DATA.version) fetchRemote().then(function () { grRefreshView(); }).catch(function () { /* nada */ });
+  }
+  grRefreshView();
+}
+function grMergeDirSongs(st) {
+  if (!isGroup()) return;
+  var ch = false;
+  Object.keys(st.songs || {}).forEach(function (id) {
+    var a = JSON.stringify(st.songs[id]); if (JSON.stringify(local.songs[id] || null) === a) return;
+    var b = baseSong(id);
+    if (b && JSON.stringify(cleanSong(b)) === a) { if (local.songs[id]) { delete local.songs[id]; ch = true; } }
+    else { local.songs[id] = st.songs[id]; ch = true; }
+    delete infoCache[id];
+  });
+  Object.keys(st.deleted || {}).forEach(function (id) { if (!local.deleted[id]) { local.deleted[id] = st.deleted[id]; ch = true; } });
+  if (ch) _saveLocalG();
+}
+/* ---------- estrellas de cada alumno (las publica cada equipo; se juntan, nunca se pierden) ---------- */
+function grProgDirty(sid, now) {
+  if (!GR || !sid) return;
+  clearTimeout(GR['p_' + sid]); GR['p_' + sid] = setTimeout(function () { grProgSend(sid); }, now ? 30 : 1500);
+}
+function grProgSend(sid) {
+  var pr = getStudent(sid); if (!pr || !GR) return;
+  var body = { prog: pr.prog || {}, chords: pr.chords || {}, log: pr.log || {}, games: pr.games || {} }, js = JSON.stringify(body);
+  if (GR.lastProg[sid] === js && GR.out['prog/' + sid]) return;
+  GR.lastProg[sid] = js;
+  grEnc(Object.assign({ sid: sid, at: Date.now(), dev: devId() }, body)).then(function (x) { grPub('prog/' + sid, x); }).catch(function () { /* nada */ });
+}
+function progMerge(a, b) {
+  var out = { prog: {}, chords: {}, log: {}, games: {} };
+  [a.prog || {}, b.prog || {}].forEach(function (P) {
+    Object.keys(P).forEach(function (id) {
+      var x = out.prog[id] || { step: 1, stars: {} }, y = P[id] || {};
+      x.step = Math.max(x.step || 1, y.step || 1); x.stars = Object.assign({}, x.stars || {}, y.stars || {});
+      if (y.last) x.last = Math.max(x.last || 0, y.last);
+      out.prog[id] = x;
+    });
+  });
+  [a.chords || {}, b.chords || {}].forEach(function (Q) { Object.keys(Q).forEach(function (k) { var x = out.chords[k], y = Q[k]; if (!x || (y.at || 0) > (x.at || 0)) out.chords[k] = y; }); });
+  [a.log || {}, b.log || {}].forEach(function (L) { Object.keys(L).forEach(function (d) { out.log[d] = Math.max(out.log[d] || 0, L[d] || 0); }); });
+  [a.games || {}, b.games || {}].forEach(function (G2) { Object.keys(G2).forEach(function (k) { out.games[k] = Math.max(out.games[k] || 0, G2[k] || 0); }); });
+  return out;
+}
+function grOnProg(sid, m) {
+  if (!GR || !m) return;
+  if (m.dev && m.dev !== devId()) { GR.seen[sid] = Math.max(GR.seen[sid] || 0, m.at || 0); LS.set('cfp.g.seen', GR.seen); }
+  var pr = getStudent(sid); if (!pr) return;
+  var cur = { prog: pr.prog || {}, chords: pr.chords || {}, log: pr.log || {}, games: pr.games || {} }, merged = progMerge(cur, m);
+  if (JSON.stringify(merged) === JSON.stringify(progMerge(cur, {}))) return;
+  pr.prog = merged.prog; pr.chords = merged.chords; pr.log = merged.log; pr.games = merged.games;
+  putStudent(pr);
+  grRefreshView();
+}
+/* ---------- propuestas del alumno ---------- */
+function applySongsDiff(cur, before, after) {
+  var add = after.filter(function (x) { return before.indexOf(x) < 0; }), rem = before.filter(function (x) { return after.indexOf(x) < 0; });
+  var out = (cur || []).filter(function (x) { return rem.indexOf(x) < 0; });
+  add.forEach(function (x) { if (out.indexOf(x) < 0) out.push(x); });
+  return out;
+}
+function propose(p) {
+  var pr = getStudent(p.sid), mine = LS.get(MINE_KEY, []), k = -1;
+  p.id = p.id || newId('p'); p.at = p.at || Date.now(); p.upd = Date.now(); p.status = 'pending'; p.fromName = pr ? pr.name : (p.fromName || '');
+  mine.forEach(function (x, i) { if (x.id === p.id) k = i; });
+  if (k >= 0) mine[k] = p; else mine.push(p);
+  LS.set(MINE_KEY, mine.slice(-40));
+  grSendProp(p);
+}
+function grSendProp(p) { if (!grupoInfo() || !GR) return; grEnc(p).then(function (x) { grPub('buzon/' + p.id, x); }).catch(function () { /* nada */ }); }
+function grResendProps() { LS.get(MINE_KEY, []).forEach(function (p) { if (p.status === 'pending') grSendProp(p); }); }
+function propWithdraw(p) {
+  LS.set(MINE_KEY, LS.get(MINE_KEY, []).filter(function (x) { return x.id !== p.id; }));
+  if (GR) grEnc({ id: p.id, sid: p.sid, withdrawn: true, upd: Date.now() }).then(function (x) { grPub('buzon/' + p.id, x); }).catch(function () { /* nada */ });
+}
+function pendingOf(sid, kind, match) {
+  return LS.get(MINE_KEY, []).filter(function (p) { return p.status === 'pending' && p.sid === sid && p.kind === kind && (!match || match(p)); })[0] || null;
+}
+function proposeCfg(sid, before, after) {
+  var prev = pendingOf(sid, 'cfg'), b = prev ? prev.before : before;
+  var changed = Object.keys(after).filter(function (k) { return JSON.stringify(after[k]) !== JSON.stringify(b[k]); });
+  if (!changed.length) { if (prev) propWithdraw(prev); return; }
+  var data = {}; changed.forEach(function (k) { data[k] = after[k]; });
+  propose({ id: prev && prev.id, at: prev && prev.at, kind: 'cfg', sid: sid, data: data, before: b,
+    label: 'cambiar ' + changed.map(function (k) { return (CFG_NAMES[k] || k).toLowerCase(); }).join(', ') });
+}
+function proposeSongs(sid, start, after) {
+  var prev = pendingOf(sid, 'songs'), b = prev ? prev.before : start;
+  var add = after.filter(function (x) { return b.indexOf(x) < 0; }), rem = b.filter(function (x) { return after.indexOf(x) < 0; });
+  if (!add.length && !rem.length) { if (prev) propWithdraw(prev); return; }
+  propose({ id: prev && prev.id, at: prev && prev.at, kind: 'songs', sid: sid, before: b, data: { songs: after },
+    label: 'cambiar sus canciones (' + [add.length ? 'agregar ' + add.length : '', rem.length ? 'quitar ' + rem.length : ''].filter(Boolean).join(', ') + ')' });
+}
+function proposeSong(sid, s, before) {
+  var prev = pendingOf(sid, 'song', function (p) { return p.data && p.data.id === s.id; }), b = prev ? prev.before : before;
+  if (b && JSON.stringify(b) === JSON.stringify(s)) { if (prev) propWithdraw(prev); return; }
+  propose({ id: prev && prev.id, at: prev && prev.at, kind: 'song', sid: sid, data: s, before: b,
+    label: (b ? 'cambiar «' : 'agregar la canción «') + C.sentenceCase(s.title) + '»' });
+}
+function grReapplyPending(pr) {
+  LS.get(MINE_KEY, []).forEach(function (p) {
+    if (p.status !== 'pending' || p.sid !== pr.id) return;
+    if (p.kind === 'cfg') Object.keys(p.data || {}).forEach(function (k) { pr[k] = p.data[k]; });
+    else if (p.kind === 'songs') pr.songs = applySongsDiff(pr.songs || [], p.before || [], (p.data && p.data.songs) || []);
+  });
+}
+function grDecisions(dec) {
+  var mine = LS.get(MINE_KEY, []), msgs = [];
+  mine.forEach(function (p) {
+    if (p.status !== 'pending' || !dec[p.id]) return;
+    var r = dec[p.id]; p.status = r.ok ? 'approved' : 'rejected'; p.note = r.note || ''; p.seen = false;
+    if (r.ok) propSettle(p); else propRevert(p);
+    msgs.push((r.ok ? '✓ ' + dirMsg() + ' aprobó: ' : dirMsg() + ' dijo «no por ahora»: ') + p.label + (r.note ? '. «' + r.note + '»' : ''));
+  });
+  if (msgs.length) { LS.set(MINE_KEY, mine); toast(msgs.join(' · '), 6000); }
+}
+function propRevert(p) {
+  var pr = getStudent(p.sid);
+  if (p.kind === 'cfg' && pr) { Object.keys(p.data || {}).forEach(function (k) { pr[k] = (p.before || {})[k]; }); _putStudentG(pr); }
+  else if (p.kind === 'songs' && pr) { pr.songs = applySongsDiff(pr.songs || [], (p.data && p.data.songs) || [], p.before || []); _putStudentG(pr); }
+  else if (p.kind === 'song' && p.data) {
+    var id = p.data.id, b = baseSong(id);
+    if (p.before && !(b && JSON.stringify(cleanSong(b)) === JSON.stringify(p.before))) local.songs[id] = p.before; else delete local.songs[id];
+    _saveLocalG(); delete infoCache[id];
+  }
+}
+function propSettle(p) { if (p.kind === 'song' && p.data && grOv().songs[p.data.id]) { delete local.songs[p.data.id]; _saveLocalG(); delete infoCache[p.data.id]; } }
+function propNoticesHTML(sid) {
+  var all = LS.get(MINE_KEY, []), mine = all.filter(function (p) { return p.sid === sid; });
+  var pend = mine.filter(function (p) { return p.status === 'pending'; }), fresh = mine.filter(function (p) { return p.status !== 'pending' && !p.seen; }), h = '';
+  if (pend.length) h += '<div class="note-box kid-wait">' + icon('inbox') + '<span>Esperando a ' + esc(dirMsg()) + ': ' + esc(pend.map(function (p) { return p.label; }).join('; ')) + '. Mientras tanto ya lo puedes usar.</span></div>';
+  fresh.forEach(function (p) {
+    h += '<div class="note-box kid-dec ' + (p.status === 'approved' ? 'ok' : 'no') + '">' + (p.status === 'approved' ? icon('check') + '<span>' + esc(dirMsg()) + ' aprobó: ' : '<span>' + esc(dirMsg()) + ' dijo «no por ahora»: ') +
+      esc(p.label) + (p.note ? '. «' + esc(p.note) + '»' : '') + '</span></div>';
+  });
+  if (fresh.length) { all.forEach(function (p) { if (p.sid === sid && p.status !== 'pending') p.seen = true; }); LS.set(MINE_KEY, all); }
+  return h;
+}
+/* ---------- buzón del director ---------- */
+function grOnProp(pid, p) {
+  if (!p || !p.id || !isDirDevice()) return;
+  var dec = LS.get(DEC_KEY, {}), inbox = LS.get(INBOX_KEY, []), k = -1;
+  inbox.forEach(function (x, i) { if (x.id === p.id) k = i; });
+  if (p.withdrawn) { if (k >= 0) { inbox.splice(k, 1); LS.set(INBOX_KEY, inbox); grRefreshView(); } grPubClear('buzon/' + p.id); return; }
+  if (dec[p.id]) { grPubClear('buzon/' + p.id); return; }
+  if (k >= 0 && (inbox[k].upd || 0) >= (p.upd || 0)) return;
+  if (k >= 0) inbox[k] = p; else inbox.push(p);
+  LS.set(INBOX_KEY, inbox);
+  if (k < 0) toast((p.fromName || 'Un alumno') + ' propone: ' + p.label + '.', 4500);
+  grRefreshView();
+}
+function propApply(p) {
+  var pr = getStudent(p.sid);
+  if (p.kind === 'cfg' && pr) { Object.keys(p.data || {}).forEach(function (k) { pr[k] = p.data[k]; }); putStudent(pr); }
+  else if (p.kind === 'songs' && pr) { pr.songs = applySongsDiff(pr.songs || [], p.before || [], (p.data && p.data.songs) || []); putStudent(pr); }
+  else if (p.kind === 'song' && p.data) { var s = cleanSong(p.data); local.songs[s.id] = s; delete local.deleted[s.id]; saveLocal(); delete infoCache[s.id]; }
+}
+function propDecide(pid, ok, note) {
+  var inbox = LS.get(INBOX_KEY, []), p = inbox.filter(function (x) { return x.id === pid; })[0]; if (!p) return;
+  if (ok) propApply(p);
+  var dec = LS.get(DEC_KEY, {}); dec[pid] = { ok: !!ok, note: note || '', at: Date.now() };
+  var keys = Object.keys(dec).sort(function (a, b) { return dec[a].at - dec[b].at; }); while (keys.length > 80) delete dec[keys.shift()];
+  LS.set(DEC_KEY, dec);
+  LS.set(INBOX_KEY, inbox.filter(function (x) { return x.id !== pid; }));
+  grPubClear('buzon/' + pid); grStateDirty(true);
+  toast(ok ? 'Aprobado: le llega a ' + (p.fromName || 'tu alumno') + ' y a todos.' : 'Listo: no se aplica, y se le avisa.', 3500);
+}
+function cfgVal(k, v) {
+  if (k === 'part') return PARTS[v] || String(v);
+  if (k === 'rhythm') return RHYTHMS[v] || String(v);
+  if (k === 'home') { var h = HOMES.filter(function (x) { return x[0] === v; })[0]; return h ? h[1] : String(v); }
+  if (k === 'oct' && typeof v === 'number') return 'Do ' + (Math.floor(v / 12) - 1);
+  if (typeof v === 'boolean') return v ? 'sí' : 'no';
+  return v == null || v === '' ? '—' : String(v);
+}
+function lineDiff(a, b) {
+  var n = a.length, m = b.length, L = [], i, j, out = [];
+  for (i = 0; i <= n; i++) { L.push(new Array(m + 1).fill(0)); }
+  for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  i = 0; j = 0;
+  while (i < n && j < m) { if (a[i] === b[j]) { out.push({ t: '=', s: a[i] }); i++; j++; } else if (L[i + 1][j] >= L[i][j + 1]) out.push({ t: '-', s: a[i++] }); else out.push({ t: '+', s: b[j++] }); }
+  while (i < n) out.push({ t: '-', s: a[i++] });
+  while (j < m) out.push({ t: '+', s: b[j++] });
+  return out;
+}
+function propDiffHTML(p) {
+  if (p.kind === 'cfg') {
+    return '<table class="dif"><tbody>' + Object.keys(p.data || {}).map(function (k) {
+      return '<tr><th>' + esc(CFG_NAMES[k] || k) + '</th><td><del>' + esc(cfgVal(k, (p.before || {})[k])) + '</del></td><td>' + icon('fwd') + '</td><td><ins>' + esc(cfgVal(k, p.data[k])) + '</ins></td></tr>';
+    }).join('') + '</tbody></table>';
+  }
+  if (p.kind === 'songs') {
+    var b = p.before || [], a = (p.data && p.data.songs) || [], t = function (id) { var s = getSong(id); return s ? C.sentenceCase(s.title) : id; };
+    var add = a.filter(function (x) { return b.indexOf(x) < 0; }), rem = b.filter(function (x) { return a.indexOf(x) < 0; });
+    return (add.length ? '<p class="dif-l"><ins>Agregar: ' + esc(add.map(t).join(', ')) + '</ins></p>' : '') + (rem.length ? '<p class="dif-l"><del>Quitar: ' + esc(rem.map(t).join(', ')) + '</del></p>' : '');
+  }
+  var s = p.data || {}, o = p.before, head = '';
+  if (o) [['title', 'Título'], ['author', 'Autor'], ['key', 'Tono']].forEach(function (f) { if ((o[f[0]] || '') !== (s[f[0]] || '')) head += '<p class="dif-l">' + f[1] + ': <del>' + esc(o[f[0]] || '—') + '</del> → <ins>' + esc(s[f[0]] || '—') + '</ins></p>'; });
+  if (o && JSON.stringify(o.timeline || null) !== JSON.stringify(s.timeline || null)) head += '<p class="dif-l">Cambió los compases.</p>';
+  var A = String((o && o.src) || '').split('\n'), B = String(s.src || '').split('\n');
+  var d = o ? lineDiff(A, B) : B.map(function (x) { return { t: '+', s: x }; });
+  var keep = d.map(function (x, i) { return !o || x.t !== '=' || (d[i - 1] && d[i - 1].t !== '=') || (d[i + 1] && d[i + 1].t !== '='); });
+  var body = d.map(function (x, i) {
+    if (!keep[i]) return keep[i - 1] ? '<div class="dl gap">…</div>' : '';
+    return '<div class="dl' + (x.t === '+' ? ' add' : x.t === '-' ? ' del' : '') + '">' + esc(x.s || ' ') + '</div>';
+  }).join('');
+  return head + (o && !d.some(function (x) { return x.t !== '='; }) ? '' : '<div class="dif-src">' + body + '</div>');
+}
+function whenText(t) {
+  var m = Math.round((Date.now() - t) / 60000);
+  return m < 1 ? 'recién' : m < 60 ? 'hace ' + m + ' min' : m < 1440 ? 'hace ' + Math.round(m / 60) + ' h' : 'hace ' + Math.round(m / 1440) + ' d';
+}
+function propCardHTML(p) {
+  var pr = getStudent(p.sid), name = (pr && pr.name) || p.fromName || 'Alumno';
+  return '<article class="prop" data-pid="' + esc(p.id) + '"><header><span class="avatar" style="--c:' + esc(pr ? pr.color : '#888') + '">' + esc(name.charAt(0).toUpperCase()) + '</span>' +
+    '<div><b>' + esc(name) + '</b> propone ' + esc(p.label) + '<small>' + whenText(p.at) + '</small></div></header>' + propDiffHTML(p) +
+    '<div class="field"><input data-note placeholder="Mensaje para ' + esc(name) + ' (si quieres)" autocomplete="off" aria-label="Mensaje"></div>' +
+    '<div class="btnrow"><button type="button" class="btn primary" data-pa="ok">' + icon('check') + 'Aprobar</button><button type="button" class="btn" data-pa="no">No por ahora</button></div></article>';
+}
+function renderProps() {
+  leaveSong();
+  var inbox = LS.get(INBOX_KEY, []);
+  app.innerHTML = '<div class="page props"><div class="page-h">' + btnIcon('back', 'Volver', 'data-go="#/"') + '<h1>Propuestas</h1></div>' +
+    (inbox.length ? '<p class="help">Lo que apruebes se aplica en tus equipos y en los de los chicos. Si dices «no por ahora», en su celular vuelve como estaba.</p>' + inbox.map(propCardHTML).join('') :
+      '<p class="empty">No hay propuestas pendientes. Cuando un alumno cambie sus ajustes o sus canciones, o proponga una canción, aparece aquí.</p>') + '</div>';
+  app.querySelector('.props').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-pa]'); if (!b) return;
+    var card = b.closest('[data-pid]'), note = card.querySelector('[data-note]');
+    propDecide(card.getAttribute('data-pid'), b.getAttribute('data-pa') === 'ok', note ? note.value.trim() : '');
+    renderProps();
+  });
+}
+function inboxBannerHTML() {
+  var n = inboxCount();
+  return n ? '<a class="inbox-b" href="#/propuestas">' + icon('inbox') + '<span><b>' + n + (n === 1 ? ' propuesta' : ' propuestas') + '</b> de los alumnos para revisar</span>' + icon('fwd') + '</a>' : '';
+}
+/* ---------- invitaciones y pantalla del grupo ---------- */
+function grupoStatusText() {
+  var g = grupoInfo();
+  if (!g) return isDirDevice() ? 'Este equipo no está en un grupo. Créalo en Grupo para que los celulares de los chicos reciban sus canciones y ajustes, y para aprobar sus cambios.' :
+    'Este celular no está unido al grupo. Pide la invitación por WhatsApp.';
+  return (g.role === 'dir' ? 'Diriges el grupo desde este equipo.' : 'Unido al grupo' + (g.dirName ? ' de ' + g.dirName : '') + '.') +
+    (grOnline() ? ' Conectado.' : ' Sin conexión ahora: se pone al día cuando vuelva internet.');
+}
+function grInviteURL(o) { return location.href.split('#')[0] + '#/unir/' + b64u(TE8.encode(JSON.stringify(o))); }
+function grupoInviteKid(sid) {
+  var g = grupoInfo(), pr = getStudent(sid); if (!pr) return;
+  if (!g || g.role !== 'dir') { toast('Primero crea el grupo.', 3000); location.hash = '#/grupo'; return; }
+  var url = grInviteURL({ v: 1, g: g.secret, x: g.x, y: g.y, s: sid, n: pr.name, c: pr.color, d: g.dirName || dirName() });
+  shareText('Hola ' + pr.name + ': con este enlace tu celular se une al grupo de música' + (g.dirName ? ' de ' + g.dirName : '') + '. Ábrelo en Chrome:\n' + url, 'Invitación al grupo');
+}
+function grupoInviteDir() {
+  var g = grupoInfo(); if (!g || !g.priv) return;
+  var url = grInviteURL({ v: 1, g: g.secret, x: g.x, y: g.y, p: g.priv.d, d: g.dirName || dirName() });
+  openSheet('Otro equipo tuyo', '<p class="help">Abre este enlace en tu otro equipo (tu celular o la laptop). Con él también se aprueban cambios: no se lo pases a los chicos.</p>' +
+    '<div class="field"><textarea readonly rows="4">' + esc(url) + '</textarea></div><div class="btnrow"><button type="button" class="btn primary" data-x="copy">' + icon('copy') + 'Copiar</button>' +
+    '<button type="button" class="btn" data-x="share">' + icon('share') + 'Compartir</button></div>', function (el) {
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-x]'); if (!b) return;
+      if (b.getAttribute('data-x') === 'copy') copyText(url, 'Copiado.'); else shareText(url, 'Cancionero: mi otro equipo');
+    });
+  });
+}
+function grupoCreate(name) {
+  if (!window.crypto || !crypto.subtle) { toast('Este navegador no permite el grupo. Usa Chrome actualizado.', 5000); return Promise.resolve(false); }
+  var sec = b64u(crypto.getRandomValues(new Uint8Array(16)));
+  return crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']).then(function (kp) { return crypto.subtle.exportKey('jwk', kp.privateKey); })
+    .then(function (jwk) {
+      if (name) LS.set('cfp.dirName', name);
+      grupoSave({ v: 1, secret: sec, x: jwk.x, y: jwk.y, priv: { d: jwk.d }, role: 'dir', sids: [], dirName: name || '', at: 0 });
+      grupoDisconnect(); GR = null; grupoConnect(); return true;
+    });
+}
+function grupoLeave() {
+  confirmSheet('Salir del grupo', 'Este equipo deja de recibir y mandar cambios del grupo. Lo que ya tiene se queda.', 'Salir del grupo', function () {
+    grupoDisconnect(); GR = null; grupoSave(null); LS.set(OV_KEY, null); GROV = null; infoCache = {};
+    toast('Este equipo ya no está en el grupo.'); render();
+  }, true);
+}
+function seenText(sid) {
+  var t = GR && GR.seen[sid];
+  return t ? 'Su celular se conectó ' + whenText(t) : 'Su celular todavía no se une';
+}
+function renderGrupo() {
+  leaveSong();
+  var g = grupoInfo(), d = stuData(), n = inboxCount(), h = '<div class="page grupo"><div class="page-h">' + btnIcon('back', 'Volver', 'data-go="#/"') + '<h1>Grupo</h1></div>';
+  if (!g) {
+    h += '<p class="help">Con el grupo, cada alumno tiene sus canciones y ajustes en su propio celular, tú ves sus estrellas, y lo que ellos cambien te llega para que lo apruebes antes de que se aplique para todos. ' +
+      'Tus compases y cambios del cancionero les llegan al instante. Necesita internet en cada equipo; lo que viaja va cifrado.</p>' +
+      (isDirDevice() ? '<div class="field"><label for="g-n">Tu nombre (así te verán los chicos)</label><input id="g-n" value="' + esc(LS.get('cfp.dirName', '')) + '" autocomplete="off"></div>' +
+        '<div class="btnrow"><button type="button" class="btn primary" data-g="create">' + icon('group') + 'Crear el grupo</button></div>' :
+        '<p class="note-box">Para unir este celular, abre el enlace de invitación que te mandó tu profe.</p>');
+  } else if (g.role === 'dir') {
+    h += '<p class="help">' + esc(grupoStatusText()) + '</p>' + inboxBannerHTML() +
+      '<h2 class="stu-h">Invitar a cada alumno</h2>' +
+      (d.list.length ? '<ul class="list grupo-l">' + d.list.map(function (pr) {
+        return '<li><span class="avatar" style="--c:' + esc(pr.color) + '">' + esc(pr.name.charAt(0).toUpperCase()) + '</span><span class="txt"><span class="ttl">' + esc(pr.name) + '</span><span class="sub">' + esc(seenText(pr.id)) + '</span></span>' +
+          '<button type="button" class="btn" data-g="inv:' + esc(pr.id) + '">' + icon('share') + 'Invitar</button></li>';
+      }).join('') + '</ul>' : '<p class="empty">Primero crea a los alumnos (Alumnos → Nuevo).</p>') +
+      '<p class="help">Cada invitación es para un alumno: al abrirla en su celular, ese celular queda como suyo.</p>' +
+      '<h2 class="stu-h">Tus otros equipos</h2><div class="btnrow"><button type="button" class="btn" data-g="invdir">' + icon('share') + 'Enlace para otro equipo mío</button></div>' +
+      '<h2 class="stu-h">Clave de tu perfil</h2><p class="help">' + (LS.get('cfp.dirPin', '') ? 'Tu perfil tiene clave.' : 'Sin clave: cualquiera puede entrar a tu perfil desde «¿Quién va a tocar?».') + '</p>' +
+      '<div class="btnrow"><button type="button" class="btn" data-g="pin">' + (LS.get('cfp.dirPin', '') ? 'Cambiar la clave' : 'Poner clave') + '</button></div>' +
+      '<div class="btnrow"><button type="button" class="btn danger" data-g="leave">Salir del grupo en este equipo</button></div>';
+  } else {
+    h += '<p class="help">' + esc(grupoStatusText()) + '</p><div class="btnrow"><button type="button" class="btn danger" data-g="leave">Salir del grupo</button></div>';
+  }
+  app.innerHTML = h + '</div>';
+  app.querySelector('.grupo').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-g]'); if (!b) return;
+    var a = b.getAttribute('data-g');
+    if (a === 'create') { var nm = (app.querySelector('#g-n') || {}).value || ''; grupoCreate(nm.trim()).then(function (ok) { if (ok) { toast('Grupo creado. Ahora invita a cada alumno.', 3500); renderGrupo(); } }); }
+    else if (a.indexOf('inv:') === 0) grupoInviteKid(a.slice(4));
+    else if (a === 'invdir') grupoInviteDir();
+    else if (a === 'pin') openPinSheet(renderGrupo);
+    else if (a === 'leave') grupoLeave();
+  });
+}
+function renderJoin(data) {
+  leaveSong();
+  var o = null; try { o = JSON.parse(TD8.decode(unb64u(data))); } catch (e) { o = null; }
+  if (!o || !o.g || !o.x || !o.y) { app.innerHTML = '<div class="page"><h1>Invitación</h1><p class="empty">Este enlace no está completo. Pide que te lo manden otra vez.</p><p><a class="btn" href="#/">Ir al cancionero</a></p></div>'; return; }
+  var cur = grupoInfo(), other = cur && cur.secret !== o.g;
+  app.innerHTML = '<div class="page join"><h1>Unirse al grupo</h1><p class="join-t">Este equipo se une al grupo de música' + (o.d ? ' de <b>' + esc(o.d) + '</b>' : '') + ' ' +
+    (o.p ? 'como otro equipo de quien dirige.' : 'como el celular de <b>' + esc(o.n || 'un alumno') + '</b>.') + '</p>' +
+    (o.p ? '<p class="note-box">Con este enlace también se aprueban los cambios de los alumnos. Úsalo solo en tus equipos.</p>' :
+      '<p class="help">Sus canciones y ajustes llegan solos, y sus estrellas le llegan a ' + esc(o.d || 'su profe') + '. Necesita internet.</p>') +
+    (other ? '<p class="note-box">Este equipo estaba en otro grupo: se cambia a este.</p>' : '') +
+    '<div class="btnrow"><button type="button" class="btn primary big" data-j="ok">' + icon('check') + 'Unirme</button><a class="btn" href="#/">Ahora no</a></div></div>';
+  app.querySelector('[data-j="ok"]').addEventListener('click', function () { grupoJoin(o); });
+}
+function grupoJoin(o) {
+  var cur = grupoInfo(), same = cur && cur.secret === o.g;
+  var g = same ? cur : { v: 1, secret: o.g, x: o.x, y: o.y, role: 'alumno', sids: [], at: 0 };
+  g.dirName = o.d || g.dirName || '';
+  if (o.p) { g.role = 'dir'; g.priv = { d: o.p }; }
+  if (o.s && g.role !== 'dir' && (g.sids || []).indexOf(o.s) < 0) { g.sids = g.sids || []; g.sids.push(o.s); }
+  if (!same) { LS.set(OV_KEY, null); GROV = null; g.at = 0; }
+  grupoSave(g);
+  if (o.s && g.role !== 'dir') {
+    if (!getStudent(o.s)) { var pr = newStudent(o.n || 'Alumno', 'bajo'); pr.id = o.s; if (o.c) pr.color = o.c; _putStudentG(pr); }
+    var d = stuData(); d.device = o.s; stuSave(d); whoSet({ k: 'a', sid: o.s });
+  } else whoSet({ k: 'd' });
+  grupoDisconnect(); GR = null; grupoConnect();
+  toast('Listo: este equipo ya está en el grupo.', 3500);
+  location.replace(o.s && g.role !== 'dir' ? '#/a/' + enc(o.s) : '#/');
+}
+/* Cada cambio del director (canciones, compases, alumnos) se publica solo; las estrellas también. */
+var _saveLocalG = saveLocal;
+saveLocal = function () { var r = _saveLocalG.apply(this, arguments); if (GR && grupoInfo() && isDirDevice()) grStateDirty(); return r; };
+var _putStudentG = putStudent;
+putStudent = function (pr) { var r = _putStudentG.apply(this, arguments); if (GR && grupoInfo() && pr) { if (isDirDevice()) grStateDirty(); grProgDirty(pr.id); } return r; };
+setTimeout(grupoConnect, 400);
+window.addEventListener('online', function () { if (grupoInfo()) { grupoDisconnect(); GR = null; grupoConnect(); } });
+/* Las canciones que manda el director se ven en el celular del alumno como si ya estuvieran publicadas. */
+var _allSongsG = allSongs;
+allSongs = function () {
+  var out = _allSongsG.apply(this, arguments); if (!grOvOn()) return out;
+  var ov = grOv(), seen = {}, res = [];
+  out.forEach(function (s) { seen[s.id] = 1; if (local.songs[s.id]) { res.push(s); return; } if (ov.deleted[s.id]) return; res.push(ov.songs[s.id] || s); });
+  Object.keys(ov.songs).forEach(function (id) { if (!seen[id] && !local.deleted[id] && !ov.deleted[id]) res.push(ov.songs[id]); });
+  return res;
+};
+var _getSongG = getSong;
+getSong = function (id) {
+  if (id && grOvOn() && !local.songs[id] && !local.deleted[id] && !(typeof syncOverride !== 'undefined' && syncOverride && syncOverride[id])) {
+    var ov = grOv(); if (ov.deleted[id]) return null; if (ov.songs[id]) return ov.songs[id];
+  }
+  return _getSongG.apply(this, arguments);
+};
+
+/* parte 17: el celular escucha el piano (sin cable)
+   Para practicar en casa con cualquier piano o teclado, aunque no tenga salida USB ni MIDI. No reconoce cualquier
+   sonido: tras cada tecla que suena comprueba si es la nota (o el acorde) que tocaba (C.hearCreate, en el motor).
+   Aquí también: «¿Qué tecla es?», juego de notas y de acordes, video más lento y metrónomo. */
+var oido = null;
+var OIDO_AUTO = 'cfp.oidoAuto';
+var NOTE_ES = ['Do', 'Do#', 'Re', 'Re#', 'Mi', 'Fa', 'Fa#', 'Sol', 'Sol#', 'La', 'La#', 'Si'];
+function oidoActive() { return !!(oido && oido.det); }
+function micErrText(e) {
+  return e && e.name === 'NotAllowedError' ? 'Da permiso al micrófono: toca el candado junto a la dirección y permite el micrófono.' :
+    'No se pudo usar el micrófono. ' + (e && e.message ? e.message : '');
+}
+function oidoStart(onEv, stream) {
+  oidoStop();
+  audio();
+  var go = function (ms) {
+    var E = earNode(ms, !stream); if (!E) throw new Error('Este equipo no permite usar el micrófono aquí.');
+    oido = { E: E, det: C.hearCreate(), onEv: onEv || null };
+    oido.timer = setInterval(oidoTick, 50);
+    return oido;
+  };
+  if (stream) { try { return Promise.resolve(go(stream)); } catch (e) { return Promise.reject(e); } }
+  return earGetStream().then(go);
+}
+function oidoStop() { if (!oido) return; clearInterval(oido.timer); earRelease(oido.E); oido = null; }
+function oidoRead(E) {
+  E.an.getFloatFrequencyData(E.buf);
+  var raw = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], peak = -160;
+  for (var q = 0; q < E.map.length; q++) {
+    var m = E.map[q], db = E.buf[m[0]]; if (!(db > -160)) continue;
+    if (db > peak) peak = db;
+    raw[m[1]] += Math.pow(10, db / 20) * m[2];
+  }
+  return { raw: raw, peak: peak, t: performance.now() };
+}
+function oidoTick() {
+  if (!oido) return;
+  var f = oidoRead(oido.E), ev = oido.det.frame(f), w = Math.max(0, Math.min(100, (f.peak + 90) * 1.6)).toFixed(0) + '%';
+  Array.prototype.forEach.call(document.querySelectorAll('.oido-lvl i'), function (i) { i.style.width = w; });
+  if (ev && oido.onEv) oido.onEv(ev);
+}
+/* ---------- en el modo en vivo del alumno ---------- */
+function oidoTargetNow() {
+  var st = liveState; if (!oidoActive() || !st || drill) return;
+  var v = st.vo[st.i].v, reg = 127;
+  (v.right || []).concat(v.hideLeft ? [] : [v.left]).forEach(function (m) { if (m != null && m < reg) reg = m; });
+  oido.det.target(Object.keys(midiTarget()).map(Number), Object.keys(midiAllowed()).map(Number), reg === 127 ? 60 : reg, performance.now());
+}
+function oidoLabel(pcs) { var h = liveState && liveState.easy ? liveState.easy.home : 0; return pcs.map(function (p) { return ezNum(p, h); }).join('-'); }
+function oidoLiveEv(ev) {
+  var st = liveState; if (!st || ev.type === 'onset' || ev.type === 'note') return;
+  var box = lid('lv-oido'), want = (st.vo[st.i] && st.vo[st.i].label) || '';
+  if (ev.type === 'ok') {
+    if (box) { box.className = 'ok'; box.textContent = '¡Eso es!'; }
+    if (st.mode === 'practice') practiceAdvance();
+    else if (st.mode === 'auto' && st.stu) stuMicOk(ev.t);
+  } else if (ev.type === 'bad') {
+    if (box) { box.className = 'bad'; box.textContent = 'Oigo el ' + oidoLabel(ev.pcs) + (want ? '. Busca el ' + want + '.' : '.'); }
+    if (!st.pWait && ev.conf >= 0.88 && st.stu) stuWrong();
+  }
+}
+/* A tiempo con el micrófono: el golpe cuenta desde un poco antes del cambio hasta un tiempo después. */
+function stuMicOk(t) {
+  var st = liveState; if (!st || !st.stu || !stuRun || !st.playing) return;
+  if (stuRun.marks[st.i] === 'ok' || stuRun.marks[st.i] === 'tarde') return;
+  var spb = 60000 / st.bpm, t0 = st.chordT || t;
+  if (t < t0 - 0.35 * spb) return;
+  var late = t - t0 > spb;
+  stuRun.marks[st.i] = late ? 'tarde' : 'ok'; st.gotIt = true; clearTimeout(stuHelpTimer);
+  var faded = st.fade && st.fade[st.vo[st.i].key];
+  stuStat(st.vo[st.i].key, !late && st.firstTry && (!faded || !st.helpNow));
+  var g = lid('lv-good'); if (g) { g.textContent = late ? 'Un poco tarde' : '¡Bien!'; g.classList.remove('hit'); void g.offsetWidth; g.classList.add('hit'); }
+}
+function oidoRelive() { var st = liveState; if (!st) return; if (st.stu) setStuLevel(st.level, true); else drawLive(); oidoTargetNow(); }
+function oidoToggleLive() {
+  var st = liveState; if (!st) return;
+  if (oidoActive()) { oidoStop(); LS.set(OIDO_AUTO, false); oidoRelive(); toast('Ya no te escucho.', 1800); return; }
+  st.sound = false; midi.sound = false;                 // la app no debe sonar: se oiría a sí misma
+  oidoStart(oidoLiveEv).then(function () {
+    if (liveState !== st) { oidoStop(); return; }
+    LS.set(OIDO_AUTO, true); oidoRelive();
+    toast('Te escucho. Pon el celular cerca del piano.', 3200);
+  }).catch(function (e) { toast(micErrText(e), 6000); });
+}
+function oidoLiveWith(stream) {
+  var st = liveState; if (!st) return Promise.resolve(false);
+  st.sound = false;
+  return oidoStart(oidoLiveEv, stream).then(function () { oidoRelive(); return true; });
+}
+function oidoMeterHTML() {
+  var st = liveState, want = st && st.vo[st.i] ? st.vo[st.i].label || '' : '';
+  return '<div class="lv-meter lv-oidom"><span class="lv-lvl oido-lvl"><i></i></span><span id="lv-oido">' +
+    (st.mode === 'practice' ? 'Te escucho: toca el ' + esc(want) : 'Te escucho') + '</span>' +
+    '<button type="button" class="linkbtn" data-lv="oido">Apagar</button><span class="lv-good" id="lv-good"></span></div>';
+}
+/* Clic sin tono mientras el celular escucha (un clic con tono sonaría como una nota). */
+function noiseClick(when, accent) {
+  var ac = AC; if (!ac) return;
+  if (!noiseClick.b || noiseClick.b.sampleRate !== ac.sampleRate) {
+    var b = ac.createBuffer(1, Math.round(ac.sampleRate * 0.03), ac.sampleRate), d = b.getChannelData(0);
+    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ac.sampleRate * 0.005));
+    noiseClick.b = b;
+  }
+  var s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+  s.buffer = noiseClick.b; f.type = 'highpass'; f.frequency.value = 4500; g.gain.value = accent ? 1.2 : 0.8;
+  s.connect(f); f.connect(g); g.connect(audioOut() || ac.destination); s.start(when);
+}
+/* ---------- video en el modo en vivo del alumno: más lento sin perder la sincronía ---------- */
+var VRATES = [0.5, 0.75, 1];
+function videoRate(r) {
+  var st = liveState; if (!st) return;
+  st.vrate = r;
+  try { if (yt.player && yt.player.setPlaybackRate) yt.player.setPlaybackRate(r); } catch (e) { /* nada */ }
+  var nav = lid('lv-nav'); if (nav) nav.innerHTML = navHTML();
+}
+function videoRateStep(dir) { var st = liveState; if (!st) return; var k = VRATES.indexOf(st.vrate || 1); k = Math.max(0, Math.min(VRATES.length - 1, (k < 0 ? 2 : k) + dir)); videoRate(VRATES[k]); }
+function stuVideoMode(on) {
+  var st = liveState; if (!st || !st.tl || !st.tl.video) return;
+  pauseLive();
+  if (on) { st.mode = 'video'; st.vrate = st.vrate || 0.75; showVideo(st.tl.video.id, st.tl.video.start).catch(videoFailed); }
+  else { hideVideo(); st.mode = stuModeFor(st.level); }
+  drawLive();
+}
+
+/* ---------- juegos: la app pide un número y el alumno lo encuentra (primero con ayuda, después sin ayuda) ---------- */
+var drill = null;
+var DR_NOTES = [['1', [0]], ['2', [2]], ['3', [4]], ['4', [5]], ['5', [7]], ['6', [9]], ['7', [11]]];
+var DR_CHORDS = [['1', [0, 4, 7]], ['4', [5, 9, 0]], ['5', [7, 11, 2]], ['6m', [9, 0, 4]], ['2m', [2, 5, 9]]];
+function drKbSVG(lo, n, lit, home) {
+  var isB = function (m) { return [1, 3, 6, 8, 10].indexOf(C.mod12(m)) >= 0; };
+  var W = 46, H = 150, BW = 28, BH = 92, wx = {}, x = 0, out = '', m;
+  for (m = lo; m < lo + n; m++) if (!isB(m)) { wx[m] = x; x += W; }
+  for (m = lo; m < lo + n; m++) if (!isB(m)) {
+    var on = lit.indexOf(m) >= 0, num = ezNum(m, home);
+    out += '<rect x="' + (wx[m] + 1) + '" y="1" width="' + (W - 2) + '" height="' + (H - 2) + '" rx="5" class="dw' + (on ? ' on' : '') + '"/>' +
+      (num.indexOf('#') < 0 ? '<text x="' + (wx[m] + W / 2) + '" y="' + (H - 14) + '" class="dn' + (on ? ' on' : '') + '">' + num + '</text>' : '');
+  }
+  for (m = lo; m < lo + n; m++) if (isB(m) && wx[m - 1] != null) out += '<rect x="' + (wx[m - 1] + W - BW / 2) + '" y="1" width="' + BW + '" height="' + BH + '" rx="4" class="db' + (lit.indexOf(m) >= 0 ? ' on' : '') + '"/>';
+  return '<svg class="dr-svg" viewBox="0 0 ' + x + ' ' + H + '" role="img" aria-label="Teclado">' + out + '</svg>';
+}
+function openDrill(sid, kind) {
+  var pr = getStudent(sid); if (!pr) return;
+  closeDrill(true);
+  var c = cfgNorm(pr), home = c.home < 0 ? 0 : c.home, lo = 48 + C.mod12(home);
+  if ([1, 3, 6, 8, 10].indexOf(C.mod12(lo)) >= 0) lo--;
+  var el = document.createElement('div');
+  el.className = 'drill'; el.id = 'drill'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true');
+  el.style.setProperty('--c', pr.color || '#3a43c4');
+  el.innerHTML = '<header class="dr-top"><button type="button" class="iconbtn" data-d="x" aria-label="Salir">' + icon('close') + '</button><h2>' +
+    (kind === 'finder' ? '¿Qué tecla es?' : kind === 'acordes' ? 'Juego de acordes' : 'Juego de notas') + '</h2><span class="dr-score" id="dr-score"></span></header>' +
+    '<div class="dr-ask" id="dr-ask"></div><div class="dr-kb" id="dr-kb"></div><p class="dr-fb" id="dr-fb" aria-live="polite"></p><div class="dr-act" id="dr-act"></div>';
+  document.body.appendChild(el); document.body.classList.add('live-open');
+  drill = { sid: sid, kind: kind, home: home, lo: lo, span: kind === 'acordes' ? 24 : 13, items: kind === 'acordes' ? DR_CHORDS : DR_NOTES,
+    n: 0, total: 10, okFirst: 0, streak: 0, help: true, helpNow: true, cur: null, tries: 0, t0: Date.now(), lit: [], pcs: [] };
+  el.addEventListener('click', drillTap);
+  if (kind === 'finder') drillDraw('Toca una tecla y te digo su número.');
+  else drillNext();
+  if (kind === 'finder' || (LS.get(OIDO_AUTO, false) && !midi.inp)) drillMic();
+}
+function drillMic() {
+  var d = drill; if (!d) return;
+  oidoStart(drillMicEv).then(function () {
+    if (drill !== d) { oidoStop(); return; }
+    LS.set(OIDO_AUTO, true);
+    if (d.kind !== 'finder' && d.pcs.length) oido.det.target(d.pcs, [], d.lo, performance.now());
+    drillDraw();
+  }).catch(function (er) { toast(micErrText(er), 6000); });
+}
+function drillNext() {
+  var d = drill; if (!d) return;
+  if (d.n >= d.total) { drillEnd(); return; }
+  var it; do { it = d.items[Math.floor(Math.random() * d.items.length)]; } while (d.cur && it[0] === d.cur[0] && d.items.length > 1);
+  var rel = it[1];
+  d.cur = it; d.n++; d.tries = 0; d.helpNow = d.help;
+  d.pcs = rel.map(function (x) { return C.mod12(x + d.home); });
+  d.lit = rel.map(function (x) { return d.lo + C.mod12(d.home - (d.lo % 12)) + (x < rel[0] ? x + 12 : x); });
+  if (oidoActive()) oido.det.target(d.pcs, [], d.lo, performance.now());
+  clearTimeout(d.ht);
+  var n0 = d.n;
+  if (!d.help) d.ht = setTimeout(function () { if (drill === d && d.n === n0 && !d.lock) { d.helpNow = true; drillDraw('Mira: aquí está.'); } }, 5000);
+  drillDraw('');
+}
+function drillActHTML() {
+  var d = drill, h = '';
+  if (midi.inp) h += '<span class="dr-in">' + icon('keys') + 'Teclado conectado</span>';
+  else if (oidoActive()) h += '<span class="dr-in"><span class="lv-lvl oido-lvl"><i></i></span>Te escucho</span>';
+  else h += '<button type="button" class="btn primary" data-d="mic">' + icon('mic') + 'Que el celular me escuche</button>';
+  if (!midi.inp && !oidoActive() && d.kind !== 'finder') h += '<button type="button" class="btn" data-d="self">' + icon('check') + 'Lo toqué</button>';
+  if (!midi.inp && midiSupported()) h += '<button type="button" class="linkbtn" data-d="midi">Conectar teclado (cable)</button>';
+  if (d.kind !== 'finder' && !d.helpNow && !d.done) h += '<button type="button" class="linkbtn" data-d="help">Ayuda</button>';
+  return h;
+}
+function drillDraw(fb) {
+  var d = drill, el = lid('drill'); if (!d || !el || d.done) return;
+  if (d.kind === 'finder') {
+    if (d.heard == null) { el.querySelector('#dr-ask').innerHTML = '<span class="dr-q">Toca una tecla</span><b class="dr-n">?</b>'; el.querySelector('#dr-kb').innerHTML = drKbSVG(d.lo, 13, [], d.home); }
+  } else {
+    el.querySelector('#dr-ask').innerHTML = '<span class="dr-q">' + (d.kind === 'acordes' ? 'Toca el acorde' : 'Toca el') + '</span><b class="dr-n">' + esc(d.cur[0]) + '</b>' + (d.help ? '' : '<span class="dr-tag">sin ayuda</span>');
+    el.querySelector('#dr-kb').innerHTML = drKbSVG(d.lo, d.span, d.helpNow ? d.lit : [], d.home);
+    el.querySelector('#dr-score').textContent = Math.min(d.n, d.total) + ' de ' + d.total;
+  }
+  if (fb != null) el.querySelector('#dr-fb').innerHTML = esc(fb);
+  el.querySelector('#dr-act').innerHTML = drillActHTML();
+}
+function drillShowHeard(pc) {
+  var d = drill, el = lid('drill'); if (!d || !el) return;
+  d.heard = pc;
+  var num = ezNum(pc, d.home), lit = [];
+  for (var m = d.lo; m < d.lo + 13; m++) if (C.mod12(m) === pc) lit.push(m);
+  el.querySelector('#dr-ask').innerHTML = '<span class="dr-q">Esa tecla es el</span><b class="dr-n">' + esc(num) + '</b><span class="dr-q">' + NOTE_ES[pc] + '</span>';
+  el.querySelector('#dr-kb').innerHTML = drKbSVG(d.lo, 13, lit, d.home);
+  el.querySelector('#dr-fb').textContent = 'Si el número es el correcto, el celular te oye bien.';
+}
+function drillHit(ok, heard) {
+  var d = drill, el = lid('drill'); if (!d || d.lock || d.done || d.kind === 'finder') return;
+  if (ok) {
+    d.lock = true; clearTimeout(d.ht);
+    var first = d.tries === 0, msg = first ? '¡Bien!' : 'Eso es.';
+    if (first) { d.okFirst++; d.streak++; } else d.streak = 0;
+    if (d.help && d.streak >= 3) { d.help = false; d.streak = 0; msg = '¡Muy bien! Ahora sin ayuda.'; }
+    if (el) { var f = el.querySelector('#dr-fb'); f.textContent = msg; f.className = 'dr-fb ok'; }
+    setTimeout(function () { if (drill !== d) return; d.lock = false; var f2 = el && el.querySelector('#dr-fb'); if (f2) f2.className = 'dr-fb'; drillNext(); }, 700);
+  } else {
+    d.tries++; d.streak = 0;
+    if (d.tries >= 2) d.helpNow = true;
+    if (d.tries >= 3) d.help = true;                     // si cuesta, la ayuda vuelve
+    drillDraw(heard ? 'Ese es el ' + heard + '. Busca el ' + d.cur[0] + '.' : 'Casi. Prueba otra vez.');
+  }
+}
+function drillNote(n) {
+  var d = drill; if (!d || d.lock) return;
+  var pc = C.mod12(n);
+  if (d.kind === 'finder') { drillShowHeard(pc); return; }
+  if (d.pcs.indexOf(pc) < 0) { drillHit(false, ezNum(n, d.home)); return; }
+  var held = {}; Object.keys(midi.held).forEach(function (m) { held[C.mod12(+m)] = 1; });
+  if (d.pcs.every(function (p) { return held[p]; })) drillHit(true);
+}
+function drillMicEv(ev) {
+  var d = drill; if (!d) return;
+  if (d.kind === 'finder') { if (ev.type === 'note') drillShowHeard(ev.pc); return; }
+  if (ev.type === 'ok') drillHit(true);
+  else if (ev.type === 'bad') drillHit(false, ev.pcs.map(function (p) { return ezNum(p, d.home); }).join('-'));
+}
+function drillEnd() {
+  var d = drill, el = lid('drill'); if (!d || !el) return;
+  var s = d.okFirst, stars = s >= 9 ? 3 : s >= 7 ? 2 : s >= 5 ? 1 : 0, pr = getStudent(d.sid);
+  d.done = true; clearTimeout(d.ht);
+  el.querySelector('#dr-ask').innerHTML = '<span class="dr-q">' + (s >= 7 ? '¡Muy bien!' : 'Buen trabajo') + '</span><b class="dr-n">' + s + '/' + d.total + '</b><span class="dr-q">a la primera</span>';
+  el.querySelector('#dr-kb').innerHTML = '<p class="dr-stars">' + [1, 2, 3].map(function (k) { return '<i class="' + (k <= stars ? 'on' : '') + '">' + icon('star') + '</i>'; }).join('') + '</p>';
+  el.querySelector('#dr-fb').textContent = s >= 9 ? 'Ya casi no necesitas ayuda.' : 'Otra vuelta y sale mejor.';
+  el.querySelector('#dr-act').innerHTML = '<button type="button" class="btn primary" data-d="again">Otra vez</button><button type="button" class="btn" data-d="x">Salir</button>';
+  if (pr) { pr.games = pr.games || {}; pr.games[d.kind] = Math.max(pr.games[d.kind] || 0, s); putStudent(pr); }
+}
+function drillTap(e) {
+  var b = e.target.closest('[data-d]'), d = drill; if (!b || !d) return;
+  var a = b.getAttribute('data-d');
+  if (a === 'x') closeDrill();
+  else if (a === 'mic') drillMic();
+  else if (a === 'self') drillHit(true);
+  else if (a === 'midi') midiConnect().then(function () { drillDraw(); if (!midi.inp) toast('No encontré el teclado. Revisa el cable.', 4000); }).catch(function () { toast('Este navegador no puede usar el teclado por cable.', 4000); });
+  else if (a === 'help') { d.helpNow = true; drillDraw(); }
+  else if (a === 'again') { d.n = 0; d.okFirst = 0; d.streak = 0; d.cur = null; d.done = false; d.help = true; drillNext(); }
+}
+function closeDrill(silent) {
+  var d = drill; if (!d) return;
+  clearTimeout(d.ht); drill = null; oidoStop();
+  var el = lid('drill'); if (el) el.remove();
+  if (!liveState) document.body.classList.remove('live-open');
+  kidLog(d.sid, (Date.now() - d.t0) / 60000);
+  if (!silent && route.name === 'kidtab') renderKid(d.sid, 'practicar');
+}
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drill && !sheetRoot.firstChild) closeDrill(); });
+
+/* ---------- practicar con un video de YouTube: más lento y repitiendo una parte ---------- */
+var vprac = null;
+function openVideoPractice(sid) {
+  var last = LS.get('cfp.vp.' + sid, ''), el = document.createElement('div');
+  el.className = 'drill vprac'; el.id = 'vprac'; el.setAttribute('role', 'dialog');
+  el.innerHTML = '<header class="dr-top"><button type="button" class="iconbtn" data-v="x" aria-label="Salir">' + icon('close') + '</button><h2>Practicar con un video</h2></header>' +
+    '<div class="vp-in"><input id="vp-url" type="url" inputmode="url" placeholder="Pega aquí el enlace de YouTube" value="' + esc(last) + '" autocomplete="off"><button type="button" class="btn primary" data-v="open">Abrir</button></div>' +
+    '<div class="vp-box"><div id="vp-yt"></div></div>' +
+    '<div class="vp-ctl"><div class="seg" id="vp-rate">' + [[0.5, '50 %'], [0.75, '75 %'], [1, '100 %']].map(function (r) { return '<button type="button" data-rate="' + r[0] + '" aria-pressed="' + (r[0] === 1) + '">' + r[1] + '</button>'; }).join('') + '</div>' +
+    '<button type="button" class="btn" data-v="back5">« 5 s</button><button type="button" class="btn" data-v="a">Inicio A</button><button type="button" class="btn" data-v="b">Fin B</button>' +
+    '<button type="button" class="btn" data-v="loop" aria-pressed="false">Repetir A-B</button></div>' +
+    '<p class="help" id="vp-msg">Ponlo más lento para sacar la canción de oído. Marca dónde empieza (A) y dónde termina (B) una parte y repítela hasta que salga.</p>';
+  document.body.appendChild(el); document.body.classList.add('live-open');
+  var V = vprac = { p: null, a: null, b: null, loop: false, timer: 0, rate: 1 };
+  var msg = function (t) { var m = el.querySelector('#vp-msg'); if (m) m.textContent = t; };
+  var open = function () {
+    var url = el.querySelector('#vp-url').value.trim(), id = C.ytId(url);
+    if (!id) { msg('Ese enlace no es de YouTube. Cópialo desde el botón «Compartir» del video.'); return; }
+    LS.set('cfp.vp.' + sid, url);
+    if (V.p) { try { V.p.destroy(); } catch (x) { /* nada */ } V.p = null; el.querySelector('.vp-box').innerHTML = '<div id="vp-yt"></div>'; }
+    msg('Abriendo el video…');
+    loadYT().then(function (YT) {
+      if (vprac !== V) return;
+      V.p = new YT.Player('vp-yt', { videoId: id, width: '100%', height: '100%', playerVars: { playsinline: 1, rel: 0, modestbranding: 1, start: Math.floor(C.ytStart(url) || 0) },
+        events: { onReady: function () { msg('Listo. Elige la velocidad y dale play.'); try { V.p.setPlaybackRate(V.rate); } catch (x) { /* nada */ } } } });
+    }).catch(function () { msg('No se pudo abrir el video. Revisa la conexión a internet.'); });
+  };
+  V.timer = setInterval(function () {
+    if (!V.p || !V.loop || V.a == null || V.b == null || !V.p.getCurrentTime) return;
+    try { if (V.p.getCurrentTime() >= V.b) V.p.seekTo(V.a, true); } catch (x) { /* nada */ }
+  }, 200);
+  el.addEventListener('click', function (e) {
+    var r = e.target.closest('[data-rate]');
+    if (r) { V.rate = +r.getAttribute('data-rate'); Array.prototype.forEach.call(r.parentNode.children, function (x) { x.setAttribute('aria-pressed', String(x === r)); }); try { if (V.p) V.p.setPlaybackRate(V.rate); } catch (x) { /* nada */ } return; }
+    var b = e.target.closest('[data-v]'); if (!b) return;
+    var a = b.getAttribute('data-v'), now = 0;
+    try { now = V.p && V.p.getCurrentTime ? V.p.getCurrentTime() : 0; } catch (x) { now = 0; }
+    if (a === 'x') closeVideoPractice();
+    else if (a === 'open') open();
+    else if (!V.p) msg('Primero abre un video.');
+    else if (a === 'back5') V.p.seekTo(Math.max(0, now - 5), true);
+    else if (a === 'a') { V.a = now; msg('Inicio A en ' + C.fmtClock(now) + '. Ahora marca el fin B.'); }
+    else if (a === 'b') { V.b = now; if (V.a != null && V.b > V.a) { V.loop = true; el.querySelector('[data-v="loop"]').setAttribute('aria-pressed', 'true'); V.p.seekTo(V.a, true); msg('Repitiendo de ' + C.fmtClock(V.a) + ' a ' + C.fmtClock(V.b) + '.'); } else msg('El fin B tiene que ir después del inicio A.'); }
+    else if (a === 'loop') { V.loop = !V.loop && V.a != null && V.b != null; b.setAttribute('aria-pressed', String(V.loop)); if (!V.loop) msg('Ya no repite.'); }
+  });
+  el.querySelector('#vp-url').addEventListener('keydown', function (e) { if (e.key === 'Enter') open(); });
+  if (last) open();
+  V.t0 = Date.now(); V.sid = sid;
+}
+function closeVideoPractice() {
+  var V = vprac; if (!V) return;
+  vprac = null; clearInterval(V.timer);
+  if (V.p) { try { V.p.destroy(); } catch (x) { /* nada */ } }
+  var el = lid('vprac'); if (el) el.remove();
+  if (!liveState) document.body.classList.remove('live-open');
+  kidLog(V.sid, (Date.now() - V.t0) / 60000);
+}
+/* ---------- metrónomo ---------- */
+function openMetronome() {
+  var M = { bpm: +LS.get('cfp.metro', 80) || 80, on: false, n: 0, timer: 0 };
+  audio();
+  openSheet('Metrónomo', '<div class="metro"><button type="button" class="btn" data-m="-" aria-label="Más lento">−</button><output id="mt-b">' + M.bpm + '</output>' +
+    '<button type="button" class="btn" data-m="+" aria-label="Más rápido">+</button></div><p class="help">Pulsos por minuto. Empieza lento: más vale lento y parejo que rápido y a saltos.</p>' +
+    '<div class="btnrow"><button type="button" class="btn primary" data-m="go">' + icon('play') + 'Empezar</button></div>', function (el) {
+    var tick = function () { if (!M.on || !AC) return; clickAt(AC.currentTime + 0.02, M.n % 4 === 0); M.n++; M.timer = setTimeout(tick, 60000 / M.bpm); };
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-m]'); if (!b) return;
+      var a = b.getAttribute('data-m');
+      if (a === '-' || a === '+') { M.bpm = Math.max(30, Math.min(220, M.bpm + (a === '+' ? 4 : -4))); LS.set('cfp.metro', M.bpm); el.querySelector('#mt-b').textContent = M.bpm; }
+      else { M.on = !M.on; clearTimeout(M.timer); M.n = 0; b.innerHTML = M.on ? icon('pause') + 'Parar' : icon('play') + 'Empezar'; if (M.on) { audio(); tick(); } }
+    });
+  }, { onClose: function () { M.on = false; clearTimeout(M.timer); } });
+}
+
+/* parte 18: mandar con la voz mientras tocas («siguiente», «otra vez», «más lento»…)
+   Usa el reconocimiento de voz de Chrome (en Android casi siempre necesita internet). Solo responde a frases cortas y
+   exactas, para que la letra que se canta no mueva nada. */
+var voz = null, VOZ_PREF = 'cfp.voz';
+var VOZ_CMDS = [
+  ['next', ['siguiente', 'adelante', 'pasa', 'el que sigue', 'la que sigue']],
+  ['prev', ['anterior', 'atras', 'regresa', 'vuelve', 'para atras']],
+  ['again', ['otra vez', 'repite', 'repetir', 'de nuevo', 'otra vez esa', 'repite esa']],
+  ['top', ['desde el inicio', 'al inicio', 'desde el principio', 'del principio', 'empieza de nuevo', 'inicio', 'desde el comienzo']],
+  ['slower', ['mas lento', 'lento', 'mas despacio', 'despacio', 'baja la velocidad', 'mas lenta']],
+  ['faster', ['mas rapido', 'rapido', 'sube la velocidad', 'mas rapida']],
+  ['pause', ['pausa', 'para', 'alto', 'detente', 'espera', 'stop']],
+  ['play', ['dale', 'empieza', 'empezar', 'sigue', 'continua', 'play', 'toca', 'arranca']],
+  ['help', ['ayuda', 'ayudame', 'no se', 'muestrame']],
+  ['coro', ['coro', 'al coro', 'el coro', 'vamos al coro']],
+  ['end', ['salir', 'cerrar', 'terminar']]
+];
+function vozSupported() { return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
+function vozNorm(s) { return C.normalize(s).replace(/[^a-zñ ]/g, ' ').replace(/\s+/g, ' ').trim().replace(/^(oye|ok|okey|app|piano|ya) /, '').replace(/ por favor$/, ''); }
+function vozMatch(text) {
+  var s = vozNorm(text); if (!s || s.split(' ').length > 4) return null;
+  for (var i = 0; i < VOZ_CMDS.length; i++) if (VOZ_CMDS[i][1].indexOf(s) >= 0) return VOZ_CMDS[i][0];
+  return null;
+}
+function vozStart() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { toast('Este navegador no entiende la voz. Usa Chrome.', 4000); return false; }
+  vozStop();
+  var r = new SR(), V = { r: r, on: true, fails: 0 };
+  r.lang = 'es-PE'; r.continuous = true; r.interimResults = false; r.maxAlternatives = 3;
+  r.onresult = function (e) {
+    for (var k = e.resultIndex; k < e.results.length; k++) {
+      if (!e.results[k].isFinal) continue;
+      for (var a = 0; a < e.results[k].length; a++) { var cmd = vozMatch(e.results[k][a].transcript); if (cmd) { vozRun(cmd, e.results[k][a].transcript); return; } }
+    }
+  };
+  r.onerror = function (e) {
+    var er = e && e.error;
+    if (er === 'not-allowed' || er === 'service-not-allowed') { toast('Da permiso al micrófono para mandar con la voz.', 5000); vozStop(); }
+    else if (er === 'network') { toast('La voz necesita internet en este equipo.', 5000); vozStop(); }
+    else if (er === 'audio-capture') { V.fails++; if (V.fails > 2) { toast('El micrófono está ocupado: en este celular no se puede usar a la vez la voz y «Que me escuche».', 6500); vozStop(); } }
+  };
+  r.onend = function () { if (voz === V && V.on) setTimeout(function () { if (voz === V && V.on) { try { r.start(); } catch (x) { /* ya empezó */ } } }, 300); };
+  voz = V;
+  try { r.start(); } catch (x) { /* nada */ }
+  vozBadge();
+  return true;
+}
+function vozStop() { var V = voz; voz = null; if (V) { V.on = false; try { V.r.abort(); } catch (x) { /* nada */ } } vozBadge(); }
+function vozBadge() { var b = lid('lv-vozb'); if (b) { b.hidden = !voz; b.textContent = voz ? 'Te oigo: «siguiente», «otra vez», «más lento»…' : ''; } }
+function vozToggle() {
+  if (voz) { vozStop(); LS.set(VOZ_PREF, false); toast('Voz apagada.', 1500); return; }
+  if (vozStart()) { LS.set(VOZ_PREF, true); toast('Di «siguiente», «anterior», «otra vez», «desde el inicio», «más lento», «pausa» o «dale».', 5500); }
+}
+function vozLineStart(st) { var li = st.steps[st.path[st.i]].li, q = st.i; while (q > 0 && st.steps[st.path[q - 1]].li === li) q--; return q; }
+function vozFind(st, re) {
+  var lines = info(st.song).lines, n = st.path.length;
+  for (var k = 1; k <= n; k++) {
+    var q = (st.i + k) % n, li = st.steps[st.path[q]].li, pl = q ? st.steps[st.path[q - 1]].li : -1;
+    if (li !== pl && re.test(sectionOf(lines, li))) return q;
+  }
+  return -1;
+}
+function vozRun(cmd, heard) {
+  var st = liveState; if (!st) return;
+  var b = lid('lv-vozb'); if (b) { b.hidden = false; b.textContent = '«' + String(heard).trim() + '»'; clearTimeout(vozRun.t); vozRun.t = setTimeout(vozBadge, 1600); }
+  var playable = st.tl && (st.mode === 'auto' || st.mode === 'video');
+  switch (cmd) {
+    case 'next': jumpTo(st.i + 1); break;
+    case 'prev': jumpTo(st.i - 1); break;
+    case 'again': jumpTo(vozLineStart(st)); break;
+    case 'top': jumpTo(0); if (playable && !st.playing && !st.counting) playLive(); break;
+    case 'slower': if (st.mode === 'video') videoRateStep(-1); else if (st.mode === 'auto' && st.bpm) setBpm(st.bpm * 0.9); break;
+    case 'faster': if (st.mode === 'video') videoRateStep(1); else if (st.mode === 'auto' && st.bpm) setBpm(st.bpm * 1.1); break;
+    case 'pause': if (st.playing || st.counting) pauseLive(); break;
+    case 'play': if (playable && !st.playing && !st.counting) playLive(); break;
+    case 'help': st.helpNow = true; drawLive(); break;
+    case 'coro': var q = vozFind(st, /coro/i); if (q >= 0) jumpTo(q); else toast('Esta canción no tiene el coro marcado.', 2500); break;
+    case 'end': closeLive(false); break;
+  }
+}
+
+var APP_VERSION = '2026-10-01 15:32';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
@@ -6533,6 +8109,12 @@ function parseHashFrom(hash) {
   if (p[0] === 'e' && p[1]) return { name: 'edit', id: p[1] };
   if (p[0] === 'a' && !p[1]) return { name: 'students' };
   if (p[0] === 'a' && p[1] && p[2]) return { name: 'stulive', sid: p[1], song: p[2] };
+  if (p[0] === 'quien') return { name: 'quien' };
+  if (p[0] === 'k' && p[1] && p[2] === 'c' && p[3]) return { name: 'kidsong', sid: p[1], song: p[3] };
+  if (p[0] === 'k' && p[1] && p[2]) return { name: 'kidtab', sid: p[1], tab: p[2] };
+  if (p[0] === 'unir' && p[1]) return { name: 'unir', data: p[1] };
+  if (p[0] === 'grupo') return { name: 'grupo' };
+  if (p[0] === 'propuestas') return { name: 'props' };
   if (p[0] === 'a' && p[1]) return { name: 'student', sid: p[1] };
   if (p[0] === 'sala' && p[1]) return { name: 'sala', code: p[1] };
   return { name: 'home' };
@@ -6553,10 +8135,18 @@ function render() {
     toast('Siguiendo la sala ' + sync.code + '. La canción aparece cuando quien guía la abre.', 4500);
     return;
   }
-  if (r.name === 'home' && !homeState.full) {               // el equipo de un alumno abre directo en sus canciones
-    var devS = stuData().device;
-    if (devS && getStudent(devS)) { location.replace('#/a/' + enc(devS)); return; }
+  if (r.name === 'home') {                                   // ¿quién va a tocar?
+    var w = whoGet();
+    if (!w) { var aw = autoWho(); if (aw) { whoSet(aw); w = aw; } }
+    if (!w) { location.replace('#/quien'); return; }
+    if (w.k === 'a' && getStudent(w.sid)) { location.replace('#/a/' + enc(w.sid)); return; }
   }
+  if (r.name === 'quien') { renderPicker(); window.scrollTo(0, 0); return; }
+  if (r.name === 'kidtab') { renderKid(r.sid, r.tab); window.scrollTo(0, 0); return; }
+  if (r.name === 'kidsong') { renderKidSong(r.sid, r.song); window.scrollTo(0, 0); return; }
+  if (r.name === 'unir') { renderJoin(r.data); return; }
+  if (r.name === 'grupo') { renderGrupo(); window.scrollTo(0, 0); return; }
+  if (r.name === 'props') { renderProps(); window.scrollTo(0, 0); return; }
   if (r.name === 'home') { renderHome(); return; }
   if (r.name === 'students') { renderStudents(); window.scrollTo(0, 0); return; }
   if (r.name === 'student') { renderStudent(r.sid); window.scrollTo(0, 0); return; }
@@ -6711,7 +8301,12 @@ openBookData();
 syncResume();
 render();
 fetchRemote().then(function (res) { if (res === 'nuevo') afterRemoteUpdate(); else refreshChrome(); });
-window.__cancionero = { fixCollisions: fixCollisions, version: function () { return APP_VERSION; }, setPref: function (k, v) { prefs[k] = v; savePrefs(); applyPrefs(); render(); }, openVersion: function () { openVersionSheet(); }, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), startB: liveState.startB, bpm: liveState.bpm, tl: liveState.tl } : null; }, grid: function () { return gridState ? JSON.parse(JSON.stringify(gridState.tl)) : null; }, _setV1: function (marks, end) { var st = liveState, song = clone(st.song); song.timeline = { v: 1, video: '', start: 0, sig: seqSig(st.steps), steps: marks, end: end }; local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id]; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; },
+window.__cancionero = {
+    oidoWith: function (stream) { return oidoLiveWith(stream); }, oidoState: function () { return { on: oidoActive(), mode: liveState && liveState.mode, i: liveState && liveState.i }; },
+    grupo: function () { return { info: grupoInfo(), online: grOnline(), inbox: LS.get(INBOX_KEY, []), mine: LS.get(MINE_KEY, []), dec: LS.get(DEC_KEY, {}) }; }, who: function () { return whoGet(); }, oidoTarget: function () { return liveState ? { pcs: Object.keys(midiTarget()).map(Number), i: liveState.i, n: liveState.path.length, mode: liveState.mode } : null; },
+    grupoInvite: function (sid) { var g = grupoInfo(), pr = getStudent(sid); return grInviteURL({ v: 1, g: g.secret, x: g.x, y: g.y, s: sid, n: pr.name, c: pr.color, d: g.dirName }); },
+    stu: function (sid) { return getStudent(sid); }, kidSave: function (song) { return kidSongSave(cleanSong(song)); }, songById: function (id) { return getSong(id); },
+    dirSave: function (song) { var s2 = cleanSong(song); local.songs[s2.id] = s2; saveLocal(); delete infoCache[s2.id]; }, fixCollisions: fixCollisions, version: function () { return APP_VERSION; }, setPref: function (k, v) { prefs[k] = v; savePrefs(); applyPrefs(); render(); }, openVersion: function () { openVersionSheet(); }, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), startB: liveState.startB, bpm: liveState.bpm, tl: liveState.tl } : null; }, grid: function () { return gridState ? JSON.parse(JSON.stringify(gridState.tl)) : null; }, _setV1: function (marks, end) { var st = liveState, song = clone(st.song); song.timeline = { v: 1, video: '', start: 0, sig: seqSig(st.steps), steps: marks, end: end }; local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id]; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; },
   setTimeline: function (id, beats, bpm, bpb) { var song = clone(getSong(id)), st = liveSteps(song); song.timeline = { v: 2, bpm: bpm || 100, beats: bpb || 4, sig: seqSig(st.steps), steps: st.steps.map(function (x, k) { return [k, (beats && beats[k % beats.length]) || 4, null]; }), video: null }; local.songs[id] = cleanSong(song); saveLocal(); delete infoCache[id]; },
   students: function () { return stuData(); }, syncState: function () { return { role: sync.role, code: sync.code, online: syncOnline(), songId: sync.songId, gotAt: sync.gotAt }; },
   liveExtra: function () { var st = liveState; return st ? { level: st.level, mode: st.mode, stu: !!st.stu, part: st.easy ? st.easy.cfg.part : null, rhythm: st.easy ? st.easy.cfg.rhythm : null, home: st.easy ? st.easy.home : null, keyboard: st.easy ? st.easy.keyboard : null, labels: st.vo.map(function (x) { return x.label; }), keys: st.vo.map(function (x) { return x.key; }), right: st.vo.map(function (x) { return x.v.right; }), lo: st.lLo, hi: st.rHi, fade: st.fade || null, helpNow: !!st.helpNow, playing: st.playing, bpm: st.bpm } : null; },
