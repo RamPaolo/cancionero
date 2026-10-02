@@ -877,6 +877,20 @@ body.live-open { overflow: hidden; }
 .seg[data-ezk] { display: flex; flex-wrap: wrap; max-width: 100%; }
 .seg[data-ezk] button { flex: 1 1 auto; padding: .35rem .7rem; }
 
+/* «¿Qué oye el celular?» */
+.mc-wrap { margin: .4rem 0 .2rem; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--paper); }
+.mc-kb { display: block; width: 100%; height: 92px; }
+.mc-kb .mc-w { fill: var(--paper); stroke: var(--rule); stroke-width: .15; }
+.mc-kb .mc-b { fill: var(--ink); }
+.mc-kb .mc-lab { font-size: 2.6px; fill: var(--muted); text-anchor: middle; font-family: var(--ui-font); }
+.mc-heard { font-size: 1.15rem; margin: .5rem 0; min-height: 1.6em; }
+.mc-row { display: flex; align-items: center; gap: .6rem; }
+.mc-k { color: var(--muted); font-size: .9rem; min-width: 5.5em; }
+.mc-lvl { flex: 1; }
+.mc-st { margin: .6rem 0; padding-left: 1.1rem; line-height: 1.45; }
+.mc-tips summary { cursor: pointer; color: var(--accent); margin: .3rem 0; }
+.mc-tips ul { padding-left: 1.1rem; line-height: 1.45; color: var(--muted); }
+
 </style>
 </head>
 <body>
@@ -1688,6 +1702,43 @@ body.live-open { overflow: hidden; }
     var n = Math.sqrt(t.reduce(function (a, x) { return a + x * x; }, 0)) || 1;
     return t.map(function (x) { return x / n; });
   }
+  /* Las notas (0-11) de un acorde, con su bajo si tiene barra. */
+  function chordPcs(en) {
+    var c = parseChord(splitTok(en).core), out = [];
+    if (!c) return out;
+    chordIntervals(c.qual).forEach(function (iv) { var pc = mod12(c.root + iv); if (out.indexOf(pc) < 0) out.push(pc); });
+    if (c.bass !== null && out.indexOf(c.bass) < 0) out.push(c.bass);
+    return out;
+  }
+  /* ¿Cuánto se parece lo que suena (fuerza por nota, 0-1) a un acorde? Que estén sus notas (cada una con algo de
+     fuerza) y que no suene mucho fuera de él. 1: es ese acorde; 0: nada que ver. */
+  function chordScore(pcs, chord) {
+    if (!chord || !chord.length) return 0;
+    var cover = 0, inE = 0, tot = 0, p;
+    for (p = 0; p < 12; p++) tot += pcs[p] * pcs[p];
+    if (!(tot > 0)) return 0;
+    chord.forEach(function (q) { cover += Math.min(1, pcs[q] / 0.25); inE += pcs[q] * pcs[q]; });
+    return (cover / chord.length) * (inE / tot);
+  }
+  /* Lo mismo, mirando las teclas (todas, sin quitar armónicos): una tecla que puede ser armónico de otra más grave que
+     suena (la quinta de arriba del bajo, su tercera de dos octavas arriba) no cuenta en contra de ningún acorde; si su
+     nota es del acorde, sí cuenta a favor. Así un Do con su bajo no pierde el Sol (que es armónico del bajo). */
+  var HARM_IV = { 12: 1, 19: 1, 24: 1, 28: 1, 31: 1, 34: 1, 36: 1 };
+  function chordScoreKeys(keys, chord) {
+    if (!chord || !chord.length) return 0;
+    var ks = Object.keys(keys).map(Number), mx = 0, inPc = {}, inE = 0, outE = 0;
+    ks.forEach(function (m) { if (keys[m] > mx) mx = keys[m]; });
+    if (!(mx > 0)) return 0;
+    ks.forEach(function (m) {
+      var v = keys[m] / mx, p = mod12(m);
+      if (v < 0.07) return;
+      if (chord.indexOf(p) >= 0) { inPc[p] = Math.max(inPc[p] || 0, v); inE += v * v; return; }
+      if (ks.some(function (n) { return n < m && HARM_IV[m - n] && keys[n] / mx >= 0.07; })) return;
+      outE += v * v;
+    });
+    var cover = 0; chord.forEach(function (q) { cover += Math.min(1, (inPc[q] || 0) / 0.25); });
+    return (cover / chord.length) * (inE / ((inE + outE) || 1));
+  }
   function rotT(t, s) { var o = []; for (var i = 0; i < 12; i++) o[mod12(i + s)] = t[i]; return o; }
   function dot12(a, b) { var s = 0; for (var i = 0; i < 12; i++) s += a[i] * b[i]; return s; }
   function hannWin(n) { var w = new Float64Array(n); for (var i = 0; i < n; i++) w[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (n - 1)); return w; }
@@ -1959,10 +2010,17 @@ body.live-open { overflow: hidden; }
     }
     reset(o.i0 || 0);
     function mass(z) { var s = 0; for (var e = 0; e < z.length; e++) s += z[e]; return s; }
-    /* f: { ch: cromagrama normalizado | null, silent: bool, onset: bool } */
+    /* f: { ch: cromagrama normalizado | null, silent: bool, onset: bool }
+       o, con el oído nuevo (tecla por tecla): { scores: [0-1 por acorde del recorrido], tonal: bool, silent, onset }.
+       Con scores el seguidor ESPERA: el tiempo solo corre si lo que suena es el acorde actual o uno de los que pueden
+       venir (el siguiente, uno o dos más allá, el comienzo de una parte). Una tecla equivocada, otro acorde o ruido:
+       la canción no avanza (antes avanzaba sola con el tiempo). */
+    var GATE = o.gate || 0.42, sema = null;
+    if (o.waitFreeze == null) o.waitFreeze = true;
     function step(f) {
       st.frame++;
-      if (f.silent) { st.ema = null; return out(false); }             // silencio: el tiempo no corre
+      if (f.silent) { st.ema = null; sema = null; st.why = 'silencio'; return out(false); }             // silencio: el tiempo no corre
+      if (f.scores) return stepScores(f);
       if (f.onset) st.lastOnset = st.frame;
       var strum = st.frame - st.lastOnset <= 2, hm = strum ? 2.2 : 0.8, a2, e2;
       var leave = new Float64Array(N);
@@ -1994,11 +2052,54 @@ body.live-open { overflow: hidden; }
       for (a2 = 0; a2 < N; a2++) { var z = Q[a2], pp = P[a2]; for (e2 = 0; e2 < z.length; e2++) pp[e2] = z[e2] / tot; }
       return out(true);
     }
+    function stepScores(f) {
+      if (!f.tonal) { st.why = 'ruido'; return out(false); }
+      // puntajes suavizados (un rasgueo dura varios cuadros)
+      var sc = f.scores, a2, e2, k;
+      if (!sema || f.onset) sema = sc.slice(); else for (k = 0; k < N; k++) sema[k] = sema[k] * 0.4 + (sc[k] || 0) * 0.6;
+      var sCur = sema[st.shown] || 0, sT = 0, tj = -1;
+      targets[st.shown].forEach(function (t) { if ((sema[t[0]] || 0) > sT) { sT = sema[t[0]]; tj = t[0]; } });
+      st.heardCur = sCur; st.heardNext = sT; st.heardNextI = tj;
+      if (sCur < GATE && sT < GATE) { st.why = 'otro'; return out(false); }       // no es lo que va: espera
+      st.why = sCur >= sT ? 'actual' : 'siguiente';
+      if (f.onset) st.lastOnset = st.frame;
+      // si suena claramente el acorde actual y nada del siguiente, la banda se está quedando: el tiempo casi no empuja
+      // (si el siguiente es el mismo acorde, solo el tiempo puede decir cuándo cambia)
+      var s1 = st.shown + 1 < N ? (sema[st.shown + 1] || 0) : 0, holding = !same[st.shown] && sCur >= GATE && sCur > s1 + 0.2;
+      // un cambio de acorde llega con un golpe (tecla o rasgueo): sin golpe reciente, lo que «suena a otro acorde» es
+      // la cola del anterior con algo encima (una voz, un golpe en la mesa) y no se avanza por eso
+      var fresh = st.frame - st.lastOnset <= 12;
+      var strum = st.frame - st.lastOnset <= 2, hm = (strum ? 2.2 : 0.8) * (holding || (st.why === 'siguiente' && !fresh) ? 0.05 : 1);
+      var leave = new Float64Array(N);
+      for (a2 = 0; a2 < N; a2++) {
+        var p = P[a2], q = Q[a2], h = H[a2], cp = cap[a2], lv = 0; q.fill(0);
+        for (e2 = 0; e2 <= cp; e2++) {
+          var v = p[e2]; if (v < 1e-12) continue;
+          var hz = Math.min(0.6, h[e2] * hm), go = v * hz;
+          lv += go; q[e2 < cp ? e2 + 1 : cp] += v - go;
+        }
+        leave[a2] = lv;
+      }
+      for (a2 = 0; a2 < N; a2++) if (leave[a2] > 0) targets[a2].forEach(function (t) { Q[t[0]][0] += leave[a2] * t[1]; });
+      // lo que suena manda: el acorde que más se parece pesa más (y uno que no suena casi nada)
+      var mx = 0; for (a2 = 0; a2 < N; a2++) if (sema[a2] > mx) mx = sema[a2];
+      var kap = 6 * Math.max(0, Math.min(1, (mx - 0.3) / 0.4));
+      for (a2 = 0; a2 < N; a2++) {
+        var w = Math.max(0.05, Math.exp(kap * ((sema[a2] || 0) - mx))), qq = Q[a2];
+        if (w !== 1) for (e2 = 0; e2 < qq.length; e2++) qq[e2] *= w;
+      }
+      var tot = 0; for (a2 = 0; a2 < N; a2++) tot += mass(Q[a2]);
+      if (!(tot > 1e-300)) { reset(st.shown); return out(false); }
+      for (a2 = 0; a2 < N; a2++) { var z = Q[a2], pp = P[a2]; for (e2 = 0; e2 < z.length; e2++) pp[e2] = z[e2] / tot; }
+      return out(true);
+    }
     function out(moved) {
       var best = 0, bm = -1, ms = [];
       for (var a = 0; a < N; a++) { ms[a] = mass(P[a]); if (ms[a] > bm) { bm = ms[a]; best = a; } }
       var changed = false;
-      if (best !== st.shown) {
+      // mientras espera (silencio, ruido, otra cosa) no se cambia de acorde: la cuenta de cuadros también espera
+      if (!moved && o.waitFreeze) { /* nada */ }
+      else if (best !== st.shown) {
         st.hold = best === st.best ? st.hold + 1 : 1;
         var seq = best === st.shown + 1;
         // avanzar al siguiente pide poca espera; un salto (atrás o de más de uno) pide más seguridad y medio segundo
@@ -2019,10 +2120,12 @@ body.live-open { overflow: hidden; }
       var p = P[st.shown], m = 0, se = 0;
       for (var e = 0; e < p.length; e++) { m += p[e]; se += e * p[e]; }
       var inBeats = m > 0 ? (se / m) * dt * bpm / 60 : 0;
-      return { i: st.shown, best: best, conf: st.conf, beat: Math.min(beats[st.shown] - 0.05, inBeats), bpm: bpm, changed: changed, moved: moved };
+      return { i: st.shown, best: best, conf: st.conf, beat: Math.min(beats[st.shown] - 0.05, inBeats), bpm: bpm, changed: changed, moved: moved,
+        why: st.why, cur: st.heardCur, next: st.heardNext, nextI: st.heardNextI };
     }
     return {
       step: step,
+      targets: function (i2) { return (targets[i2] || []).map(function (t) { return t[0]; }); },
       jump: function (i2) { st.enteredAt = st.frame; reset(i2); },
       state: function () { return { i: st.shown, conf: st.conf, bpm: bpm }; },
       setBpm: function (b) { if (b > 20) { bpm = b; st.bpm = b; hazards(); } }
@@ -2049,29 +2152,38 @@ body.live-open { overflow: hidden; }
     var n = Math.sqrt(dot12(t, t)) || 1;
     return t.map(function (x) { return x / n; });
   }
-  /* ---------- qué teclas suenan (para los acordes) ----------
+  /* ---------- qué teclas suenan ----------
      El cromagrama dobla todo a 12 notas y por eso un Do solo se parece a Do-Mi-Sol (sus armónicos tienen Mi y Sol).
      Aquí el sonido se mira tecla por tecla, sin doblar: un espectro en tercios de semitono (100 Hz a 2,7 kHz) y un
      molde por tecla con sus armónicos tal como los deja la ventana de Blackman del analizador de Chrome. Con NNLS se
-     calcula cuánto de cada tecla explica lo que suena. Así un Do4 solo no tiene nada en Mi4 ni en Sol4. */
-  var SP_LO = 43.5, SP_STEP = 1 / 3, SP_N = 172, SP_M0 = 28, SP_M1 = 96, spLayouts = {};
+     calcula cuánto de cada tecla explica lo que suena. Así un Do4 solo no tiene nada en Mi4 ni en Sol4.
+     Oído 3 (oct 2026), probado con grabaciones reales de pianos por parlantes de laptop, bluetooth y equipo de sonido:
+     - el piano puede estar desafinado (los de casa casi siempre lo están un poco): el oído mide cuánto y corre los moldes;
+     - moldes de «ruido» (jorobas anchas) se llevan el roce de las teclas del KeyLab, los golpes y el ruido de la sala,
+       que antes se confundían con teclas;
+     - un parlante estéreo o la sala apagan algunas frecuencias: una nota del acorde puede quedar débil; por eso basta
+       que se oiga un poco (7 % de la más fuerte), siempre que se oiga en dos cuadros seguidos. */
+  var SP_LO = 43.5, SP_STEP = 1 / 3, SP_N = 172, SP_M0 = 28, SP_M1 = 96, SP_NOISE = 8, spLayouts = {};
   function sincP(x) { return Math.abs(x) < 1e-9 ? 1 : Math.sin(Math.PI * x) / (Math.PI * x); }
   function bmLobe(d) { d = Math.abs(d); return d >= 3.5 ? 0 : Math.abs(0.42 * sincP(d) + 0.25 * (sincP(d - 1) + sincP(d + 1)) + 0.04 * (sincP(d - 2) + sincP(d + 2))) / 0.42; }
-  function spLayout(sr, nfft) {
-    var key = sr + '/' + nfft; if (spLayouts[key]) return spLayouts[key];
+  /* tune: cuántos centésimos de semitono está corrido el piano (+ más alto, − más bajo). Los tercios de semitono y los
+     moldes se corren lo mismo, así un piano desafinado se mira igual que uno afinado. */
+  function spLayout(sr, nfft, tune) {
+    tune = Math.max(-50, Math.min(50, Math.round(tune || 0)));
+    var key = sr + '/' + nfft + '/' + tune; if (spLayouts[key]) return spLayouts[key];
     var hz = sr / nfft, c = new Float64Array(SP_N), a = new Int32Array(SP_N), z = new Int32Array(SP_N), kmax = 0;
     for (var b = 0; b < SP_N; b++) {
-      var f = 440 * Math.pow(2, (SP_LO + b * SP_STEP - 69) / 12);
+      var f = 440 * Math.pow(2, (SP_LO + b * SP_STEP - 69 + tune / 100) / 12);
       c[b] = f / hz; a[b] = Math.ceil(f * Math.pow(2, -SP_STEP / 24) / hz); z[b] = Math.floor(f * Math.pow(2, SP_STEP / 24) / hz);
       if (z[b] + 2 > kmax) kmax = z[b] + 2;
     }
-    return (spLayouts[key] = { hz: hz, c: c, a: a, z: z, kmax: kmax, atoms: {}, grams: {} });
+    return (spLayouts[key] = { hz: hz, c: c, a: a, z: z, kmax: kmax, tune: tune, atoms: {}, grams: {} });
   }
   /* magnitud lineal por bin de la FFT -> por tercio de semitono (lo más alto dentro del tercio, o interpolado al centro) */
   function spPool(L, mag) {
     var out = new Float64Array(SP_N);
     for (var b = 0; b < SP_N; b++) {
-      var k0 = Math.floor(L.c[b]), fr = L.c[b] - k0, v = mag[k0] * (1 - fr) + mag[k0 + 1] * fr;
+      var k0 = Math.floor(L.c[b]), fr = L.c[b] - k0, v = (mag[k0] || 0) * (1 - fr) + (mag[k0 + 1] || 0) * fr;
       for (var k = L.a[b]; k <= L.z[b]; k++) if (mag[k] > v) v = mag[k];
       out[b] = v;
     }
@@ -2082,7 +2194,7 @@ body.live-open { overflow: hidden; }
      fundamental débil en los graves y el micrófono del celular que casi no oye debajo de 150 Hz. */
   function spAtom(L, m) {
     if (L.atoms[m]) return L.atoms[m];
-    var f0 = 440 * Math.pow(2, (m - 69) / 12), B = 0.0002 * Math.pow(2, (m - 48) / 18), mag = new Float64Array(L.kmax + 2), top = L.c[SP_N - 1] * L.hz * 1.03;
+    var f0 = 440 * Math.pow(2, (m - 69) / 12 + L.tune / 1200), B = 0.0002 * Math.pow(2, (m - 48) / 18), mag = new Float64Array(L.kmax + 2), top = L.c[SP_N - 1] * L.hz * 1.03;
     for (var h = 1; h <= 30; h++) {
       var f = h * f0 * Math.sqrt(1 + B * h * h); if (f > top) break;
       var amp = Math.pow(h, -0.9) * (f0 < 150 && h === 1 ? 0.35 : 1) * (f / Math.sqrt(f * f + 22500)), kc = f / L.hz;
@@ -2092,14 +2204,28 @@ body.live-open { overflow: hidden; }
     for (var b = 0; b < SP_N; b++) v[b] /= n;
     return (L.atoms[m] = v);
   }
+  /* Moldes de ruido: jorobas anchas. Se llevan lo que no tiene forma de tecla (el roce de las teclas, un golpe, un
+     ventilador) para que no aparezcan teclas que nadie tocó. */
+  function spNoiseAtoms(L) {
+    if (L.noiseA) return L.noiseA;
+    var out = [], span = SP_N / SP_NOISE;
+    for (var j = 0; j < SP_NOISE; j++) {
+      var c = (j + 0.5) * span, v = new Float64Array(SP_N), n = 0, b;
+      for (b = 0; b < SP_N; b++) { v[b] = Math.exp(-0.5 * Math.pow((b - c) / (0.6 * span), 2)); n += v[b] * v[b]; }
+      n = Math.sqrt(n); for (b = 0; b < SP_N; b++) v[b] /= n;
+      out.push(v);
+    }
+    return (L.noiseA = out);
+  }
   function spGram(L, lo, hi) {
     var key = lo + ':' + hi; if (L.grams[key]) return L.grams[key];
     var A = [], G = [], i, j; for (var m = lo; m <= hi; m++) A.push(spAtom(L, m));
+    var nk = A.length; A = A.concat(spNoiseAtoms(L));
     for (i = 0; i < A.length; i++) G.push(new Float64Array(A.length));
     for (i = 0; i < A.length; i++) for (j = i; j < A.length; j++) G[i][j] = G[j][i] = spDot(A[i], A[j]);
-    return (L.grams[key] = { lo: lo, A: A, G: G });
+    return (L.grams[key] = { lo: lo, nk: nk, A: A, G: G });
   }
-  /* NNLS por actualizaciones multiplicativas (con ~45 teclas converge bien en 150 vueltas) */
+  /* NNLS por actualizaciones multiplicativas (con ~50 moldes converge bien en 150 vueltas) */
   function spNnls(W, y, iters) {
     var K = W.A.length, b = new Float64Array(K), x = new Float64Array(K), i, j;
     for (i = 0; i < K; i++) { b[i] = spDot(W.A[i], y); x[i] = Math.max(1e-12, b[i] * 0.3); }
@@ -2107,27 +2233,74 @@ body.live-open { overflow: hidden; }
     return x;
   }
   /* Teclas que suenan en un espectro ya limpio (sin ruido de fondo): {midi: fuerza relativa a la más fuerte}.
-     err: qué parte del sonido no se parece a ninguna tecla de piano (una voz, un golpe, un ruido). */
+     err: qué parte del sonido no se explica con teclas ni ruido (una voz que sube y baja); key: qué parte son teclas. */
   function spFit(L, y, lo, hi) {
-    var W = spGram(L, Math.max(SP_M0, lo), Math.min(SP_M1, hi)), x = spNnls(W, y), mx = 0, out = {}, i, b;
-    for (i = 0; i < x.length; i++) if (x[i] > mx) mx = x[i];
-    if (mx > 0) for (i = 0; i < x.length; i++) if (x[i] > 0.04 * mx) out[W.lo + i] = x[i] / mx;
-    var r = new Float64Array(SP_N), yy = 0, e = 0;
-    for (i = 0; i < x.length; i++) if (x[i] > 0) { var a = W.A[i]; for (b = 0; b < SP_N; b++) r[b] += x[i] * a[b]; }
-    for (b = 0; b < SP_N; b++) { var d = y[b] - r[b]; e += d * d; yy += y[b] * y[b]; }
-    return { notes: out, err: yy > 0 ? e / yy : 1 };
+    var W = spGram(L, Math.max(SP_M0, lo), Math.min(SP_M1, hi)), x = spNnls(W, y), mx = 0, out = {}, i, b, nk = W.nk;
+    for (i = 0; i < nk; i++) if (x[i] > mx) mx = x[i];
+    if (mx > 0) for (i = 0; i < nk; i++) if (x[i] > 0.03 * mx) out[W.lo + i] = x[i] / mx;
+    var r = new Float64Array(SP_N), rk = new Float64Array(SP_N), yy = 0, e = 0, kk = 0;
+    for (i = 0; i < W.A.length; i++) if (x[i] > 0) { var a = W.A[i]; for (b = 0; b < SP_N; b++) { r[b] += x[i] * a[b]; if (i < nk) rk[b] += x[i] * a[b]; } }
+    for (b = 0; b < SP_N; b++) { var d = y[b] - r[b]; e += d * d; yy += y[b] * y[b]; kk += rk[b] * rk[b]; }
+    return { notes: out, err: yy > 0 ? e / yy : 1, key: yy > 0 ? kk / yy : 0, top: mx };
   }
   function spNotes(L, y, lo, hi) { return spFit(L, y, lo, hi).notes; }
+  /* ---------- afinación del piano ----------
+     Cada pico del espectro (un armónico) cae cerca de una tecla; cuánto se aparta (en centésimos) dice si el piano
+     está alto o bajo. Se promedia en círculo (−50 y +50 son lo mismo) y con memoria corta, así se ajusta a cada piano. */
+  /* Picos del espectro entre 200 Hz y 2 kHz, 20 dB sobre la mediana: [{c: centésimos desde La 440, db, s: dB sobre la mediana}] */
+  var pkTmp = [];
+  function spPeaks(db, hz) {
+    var k0 = Math.ceil(200 / hz), k1 = Math.min(db.length - 3, Math.floor(2000 / hz)), k, ref, out = [];
+    if (k1 - k0 < 20) return out;
+    pkTmp.length = 0; for (k = k0; k <= k1; k++) pkTmp.push(db[k]);
+    pkTmp.sort(function (x, y) { return x - y; }); ref = pkTmp[pkTmp.length >> 1];
+    for (k = k0; k <= k1; k++) {
+      var b = db[k]; if (!(b > ref + 20 && b > db[k - 1] && b >= db[k + 1] && b > db[k - 2] && b >= db[k + 2])) continue;
+      var a = db[k - 1], c = db[k + 1], den = a - 2 * b + c; if (!(den < 0)) continue;
+      var d = 0.5 * (a - c) / den; if (!(Math.abs(d) <= 0.6)) continue;
+      out.push({ c: 1200 * Math.log((k + d) * hz / 440) / Math.LN2, db: b, s: b - ref, k: k + d });
+    }
+    out.sort(function (x, y) { return y.db - x.db; });
+    return out;
+  }
+  /* ¿Cuánto se movió el tono? Mediana de cuánto cambió cada pico fuerte respecto del cuadro anterior (centésimos).
+     Un piano queda quieto (0-2); una voz sube, baja y tiembla (5-30). -1 si hay muy pocos picos para saber. */
+  function spDrift(pk, prev) {
+    if (!prev) return -1;
+    var ds = [];
+    pk.slice(0, 8).forEach(function (p) { var best = 99; prev.slice(0, 10).forEach(function (q) { var d = Math.abs(p.c - q.c); if (d < best) best = d; }); if (best < 40) ds.push(best); });
+    if (ds.length < 3) return -1;
+    ds.sort(function (a, b) { return a - b; });
+    return ds[ds.length >> 1];
+  }
+  function tuneCreate(t0, w0) {
+    var Z = { re: 0, im: 0, w: 0 };
+    if (w0) { var a0 = 2 * Math.PI * t0 / 100; Z.re = w0 * Math.cos(a0); Z.im = w0 * Math.sin(a0); Z.w = w0; }
+    return {
+      add: function (pk) {
+        pk.forEach(function (p) {
+          if (p.c < 1200 * Math.log(250 / 440) / Math.LN2) return;
+          var dev = p.c - 100 * Math.round(p.c / 100), w = Math.pow(10, p.s / 40), ang = 2 * Math.PI * dev / 100;
+          Z.re = Z.re * 0.997 + w * Math.cos(ang); Z.im = Z.im * 0.997 + w * Math.sin(ang); Z.w = Z.w * 0.997 + w;
+        });
+      },
+      get: function () { if (!(Z.w > 0)) return { t: 0, r: 0, w: 0 }; return { t: Math.atan2(Z.im, Z.re) * 100 / (2 * Math.PI), r: Math.sqrt(Z.re * Z.re + Z.im * Z.im) / Z.w, w: Z.w }; }
+    };
+  }
   function hearCreate(opt) {
     opt = opt || {};
     var OK = opt.ok || 0.8, BAD = opt.bad || 0.84, REL = opt.rel || 0.3, KEEP = opt.keep || 0.97;
     var S = { cands: [], tgt: [], allow: {}, hist: [], pre: null, noise: null, onT: -1e9, lastOn: -1e9, fr: 99, ok: 0, bad: 0, done: true, hit: false, heard: null, vp: null, dbg: null };
-    /* Acordes (dos o más notas): se juzgan tecla por tecla. RHO: una nota del acorde cuenta si suena al menos así de
-       fuerte respecto de la más fuerte (los dedos de un niño no tocan parejo: el meñique puede sonar 10 dB menos).
-       Se acumula lo que se oyó durante JUNTAR ms: si toca el acorde de a poco (Do, luego Mi y Sol), también vale. */
-    var RHO = opt.rho || 0.14, WRONG = opt.wrong || 0.4, JUNTAR = opt.join || 1600, COVER = 0.35, PIANO = opt.piano || 0.3;
-    var SPL = opt.sr ? spLayout(opt.sr, opt.nfft || 8192) : null;
-    var Q = { on: false, ring: [], hist: [], pre: null, exp: [], win: {}, cover: {}, got: {}, struck: {}, seen: {}, fr: 99, done: true, okN: 0, badN: 0, part: false, onT: -1e9, dbg: null, prev: {}, tg: [], chgT: 0, lastT: 0, hold: {} };
+    /* Tecla por tecla. RHO: una nota del acorde cuenta si suena al menos así de fuerte respecto de la más fuerte (los
+       dedos de un niño no tocan parejo, y un parlante estéreo apaga algunas frecuencias). Se acumula lo que se oyó
+       durante JUNTAR ms: si toca el acorde de a poco (Do, luego Mi y Sol), también vale. FRMAX: cuadros que se mira
+       después de cada golpe (900 ms: el sonido del KeyLab pasa por la laptop y el equipo y llega un poco tarde). */
+    var RHO = opt.rho || 0.07, WRONG = opt.wrong || 0.4, JUNTAR = opt.join || 1600, COVER = 0.35, FRMAX = opt.frmax || 18;
+    var NOPIANO = opt.nopiano || 0.42, KEYMIN = opt.keymin || 0.35;
+    var SR0 = opt.sr || 0, NF = opt.nfft || 8192, T0 = Math.max(-50, Math.min(50, +opt.tune || 0));
+    var SPL = SR0 ? spLayout(SR0, NF, T0) : null, KMAX = SR0 ? spLayout(SR0, NF, 50).kmax : 0;
+    var TT = SR0 && opt.autotune !== false ? tuneCreate(T0, opt.tune ? 30 : 0) : null, tuneN = 0, lastTgt = null;
+    var Q = { on: false, find: false, ring: [], hist: [], pre: null, exp: [], win: {}, cover: {}, got: {}, struck: {}, seen: {}, h3: {}, fr: 99, done: true, okN: 0, badN: 0, part: false, onT: -1e9, dbg: null, prev: {}, tg: [], chgT: 0, lastT: 0, hold: {}, lastOn: -1e9 };
     function skey(a) { return a.slice().sort(function (x, y) { return x - y; }).join(','); }
     function target(pcs, allow, reg, now, notes) {
       var tg = [];
@@ -2149,13 +2322,19 @@ body.live-open { overflow: hidden; }
       // un golpe de hace muy poco que no fue acierto se juzga otra vez con la nota nueva (la tocó un poquito antes)
       var again = now != null && now - S.onT < 350 && !S.hit && S.pre;
       S.done = !again;
+      lastTgt = [tg, reg, notes];
       qTarget(tg, reg, notes, again);
     }
     /* Las teclas que pide la pantalla (o, si no se saben, cada nota en la octava de la zona). */
-    function qTarget(tg, reg, notes, again) {
-      var pv = {}; (Q.tg || []).forEach(function (p) { pv[p] = 1; }); Q.prev = pv; Q.tg = tg.slice(); Q.chgT = Q.lastT || 0;
-      Q.on = !!(SPL && tg.length >= 2); Q.got = {}; Q.okN = Q.badN = 0; Q.seen = {}; Q.hold = {}; Q.part = false;
-      if (!again) Q.done = true;
+    function qTarget(tg, reg, notes, again, keep) {
+      if (!keep) {
+        var pv = {}; (Q.tg || []).forEach(function (p) { pv[p] = 1; }); Q.prev = pv; Q.tg = tg.slice(); Q.chgT = Q.lastT || 0;
+        Q.got = {}; Q.okN = Q.badN = 0; Q.seen = {}; Q.hold = {}; Q.h3 = {}; Q.part = false;
+        if (!again) Q.done = true;
+      }
+      // con micrófono y espectro: siempre tecla por tecla (una nota sola también: el cromagrama fallaba con pianos reales)
+      Q.on = !!(SPL && tg.length >= 1 && opt.single !== 'croma' || SPL && tg.length >= 2);
+      Q.find = !!(SPL && !tg.length);
       if (!Q.on) return;
       var base = reg != null ? reg : 60, exp = [];
       (notes && notes.length ? notes : tg.map(function (p) { return base + mod12(p - base); })).forEach(function (m) {
@@ -2173,6 +2352,11 @@ body.live-open { overflow: hidden; }
       Q.cover = {};
       exp.forEach(function (e) { exp.forEach(function (j) { if (j < e && mod12(j) !== mod12(e) && spDot(spAtom(SPL, j), spAtom(SPL, e)) >= COVER) (Q.cover[e] = Q.cover[e] || []).push(j); }); });
     }
+    /* el piano está corrido: se cambian los tercios de semitono y los moldes (solo entre golpes, nunca a mitad de uno) */
+    function setTune(t) {
+      SPL = spLayout(SR0, NF, t);
+      if (lastTgt) qTarget(lastTgt[0], lastTgt[1], lastTgt[2], false, true);
+    }
     function qFrame(f) {
       Q.lastT = f.t;
       // espectro por teclas, ruido de fondo (lo mínimo de los últimos 3 s) y lo que suena ahora
@@ -2180,9 +2364,37 @@ body.live-open { overflow: hidden; }
       Q.ring.push(sp); if (Q.ring.length > 60) Q.ring.shift();
       for (b = 0; b < SP_N; b++) { var nf = sp[b]; for (q = 0; q < Q.ring.length; q++) if (Q.ring[q][b] < nf) nf = Q.ring[q][b]; cur[b] = Math.max(0, sp[b] - nf); }
       Q.hist.push(cur); if (Q.hist.length > 5) Q.hist.shift();
+      // picos: para saber si el tono se mueve (voz) y para la afinación
+      var pk = f.db ? spPeaks(f.db, SR0 / NF) : null;
+      Q.drift0 = Q.drift1; Q.drift1 = pk ? spDrift(pk, Q.pk) : -1; Q.pk = pk;
+      // afinación: se aprende de lo que suena después de un golpe (el piano), no del silencio ni de una voz
+      if (TT && pk && S.noise != null && f.peak > S.noise + 12 && Q.drift1 >= 0 && Q.drift1 <= 4) {
+        TT.add(pk);
+        if (++tuneN % 5 === 0 && (Q.done || !Q.tuned)) {
+          var g = TT.get();
+          if (g.r >= 0.3 && g.w >= (Q.tuned ? 25 : 8) && Math.abs(g.t - SPL.tune) >= (Q.tuned ? 7 : 4)) { setTune(Math.round(g.t)); Q.tuned = true; }
+          else if (g.w >= 25) Q.tuned = true;
+        }
+      }
       return cur;
     }
-    function qPresent(notes, p) { var best = 0; Object.keys(notes).forEach(function (m) { if (Q.win[p] && Q.win[p][m] && notes[m] > best) best = notes[m]; }); return best; }
+    /* Qué tan fuerte suena la nota p (en la tecla pedida o una octava arriba o abajo). Si al lado (un semitono) suena
+       mucho más fuerte una tecla que no va, lo poquito que aparece en p es «derrame» de esa vecina: no cuenta. */
+    function qPresent(notes, p, all) {
+      var best = 0; all = all || notes;
+      Object.keys(notes).forEach(function (m) {
+        if (!(Q.win[p] && Q.win[p][m] && notes[m] > best)) return;
+        m = +m; var v = notes[m];
+        if ([m - 1, m + 1].some(function (k) { return (notes[k] || 0) >= 3 * v && !S.allow[mod12(k)]; })) return;
+        // la misma nota en otra octava (no la tecla pedida) no cuenta si puede ser armónico de una tecla más grave que
+        // suena: con un parlante chico el bajo pierde su fundamental y su quinto armónico (Mi5 para Do3) parece tocado
+        if (Q.exp.indexOf(m) < 0 && Object.keys(all).some(function (n) { n = +n; return n < m && HARM[m - n] && all[n] >= 0.05; })) return;
+        // y en otra octava tiene que sonar de verdad (no un rastro débil del eco o de una vecina)
+        if (Q.exp.indexOf(m) < 0 && v < 0.25) return;
+        best = v;
+      });
+      return best;
+    }
     /* Quita los armónicos «fantasma»: una tecla que es armónico de otra más grave que suena (su octava, su quinta de
        arriba…) y que suena menos que ella. Un Do4 solo deja algo en Sol5 y en Do5: eso no es tocar Sol. */
     var HARM = { 12: 1, 19: 1, 24: 1, 28: 1, 31: 1, 34: 1, 36: 1 };     // octava, quinta de arriba, 2 octavas, tercera…
@@ -2194,29 +2406,67 @@ body.live-open { overflow: hidden; }
       });
       return out;
     }
+    /* No es error: (1) en los graves el micrófono no separa bien teclas vecinas: la vecina más débil de una tecla que sí
+       va; (2) un armónico de una tecla que sí va (la quinta o la tercera de arriba de su serie): cada piano los tiene
+       más o menos fuertes, y el molde no puede saber cuánto. */
+    function excused(nw, all, m) {
+      return Object.keys(all).some(function (k) {
+        k = +k; if (k === m || !S.allow[mod12(k)]) return false;
+        if (m < 64 && Math.abs(k - m) <= 2 && (nw[k] || 0) * 0.7 >= nw[m]) return true;
+        // (aunque suene más que la tecla de abajo: el parlante de una laptop casi borra la fundamental de los graves)
+        return k < m && HARM[m - k] && all[k] >= 0.05;
+      });
+    }
+    /* sin objetivo («¿Qué tecla es?»): la tecla más fuerte que no es armónico de otra, dos cuadros seguidos */
+    function qFind(f, cur) {
+      if (Q.done || !Q.pre || Q.fr >= FRMAX) return null;
+      Q.fr++;
+      var keep = Math.pow(KEEP, Q.fr + 4), y = new Float64Array(SP_N), e = 0;
+      for (var b = 0; b < SP_N; b++) { y[b] = Math.max(0, cur[b] - Q.pre[b] * keep); e += y[b]; }
+      if (!(e > 0)) return null;
+      var fit = spFit(SPL, y, 36, 96), nw = qReal(fit.notes), best = -1, bv = 0;
+      if (fit.err > NOPIANO || fit.key < KEYMIN) { Q.fbest = -1; return null; }
+      Object.keys(nw).forEach(function (m) { if (nw[m] > bv) { bv = nw[m]; best = +m; } });
+      if (best >= 0 && best === Q.fbest) { Q.done = true; S.heard = { pc: mod12(best), conf: 0.9, t: f.t, midi: best }; return { type: 'note', t: Q.onT, pc: mod12(best), conf: 0.9, midi: best }; }
+      Q.fbest = best;
+      if (Q.fr >= FRMAX) Q.done = true;
+      return null;
+    }
     function qAnalyze(f, cur) {
-      if (Q.done || !Q.pre || Q.fr >= 14) return null;
+      if (Q.done || !Q.pre || Q.fr >= FRMAX) return null;
       Q.fr++;
       var keep = Math.pow(KEEP, Q.fr + 4), y = new Float64Array(SP_N), e = 0;
       for (var b = 0; b < SP_N; b++) { y[b] = Math.max(0, cur[b] - Q.pre[b] * keep); e += y[b]; }
       if (!(e > 0)) return null;
       var fit = spFit(SPL, y, Q.lo, Q.hi), all = fit.notes, nw = qReal(all), tg = S.tgt, now = f.t, have = {}, wrong = [];
-      // si lo nuevo no se parece a teclas de piano (alguien habla, un golpe en la mesa), este cuadro no cuenta
-      if (fit.err > PIANO) {
+      // ¿suena a teclas? Sí si el molde calza (piano), o si es un tono simple y quieto que se repite igual (un piano
+      // eléctrico o un teclado sencillo suenan casi sin armónicos y el molde no les calza). Una voz se mueve: no cuenta.
+      var tops = Object.keys(nw).filter(function (m) { return nw[m] >= 0.5; }).sort().join(','), sameTop = tops && tops === Q.tops; Q.tops = tops;
+      var still = (Q.drift1 < 0 || Q.drift1 <= 4) && (Q.drift0 < 0 || Q.drift0 <= 4);
+      var simple = Object.keys(nw).filter(function (m) { return nw[m] >= 0.25; }).length <= 4;
+      var pianoish = (fit.err <= NOPIANO && fit.key >= KEYMIN && (Q.drift1 < 0 || Q.drift1 <= 12)) || (simple && sameTop && still && fit.key >= 0.15);
+      if (!pianoish) {
         tg.forEach(function (p) { Q.seen[p] = 0; }); Q.okN = Q.badN = 0; Q.wset = null;
-        if (opt.debug) Q.dbg = { t: now, nw: nw, all: all, err: fit.err, miss: [], wrong: [], have: [], skip: true };
-        if (Q.fr >= 14) Q.done = true;
+        if (opt.debug) Q.dbg = { t: now, nw: nw, all: all, err: fit.err, key: fit.key, miss: [], wrong: [], have: [], skip: true };
+        if (Q.fr >= FRMAX) Q.done = true;
         return null;
       }
+      // una nota sola tiene que ser la que más suena (25 %); en un acorde basta que se oiga (RHO)
+      var need = tg.length === 1 ? 0.25 : RHO;
       tg.forEach(function (p) {
-        if (qPresent(nw, p) >= RHO) { Q.seen[p] = (Q.seen[p] || 0) + 1; if (Q.seen[p] >= 2 && (!Q.got[p] || now - Q.got[p].t > 300)) Q.got[p] = { t: now, on: Q.onT }; }
+        if (qPresent(nw, p, all) >= need) { Q.seen[p] = (Q.seen[p] || 0) + 1; if (Q.seen[p] >= 2 && (!Q.got[p] || now - Q.got[p].t > 300)) Q.got[p] = { t: now, on: Q.onT }; }
         else Q.seen[p] = 0;
       });
-      Object.keys(nw).forEach(function (m) { if (nw[m] >= RHO) Q.struck[mod12(+m)] = now; });
+      Object.keys(nw).forEach(function (m) { if (nw[m] >= 0.2) Q.struck[mod12(+m)] = now; });
       // notas de otro acorde que sonaron fuerte (y que no son armónicos de lo que suena). Solo si el sonido es de
       // piano (una voz no se parece a los moldes) y si son las mismas cuadro tras cuadro (la voz sube y baja)
-      var late = Math.abs(Q.onT - Q.chgT) < 700 ? Q.prev : {};
-      Object.keys(nw).forEach(function (m) { m = +m; if (nw[m] >= WRONG && !S.allow[mod12(m)] && !late[mod12(m)]) wrong.push(m); });
+      // las del acorde anterior que siguen sonando no son error (un piano real sube y baja un poco al apagarse)
+      var late = Math.abs(Q.onT - Q.chgT) < 2000 ? Q.prev : {};
+      // («Oigo otra tecla» solo con sonido de teclas y tono quieto: una voz se mueve; el eco de la sala sube el error
+      // del ajuste, por eso aquí no se pide más que para contar las notas)
+      var clean = still && fit.err <= NOPIANO && fit.key >= KEYMIN;
+      var fresh = function (m) { var a = spAtom(SPL, m), nc = spDot(a, cur); return !(nc > 0) || spDot(a, y) / nc >= 0.5; };
+      if (clean) Object.keys(nw).forEach(function (m) { m = +m; if (nw[m] >= WRONG && !S.allow[mod12(m)] && !late[mod12(m)] && !excused(nw, all, m) && fresh(m)) wrong.push(m); });
       var wk = wrong.map(function (m) { return mod12(m); });
       Q.wset = Q.badN && Q.wset ? Q.wset.filter(function (p) { return wk.indexOf(p) >= 0; }) : wk;
       if (!Q.wset.length) wrong = [];
@@ -2224,20 +2474,35 @@ body.live-open { overflow: hidden; }
       var miss = tg.filter(function (p) { return !(Q.got[p] && now - Q.got[p].t <= JUNTAR); });
       // (después del golpe, cuando el ruido del martillo ya pasó, y solo si lo que suena es de piano)
       if (Q.fr >= 3 && miss.length && miss.some(function (p) { return Q.struck[p] && now - Q.struck[p] < 2500 && Q.onT - Q.struck[p] > 120; })) {
-        var fn = spFit(SPL, cur, Q.lo, Q.hi), nn = fn.err <= PIANO ? qReal(fn.notes) : {}; Q.nnDbg = nn;
+        var fn = spFit(SPL, cur, Q.lo, Q.hi), nn = fn.err <= NOPIANO ? qReal(fn.notes) : {}; Q.nnDbg = nn;
         miss.forEach(function (p) {
           if (Q.struck[p] && now - Q.struck[p] < 2500 && Q.onT - Q.struck[p] > 120 && qPresent(nn, p) >= 0.2) { Q.hold[p] = (Q.hold[p] || 0) + 1; if (Q.hold[p] >= 2) Q.got[p] = { t: now, on: Q.onT }; }
           else Q.hold[p] = 0;
         });
         miss = tg.filter(function (p) { return !(Q.got[p] && now - Q.got[p].t <= JUNTAR); });
       }
+      // La fundamental puede quedar apagada (un parlante chico, dos parlantes, la sala): si suena su tercer armónico
+      // (la quinta de la octava de arriba: Sol5 para Do4) y nada más de lo que se toca lo explica, la nota está.
+      // (solo en acordes, y si esa nota no sonó hace poco: una nota anterior que sigue sonando también la da)
+      if (tg.length >= 2) miss = miss.filter(function (p) {
+        var ok3 = Q.exp.some(function (e) {
+          if (mod12(e) !== p) return false;
+          var h3 = e + 19, v = all[h3] || 0;
+          // (si esa nota también va en el acorde, la puede estar dando otra tecla: no es prueba)
+          if (v < 0.15 || S.allow[mod12(h3)] || (Q.struck[mod12(h3)] && now - Q.struck[mod12(h3)] < 2500 && Q.struck[mod12(h3)] < Q.onT)) return false;
+          return !Object.keys(all).some(function (j) { j = +j; return j !== e && j < h3 && HARM[h3 - j] && (all[j] || 0) >= 0.1 && S.allow[mod12(j)]; });
+        });
+        if (ok3) { Q.h3[p] = (Q.h3[p] || 0) + 1; if (Q.h3[p] >= 2) { Q.got[p] = { t: now, on: Q.onT }; return false; } }
+        else Q.h3[p] = 0;
+        return true;
+      });
       // la que no se puede oír aparte se da por buena si suena la grave que la tapa
       miss = miss.filter(function (p) {
         var es = Q.exp.filter(function (m) { return mod12(m) === p; });
         return !es.every(function (m) { return (Q.cover[m] || []).some(function (j) { return (all[j] || 0) >= 0.25; }); });
       });
       tg.forEach(function (p) { if (Q.got[p] && now - Q.got[p].t <= JUNTAR) have[p] = 1; });
-      if (opt.debug) { Q.dbg = { t: now, nw: nw, all: all, err: fit.err, miss: miss, wrong: wrong, have: Object.keys(have), nn: Q.nnDbg, got: JSON.stringify(Q.got) }; Q.nnDbg = null; }
+      if (opt.debug) { Q.dbg = { t: now, nw: nw, all: all, err: fit.err, key: fit.key, miss: miss, wrong: wrong, have: Object.keys(have), nn: Q.nnDbg, got: JSON.stringify(Q.got), tune: SPL.tune }; Q.nnDbg = null; }
       Q.badN = wrong.length ? Q.badN + 1 : 0;
       Q.okN = !miss.length && !wrong.length ? Q.okN + 1 : 0;
       if (Q.okN >= 2) {
@@ -2245,14 +2510,14 @@ body.live-open { overflow: hidden; }
         Q.done = true; S.hit = true; return { type: 'ok', t: t0, conf: 0.9 };
       }
       if (Q.badN >= 3) {
-        var wp = Q.wset.slice();
+        var wp = Q.wset.filter(function (p, i, a) { return a.indexOf(p) === i; });
         Q.done = true; return { type: 'bad', t: Q.onT, conf: wrong.some(function (m) { return nw[m] >= 0.6; }) ? 0.9 : 0.85, pcs: wp, extra: !miss.length };
       }
       // a los 400 ms: le falta algo (oí parte del acorde); no es error, se le dice qué falta
-      if (Q.fr === 8 && !Q.part && Object.keys(have).length && miss.length && !wrong.length) {
+      if (Q.fr === 8 && !Q.part && tg.length >= 2 && Object.keys(have).length && miss.length && !wrong.length) {
         Q.part = true; return { type: 'partial', t: Q.onT, have: tg.filter(function (p) { return have[p]; }), miss: miss.slice() };
       }
-      if (Q.fr >= 14) Q.done = true;
+      if (Q.fr >= FRMAX) Q.done = true;
       return null;
     }
     function frame(f) {
@@ -2277,18 +2542,43 @@ body.live-open { overflow: hidden; }
       var rel = tot > 0 ? rs3 / tot : 0, rel1 = tot > 0 ? rs1 / tot : 0, conc = rs3 > 0 ? rmax / rs3 : 0;
       // golpe: mucho sonido nuevo respecto de hace 150 ms, que todavía está subiendo, y concentrado en pocas notas
       var onset = !!prev && loud && rel > REL && rel1 > 0.1 && conc > 0.16 && f.t - S.lastOn > 200;
+      // Con el espectro tecla por tecla el golpe se mira ahí (y el de las 12 notas no se usa): lo nuevo tiene que
+      // superar con margen lo más alto de hace 150-250 ms (el piano real sube y baja un poco solo, por sus cuerdas que
+      // laten) y estar en pocos tercios de semitono (armónicos), no repartido (el roce de las teclas, un golpe en la mesa).
+      // Así se oyen también los bajos graves, cuyos armónicos se reparten entre muchas notas.
+      if (cur) {
+        onset = false;
+        if (loud && f.t - S.lastOn > 200 && Q.hist.length >= 5) {
+          var h1 = Q.hist[Q.hist.length - 2], hA = Q.hist[Q.hist.length - 4], hB = Q.hist[Q.hist.length - 5], ct = 0, s3 = 0, s1 = 0, dd = [];
+          for (var b2 = 0; b2 < SP_N; b2++) {
+            var mp = Math.max(hA[b2], hB[b2]), u3 = cur[b2] - 1.3 * mp, u1 = cur[b2] - h1[b2];
+            ct += cur[b2]; if (u1 > 0) s1 += u1; if (u3 > 0) { s3 += u3; dd.push(u3); }
+          }
+          if (ct > 0 && s3 / ct > REL && s1 / ct > 0.1 && dd.length) {
+            dd.sort(function (x, y) { return y - x; });
+            var topS = 0, nTop = Math.round(0.12 * SP_N); for (var k2 = 0; k2 < nTop && k2 < dd.length; k2++) topS += dd[k2];
+            if (topS / s3 >= 0.3) {
+              // y lo nuevo tiene forma de teclas (no de roce o golpe): al soltar las teclas del KeyLab suena un «clac»
+              var rise = new Float64Array(SP_N); for (b2 = 0; b2 < SP_N; b2++) rise[b2] = Math.max(0, cur[b2] - 1.3 * Math.max(hA[b2], hB[b2]));
+              var rf = spFit(SPL, rise, 36, 96);
+              if (rf.key >= (opt.onkey || 0.3)) onset = true;
+              if (opt.debug) Q.onDbg = { t: f.t, key: rf.key, err: rf.err, ok: onset };
+            }
+          }
+        }
+      }
       if (onset) {
         S.pre = (H.length >= 4 ? H[H.length - 4] : H[0]).slice();
         S.onT = f.t; S.lastOn = f.t; S.fr = 0; S.done = false; S.ok = S.bad = 0; S.hit = false; S.vp = null;
-        if (cur) { Q.pre = Q.hist.length >= 5 ? Q.hist[Q.hist.length - 5] : Q.hist[0]; Q.fr = 0; Q.done = false; Q.okN = Q.badN = 0; Q.seen = {}; Q.hold = {}; Q.part = false; Q.onT = f.t; }
+        if (cur) { Q.pre = Q.hist.length >= 5 ? Q.hist[Q.hist.length - 5] : Q.hist[0]; Q.fr = 0; Q.done = false; Q.okN = Q.badN = 0; Q.seen = {}; Q.hold = {}; Q.h3 = {}; Q.part = false; Q.onT = f.t; Q.lastOn = f.t; Q.fbest = -1; }
         out = { type: 'onset', t: f.t };
       }
       H.push(raw.slice()); if (H.length > 5) H.shift();
-      if (Q.on && cur) {
-        // acorde: lo decide la mirada tecla por tecla (el cromagrama aceptaba una sola tecla del acorde)
-        var ev = qAnalyze(f, cur);
+      if ((Q.on || Q.find) && cur) {
+        // tecla por tecla (el cromagrama aceptaba una sola tecla del acorde y fallaba con pianos reales)
+        var ev = Q.on ? qAnalyze(f, cur) : qFind(f, cur);
         if (ev) out = ev;
-        if (!S.done && S.pre && S.fr < 14) { S.fr++; if (S.fr >= 14) S.done = true; }
+        if (!S.done && S.pre && S.fr < FRMAX) { S.fr++; if (S.fr >= FRMAX) S.done = true; }
         return out;
       }
       if (!S.done && S.pre && S.fr < 14) {
@@ -2320,7 +2610,63 @@ body.live-open { overflow: hidden; }
       return out;
     }
     return { target: target, frame: frame, heard: function () { return S.heard; }, noise: function () { return S.noise; }, dbg: function () { return Q.on ? Q.dbg : S.dbg; },
-      kmax: SPL ? SPL.kmax : 0, chords: !!SPL };
+      tune: function () { return SPL ? SPL.tune : 0; }, tuneInfo: function () { return TT ? TT.get() : null; },
+      kmax: KMAX, chords: !!SPL };
+  }
+
+  /* ---------- oír qué suena ahora (modo «Escuchando» del director y «¿Qué oye el celular?») ----------
+     Lo mismo que el oído del alumno (tecla por tecla, con la afinación del piano, sin roces ni golpes), pero sin
+     saber qué se espera: cada 50 ms dice qué teclas suenan y cuánto pesa cada nota. Sirve con piano o guitarra. */
+  function listenCreate(opt) {
+    opt = opt || {};
+    var SR0 = opt.sr, NF = opt.nfft || 8192, T0 = Math.max(-50, Math.min(50, +opt.tune || 0));
+    var SPL = spLayout(SR0, NF, T0), KMAX = spLayout(SR0, NF, 50).kmax, TT = tuneCreate(T0, opt.tune ? 30 : 0);
+    var LO = opt.lo || 40, HI = opt.hi || 90, RING = opt.ring || 120, HARM = { 12: 1, 19: 1, 24: 1, 28: 1, 31: 1, 34: 1, 36: 1 };
+    var S = { ring: [], hist: [], noise: null, lastOn: -1e9, pk: null, d1: -1, n: 0, tuned: !!opt.tune, lvl: null };
+    function frame(f) {
+      var sp = spPool(SPL, f.mag), b, q, cur = new Float64Array(SP_N);
+      // ruido de fondo: lo mínimo de los últimos 6 s (una banda suena seguido: con 3 s se comía las notas largas)
+      S.ring.push(sp); if (S.ring.length > RING) S.ring.shift();
+      for (b = 0; b < SP_N; b++) { var nf = sp[b]; for (q = 0; q < S.ring.length; q++) if (S.ring[q][b] < nf) nf = S.ring[q][b]; cur[b] = Math.max(0, sp[b] - nf); }
+      S.hist.push(cur); if (S.hist.length > 6) S.hist.shift();
+      if (S.noise == null) S.noise = f.peak;
+      var loud = f.peak > S.noise + 9;
+      S.noise = f.peak < S.noise ? S.noise * 0.6 + f.peak * 0.4 : S.noise + Math.min(0.03, (f.peak - S.noise) * 0.002);
+      var pk = f.db ? spPeaks(f.db, SR0 / NF) : null; S.d1 = pk ? spDrift(pk, S.pk) : -1; S.pk = pk;
+      if (pk && loud && S.d1 >= 0 && S.d1 <= 4) {
+        TT.add(pk);
+        if (++S.n % 10 === 0) { var g = TT.get(); if (g.r >= 0.3 && g.w >= (S.tuned ? 25 : 8) && Math.abs(g.t - SPL.tune) >= (S.tuned ? 7 : 4)) { SPL = spLayout(SR0, NF, Math.round(g.t)); S.tuned = true; } }
+      }
+      // golpe (tecla o rasgueo): lo nuevo supera con margen lo de hace 150-250 ms y está en pocos tercios de semitono
+      var onset = false;
+      if (loud && f.t - S.lastOn > 150 && S.hist.length >= 5) {
+        var H = S.hist, h1 = H[H.length - 2], hA = H[H.length - 4], hB = H[H.length - 5], ct = 0, s3 = 0, s1 = 0, dd = [], rise = new Float64Array(SP_N);
+        for (b = 0; b < SP_N; b++) { var u3 = cur[b] - 1.3 * Math.max(hA[b], hB[b]), u1 = cur[b] - h1[b]; ct += cur[b]; if (u1 > 0) s1 += u1; if (u3 > 0) { s3 += u3; dd.push(u3); rise[b] = u3; } }
+        if (ct > 0 && s3 / ct > 0.3 && s1 / ct > 0.1 && dd.length) {
+          dd.sort(function (x, y) { return y - x; });
+          var top = 0, nT = Math.round(0.12 * SP_N); for (q = 0; q < nT && q < dd.length; q++) top += dd[q];
+          if (top / s3 >= 0.3 && spFit(SPL, rise, LO, HI).key >= 0.3) onset = true;
+        }
+      }
+      if (onset) S.lastOn = f.t;
+      var out = { t: f.t, peak: f.peak, loud: loud, onset: onset, keys: {}, pcs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], tonal: false, key: 0, err: 1, tune: SPL.tune, drift: S.d1 };
+      if (!loud) return out;
+      var fit = spFit(SPL, cur, LO, HI), all = fit.notes, ks = Object.keys(all).map(Number).sort(function (a, c) { return a - c; }), nw = {};
+      // sin armónicos «fantasma» (la octava o la quinta de arriba de una tecla más grave que suena más)
+      ks.forEach(function (m) { var v = all[m]; if (!ks.some(function (n) { return n < m && HARM[m - n] && all[n] >= 0.07 && all[n] >= v; })) nw[m] = v; });
+      var mx = 0, p;
+      Object.keys(nw).forEach(function (m) { if (nw[m] >= 0.07) out.pcs[mod12(+m)] += nw[m]; });
+      for (p = 0; p < 12; p++) if (out.pcs[p] > mx) mx = out.pcs[p];
+      if (mx > 0) for (p = 0; p < 12; p++) out.pcs[p] /= mx;
+      out.keys = nw; out.all = all; out.key = fit.key; out.err = fit.err;
+      // una voz sola (alguien que habla) mueve el tono: no es música para seguir; con la guitarra sonando, la mayoría
+      // de los picos quedan quietos y sí cuenta
+      out.tonal = mx > 0 && fit.key >= 0.3 && !(S.d1 > 6 && fit.key < (opt.voiceKey || 0.55));
+      if (out.tonal) S.lvl = S.lvl == null ? f.peak : S.lvl * 0.97 + f.peak * 0.03;
+      out.lvl = S.lvl;
+      return out;
+    }
+    return { frame: frame, kmax: KMAX, tune: function () { return SPL.tune; }, tuneInfo: function () { return TT.get(); } };
   }
 
   var api = {
@@ -2336,7 +2682,7 @@ body.live-open { overflow: hidden; }
     tlRound: tlRound, tlQuantize: tlQuantize, tlEstimateBpm: tlEstimateBpm, tlTapBpm: tlTapBpm, tlStarts: tlStarts, tlVideoTimes: tlVideoTimes,
     tempoFromSamples: tempoFromSamples, onsetEnvelope: onsetEnvelope, fftRadix2: fftRadix2, _tempoCfg: tempoFromEnvelope,
     simpleChord: simpleChord, numLabel: numLabel, EZ_NUMS: EZ_NUMS, followerCreate: followerCreate,
-    chordTemplate: chordTemplate, pianoTpl: pianoTpl, hearCreate: hearCreate, spLayout: spLayout, spPool: spPool, spNotes: spNotes, spFit: spFit, featureStream: featureStream, beatTrack: beatTrack, beatFeatures: beatFeatures, alignSteps: alignSteps, suggestTimeline: suggestTimeline
+    chordTemplate: chordTemplate, chordPcs: chordPcs, chordScore: chordScore, chordScoreKeys: chordScoreKeys, listenCreate: listenCreate, pianoTpl: pianoTpl, hearCreate: hearCreate, spLayout: spLayout, spPool: spPool, spNotes: spNotes, spFit: spFit, tuneCreate: tuneCreate, spPeaks: spPeaks, spDrift: spDrift, featureStream: featureStream, beatTrack: beatTrack, beatFeatures: beatFeatures, alignSteps: alignSteps, suggestTimeline: suggestTimeline
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Core = api;
@@ -4720,7 +5066,7 @@ function drawLive() {
     '<div class="lv-next">' + (nxt ? '<div class="lv-next-h"><span class="lv-label">Luego</span><b>' + nextName + '</b></div>' + handsHTML(nxt, true) : endHTML) + '</div>';
   var practiceH = (st.mode === 'practice' && !oidoActive()) || (st.stu && midi.inp) ? '<div class="lv-meter"><span id="lv-midi">' + midiStatus() + '</span><button type="button" class="linkbtn" data-lv="midi">Teclado</button><span class="lv-good" id="lv-good"></span></div>' : '';
   var meterH = st.mode === 'listen' ? '<div class="lv-meter"><span class="lv-lvl" title="Nivel de entrada"><i id="lv-lvl"></i></span><span id="lv-meter" aria-live="off">' +
-    (ear ? 'Escuchando…' : 'Toca «Escuchar». Funciona mejor con la guitarra conectada a la laptop.') + '</span><button type="button" class="linkbtn" data-lv="input">Entrada</button></div>' : '';
+    (ear ? 'Escuchando…' : 'Toca «Escuchar». Avanza cuando oye el acorde que sigue; si oye otra cosa, espera.') + '</span><button type="button" class="linkbtn" data-lv="miccheck">¿Qué oye?</button><button type="button" class="linkbtn" data-lv="input">Entrada</button></div>' : '';
   var keepCv = lid('lv-roll'); if (keepCv && keepCv.parentNode) keepCv.parentNode.removeChild(keepCv);   // se reutiliza: uno nuevo nace en blanco
   lid('lv-main').className = 'lv-main' + (rollView ? ' roll' : '') + (st.easy ? ' ez-' + st.easy.cfg.level + ' part-' + st.easy.cfg.part : '') + (st.level ? ' lvl-' + st.level : '');
   st.kbRects = null;
@@ -4775,7 +5121,7 @@ function setLiveIndex(i, fromTimer) {
 }
 
 /* ---------- avanzar solo, por compases ---------- */
-function beatNow() { var st = liveState; return st.beat0 + (performance.now() - st.t0) / 60000 * st.bpm; }
+function beatNow() { var st = liveState; if (st.mode === 'listen' && st.earHold) return st.beat0; return st.beat0 + (performance.now() - st.t0) / 60000 * st.bpm; }
 function indexAtBeat(b) {
   var s = liveState.startB, lo = 0, hi = s.length - 2;
   if (b < s[0]) return 0;
@@ -4919,12 +5265,12 @@ function openLiveModes() {
     { id: 'manual', icon: 'fwd', label: 'Manual', sub: 'tocando la pantalla o con un pedal', run: function () { setLiveMode('manual'); } },
     { id: 'auto', icon: 'play', label: 'Automático', sub: has ? 'por compases, a ' + Math.round(st.bpm) + ' bpm' : why, disabled: !has, run: function () { setLiveMode('auto'); } },
     { id: 'video', icon: 'video', label: 'Con el video', sub: hasV ? 'para practicar' : (has ? 'el recorrido no tiene video' : why), disabled: !hasV, run: function () { setLiveMode('video'); } },
-    { id: 'listen', icon: 'mic', label: 'Escuchando (en prueba)', sub: 'oye a la banda y avanza', run: function () { setLiveMode('listen'); } },
+    { id: 'listen', icon: 'mic', label: 'Escuchando', sub: 'oye a la banda; si no coincide, espera', run: function () { setLiveMode('listen'); } },
     { id: 'practice', icon: 'keys', label: 'Práctica con el teclado (MIDI)', sub: midiSupported() ? 'espera a que toque el acorde correcto' : 'necesita Chrome en laptop o Android', disabled: !midiSupported(), run: function () { setLiveMode('practice'); } },
     { id: 'rec', icon: 'rec', label: has ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', sub: 'tocando al ritmo del video o de la banda', run: openRecorder },
     { id: 'grid', icon: 'list', label: has ? 'Revisar los compases' : 'Hacer el recorrido sin grabar', sub: has ? 'cuánto dura cada acorde' : 'un compás por acorde, y ajustas', run: function () { openGrid(has ? st.tl : newTimeline(), has && st.tl.converted ? 'Este recorrido se grabó en segundos y se pasó a compases. Revísalo y guárdalo.' : ''); } }
   ], '<p class="help">El recorrido guarda cuántos tiempos dura cada acorde y el tempo de la canción. Automático avanza por compases y puedes cambiar el tempo sin que se desordene. ' +
-    'Escuchando usa el micrófono y avanza cuando reconoce el acorde siguiente. En cualquier modo, tocar un acorde de la letra lo pone como el actual.</p>');
+    'Escuchando usa el micrófono y avanza cuando oye el acorde siguiente; si oye otra cosa o hay silencio, espera. En cualquier modo, tocar un acorde de la letra lo pone como el actual.</p>');
 }
 function openLiveMore() {
   var st = liveState, items = [
@@ -4940,7 +5286,6 @@ function openLiveMore() {
   if ((st.mode === 'practice' || midi.inp) && !items.some(function (x) { return x.id === 'midi'; })) items.push({ id: 'midi', icon: 'keys', label: 'Teclado MIDI', sub: midi.inp ? midi.inp.name : 'elegir teclado', run: openMidiInputs });
   if (st.mode === 'listen') {
     items.push({ id: 'inp', icon: 'mic', label: 'Entrada de audio', sub: 'micrófono o interfaz con la guitarra', run: openEarInputs });
-    items.push({ id: 'learn', icon: 'metro', label: 'Aprender el sonido de la guitarra', sub: 'mejora el reconocimiento', run: openEarLearn });
   }
   if (st.tl) items.push({ id: 'ltempo', icon: 'mic', label: 'Detectar el tempo de la banda', sub: 'con el micrófono, y avanzar a ese tempo', run: function () { pauseLive(); openTempoListen(function (bpm) { setBpm(bpm); toast('Automático a ' + bpm + ' bpm (en este equipo).', 3500); }); } });
   if (st.tl && Math.round(st.bpm) !== Math.round(st.tl.bpm)) items.push({ id: 'gt', icon: 'metro', label: 'Guardar ' + Math.round(st.bpm) + ' bpm como tempo del grupo', sub: 'ahora ' + Math.round(st.tl.bpm), run: saveGroupTempo });
@@ -4948,9 +5293,10 @@ function openLiveMore() {
   items.push({ id: 'rec', icon: 'rec', label: st.tl ? 'Volver a grabar el recorrido' : 'Grabar el recorrido', run: openRecorder });
   items.push({ id: 'sync', icon: 'share', label: 'Pantallas conectadas', sub: sync.role === 'guia' ? 'guiando la sala ' + sync.code : sync.role === 'sigue' ? 'siguiendo la sala ' + sync.code : 'que otros celulares sigan a este', run: openSyncSheet });
   items.push({ id: 'oido', icon: 'mic', label: oidoActive() ? 'Dejar de escuchar' : 'Que el celular me escuche', sub: 'sin cable: oye tu piano y avanza cuando aciertas', run: oidoToggleLive });
+  items.push({ id: 'mic', icon: 'mic', label: '¿Qué oye el celular?', sub: 'mira en vivo qué teclas oye, el volumen y la afinación', run: openMicCheck });
   if (vozSupported()) items.push({ id: 'voz', icon: 'mic', label: voz ? 'Apagar la voz' : 'Mandar con la voz', sub: '«siguiente», «otra vez», «más lento», «pausa»…', run: vozToggle });
   if (st.stu && st.tl && st.tl.video) items.push({ id: 'video', icon: 'video', label: st.mode === 'video' ? 'Volver al clic' : 'Con el video (más lento si quieres)', run: function () { stuVideoMode(st.mode !== 'video'); } });
-  if (st.stu) items = items.filter(function (x) { return ['vol', 'kbs', 'imm', 'easy', 'midi', 'sync', 'snd', 'full', 'view', 'voz', 'oido', 'video'].indexOf(x.id) >= 0; });
+  if (st.stu) items = items.filter(function (x) { return ['vol', 'kbs', 'imm', 'easy', 'midi', 'sync', 'snd', 'full', 'view', 'voz', 'oido', 'mic', 'video'].indexOf(x.id) >= 0; });
   items.push({ id: 'help', icon: 'text', label: 'Cómo funciona', run: openLiveHelp });
   menuSheet('En vivo', items);
 }
@@ -4960,7 +5306,7 @@ function openLiveHelp() {
     '<p><b>Manual.</b> Toca la pantalla, usa las flechas o un pedal Bluetooth de pasar páginas. Quien conoce la canción puede pasarla con el pie.</p>' +
     '<p><b>Recorrido por compases.</b> Guarda cuántos tiempos dura cada acorde. Se graba tocando «Cambio» al ritmo del video o de la banda: la app acomoda cada toque al tiempo más cercano, así no depende de tu precisión. Luego lo revisas en la cuadrícula. También puedes hacerlo sin grabar: un compás por acorde y ajustas lo que cambie.</p>' +
     '<p><b>Automático.</b> Tras una cuenta de un compás, avanza por tiempos y te muestra en qué tiempo del acorde van. Puedes subir o bajar el tempo en plena canción y con «Clic» suena el metrónomo para la banda. Si se desfasan, toca en la letra el acorde que suena.</p>' +
-    '<p><b>Escuchando (en prueba).</b> El celular oye a la banda y avanza cuando reconoce el acorde siguiente. Funciona mejor cerca de la guitarra y con poco ruido; en una laptop con la guitarra conectada a la interfaz de audio, mejor todavía.</p></div>');
+    '<p><b>Escuchando.</b> El celular oye a la banda (piano o guitarra) y avanza cuando oye el acorde que sigue. Si oye otra cosa —una tecla equivocada, otro acorde, ruido, gente hablando— o hay silencio, espera: la canción no avanza sola. Si la banda se queda más tiempo en un acorde, también espera. Funciona mejor cerca del instrumento o del parlante; en una laptop con la guitarra conectada a la interfaz de audio, mejor todavía. Para ver qué está oyendo, usa «¿Qué oye el celular?».</p></div>');
 }
 function onLiveTap(e) {
   if (e.target.closest && e.target.closest('[data-lvgrip]')) return;          // la barrita del teclado no avanza
@@ -4998,6 +5344,7 @@ function onLiveTap(e) {
     case 'slower': setBpm(st.bpm - 2); break;
     case 'faster': setBpm(st.bpm + 2); break;
     case 'oido': oidoToggleLive(); break;
+    case 'miccheck': openMicCheck(); break;
     case 'navtog': navToggle(); break;
     case 'vrate': videoRate(+b.getAttribute('data-r')); break;
     case 'click': st.click = !st.click; LS.set('cfp.liveClick', st.click); st.nextClick = null; audio(); lid('lv-nav').innerHTML = navHTML(); break;
@@ -5484,21 +5831,13 @@ function setVideoVolume(v, quiet) {
   if (yt.player && typeof yt.player.setVolume === 'function') { try { yt.player.setVolume(v); } catch (e) { /* nada */ } }
 }
 
-/* parte 8: modo «escuchando»
-   No intenta reconocer cualquier acorde: decide si ya suena el acorde siguiente del recorrido o sigue el actual.
-   Ayudas: entrada elegible (interfaz de audio con la guitarra conectada), el golpe del rasgueo como señal de cambio,
-   el tiempo del recorrido como guía (el tempo se ajusta a la banda) y el sonido aprendido de tu guitarra. */
-var ear = null, EAR_LEARN = 'cfp.earLearn', EAR_INPUT = 'cfp.earInput';
-function cosSim(a, b) { var s = 0; for (var k = 0; k < 12; k++) s += a[k] * b[k]; return s; }
-function sameChord(a, b) { for (var k = 0; k < 12; k++) if (Math.abs(a[k] - b[k]) > 1e-6) return false; return true; }
-function earLearned() { var o = LS.get(EAR_LEARN, null); return o && typeof o === 'object' ? o : {}; }
-/* Molde del acorde: el teórico, mezclado con cómo suena tu guitarra si ya se aprendió. */
-function earTemplateFor(en) {
-  var t = C.chordTemplate(en), L = earLearned()[en];
-  if (!L || L.length !== 12) return t;
-  var m = t.map(function (x, k) { return 0.35 * x + 0.65 * L[k]; }), n = Math.sqrt(m.reduce(function (a, x) { return a + x * x; }, 0)) || 1;
-  return m.map(function (x) { return x / n; });
-}
+/* parte 8: modo «escuchando» (director)
+   Oye a la banda (micrófono o interfaz con la guitarra) y decide si ya suena el acorde siguiente del recorrido.
+   Oído 3 (oct 2026): mira tecla por tecla (C.listenCreate, el mismo oído del alumno, con la afinación del piano y sin
+   roces ni golpes) y ESPERA: el tiempo del recorrido solo corre si lo que suena es el acorde actual o uno de los que
+   pueden venir. Una tecla equivocada, otro acorde, ruido o gente hablando: la canción no avanza (antes avanzaba sola).
+   Si la banda se queda más tiempo en un acorde, también espera. El tempo se sigue ajustando a la banda. */
+var ear = null, EAR_INPUT = 'cfp.earInput', OIDO_TUNE = 'cfp.oidoAfina';
 function earConstraints(id) {
   var a = { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
   if (id) a.deviceId = { exact: id };
@@ -5528,20 +5867,6 @@ function earNode(ms, own) {
   }
   return { ms: ms, own: own, src: src, an: an, buf: new Float32Array(bins), map: map, prev: new Float32Array(map.length) };
 }
-/* Cuadro actual: notas (cromagrama normalizado), nivel y golpe (cuánto creció el sonido respecto del cuadro anterior). */
-function earRead(E) {
-  E.an.getFloatFrequencyData(E.buf);
-  var ch = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], peak = -200, flux = 0, tot = 0, q, p;
-  for (q = 0; q < E.map.length; q++) {
-    var m = E.map[q], db = E.buf[m[0]], mag = Math.pow(10, db / 20);
-    if (db > peak) peak = db;
-    ch[m[1]] += mag * m[2];
-    var d = mag - E.prev[q]; if (d > 0) flux += d; E.prev[q] = mag; tot += mag;
-  }
-  var norm = 0; for (p = 0; p < 12; p++) { ch[p] = Math.sqrt(ch[p]); norm += ch[p] * ch[p]; }
-  norm = Math.sqrt(norm) || 1; for (p = 0; p < 12; p++) ch[p] /= norm;
-  return { ch: ch, peak: peak, flux: tot > 0 ? flux / tot : 0 };
-}
 function earRelease(E) {
   if (!E) return;
   try { E.src.disconnect(); } catch (e) { /* nada */ }
@@ -5555,8 +5880,15 @@ function earParts(st) {
 }
 function earFollower(st) {
   var tl = !!st.startB, beats = st.path.map(function (k, q) { return tl ? stepBeats(q) : 4; });
-  return C.followerCreate({ tpls: st.path.map(function (k, q) { return earTpl(q); }), beats: beats, bpm: tl ? (st.bpm || st.tl.bpm) : 90,
+  return C.followerCreate({ tpls: st.path.map(function (k, q) { return C.chordTemplate(st.vo[q].en); }), beats: beats, bpm: tl ? (st.bpm || st.tl.bpm) : 90,
     dt: 0.05, parts: earParts(st), i0: st.i, loose: !tl });
+}
+/* la afinación del piano que midió el oído: se recuerda en este equipo (así acierta desde la primera nota) */
+function earTune() { var t = +LS.get(OIDO_TUNE, 0); return t >= -50 && t <= 50 ? t : 0; }
+function earSaveTune(o, now) {
+  if (!o || !o.tuneInfo || now - (o.tuneSaved || 0) < 5000) return;
+  o.tuneSaved = now;
+  var g = o.tuneInfo(); if (g && g.r >= 0.5 && g.w >= 60 && Math.round(g.t) !== earTune()) LS.set(OIDO_TUNE, Math.round(g.t));
 }
 function startEar(stream) {
   if (ear) return;
@@ -5564,7 +5896,9 @@ function startEar(stream) {
   (stream ? Promise.resolve(stream) : earGetStream()).then(function (ms) {
     if (!liveState) { if (!stream) ms.getTracks().forEach(function (t) { t.stop(); }); return; }
     var E = earNode(ms, !stream); if (!E) throw new Error('Sin audio en este equipo.');
-    E.tpl = {}; E.lastMeter = 0; E.fluxAvg = 0; E.quietFor = 0; E.since = performance.now();
+    E.lastMeter = 0; E.quietFor = 0; E.since = performance.now();
+    E.lis = C.listenCreate({ sr: AC.sampleRate, nfft: E.an.fftSize, tune: earTune() });
+    E.pcs = st.vo.map(function (x) { return C.chordPcs(x.en); });
     ear = E; E.fol = earFollower(st); E.bpm = st.tl ? (st.bpm || st.tl.bpm) : 0;
     ear.timer = setInterval(earFrame, 50);
     if (st.startB) { st.beat0 = st.startB[st.i]; st.t0 = performance.now(); st.bpm = E.bpm; }
@@ -5573,45 +5907,57 @@ function startEar(stream) {
     toast('No se pudo usar el micrófono. ' + (e && e.name === 'NotAllowedError' ? 'Da permiso al micrófono en el navegador.' : (e && e.message ? e.message : '')), 5500);
   });
 }
-function stopEar() { if (!ear) return; clearInterval(ear.timer); earRelease(ear); ear = null; }
-function earTpl(i) { var st = liveState; return ear.tpl[i] || (ear.tpl[i] = earTemplateFor(st.vo[i].en)); }
-/* Cada 50 ms: lo que suena pasa al seguidor, que sabe cuánto dura cada acorde y se da cuenta si la banda
-   se adelanta, se atrasa, se salta acordes o repite una parte. */
+function stopEar() { if (!ear) return; clearInterval(ear.timer); earRelease(ear); ear = null; if (liveState) liveState.earHold = false; }
+/* Cada 50 ms: qué teclas suenan -> cuánto se parece cada acorde del recorrido -> el seguidor decide.
+   El seguidor sabe cuánto dura cada acorde y se da cuenta si la banda se adelanta, se atrasa, se salta acordes o
+   repite una parte; pero si lo que suena no es el acorde actual ni uno de los que pueden venir, espera. */
 function earFrame() {
   var st = liveState;
   if (!ear || !st || st.mode !== 'listen' || recState || gridState || sugState) return;
-  var now = performance.now(), f = earRead(ear), p, onset = false;
-  if (f.flux > Math.max(0.12, 2.2 * ear.fluxAvg)) onset = true;                 // golpe: rasgueo o ataque
-  ear.fluxAvg = ear.fluxAvg * 0.94 + f.flux * 0.06;
+  var now = performance.now(), f = ear.lis.frame(oidoRead(ear, ear.lis.kmax));
   var lv = lid('lv-lvl'); if (lv) lv.style.width = Math.max(0, Math.min(100, (f.peak + 90) * 1.6)).toFixed(0) + '%';
   // silencio: muy bajo, o mucho más bajo que como venía sonando la banda (sirve con cualquier volumen de entrada)
-  var quiet = f.peak < -72 || (ear.lvl != null && f.peak < ear.lvl - 26), mx = 0, mean = 0;
+  var quiet = f.peak < -72 || (f.lvl != null && f.peak < f.lvl - 26);
   ear.quietFor = quiet ? ear.quietFor + 1 : 0;
-  for (p = 0; p < 12; p++) { mx = Math.max(mx, f.ch[p]); mean += f.ch[p] / 12; }
-  // el ruido reparte la energía entre las 12 notas; un acorde la concentra en pocas
-  var clear = !quiet && mx > 0 && (mx - mean) / mx >= 0.3;
-  if (clear) ear.lvl = ear.lvl == null ? f.peak : ear.lvl * 0.97 + f.peak * 0.03;
-  ear.noiseFor = clear ? 0 : (ear.noiseFor || 0) + 1;
-  // silencio, o solo ruido de sala por más de un segundo (oración, conversación): la canción espera
-  var r = ear.fol.step({ ch: clear ? f.ch : null, silent: ear.quietFor >= 3 || ear.noiseFor >= 20, onset: onset && !quiet });
+  var tonal = f.tonal && !quiet;
+  var r = ear.fol.step({ silent: ear.quietFor >= 3, tonal: tonal, onset: f.onset && !quiet,
+    scores: tonal ? ear.pcs.map(function (c) { return C.chordScoreKeys(f.all, c); }) : [] });
   if (r.changed && r.i !== st.i) {
     if (window.__earLog) window.__earLog.push([r.i, now]);
     ear.since = now; setLiveIndex(r.i, true);
   }
+  if (window.__earWhy) window.__earWhy.push([r.why, r.i, now]);
   ear.bpm = r.bpm;
-  if (st.startB) { st.beat0 = st.startB[st.i] + Math.max(0, r.beat); st.t0 = now; st.bpm = r.bpm; }   // el rodillo sigue a la banda
-  earMeter(quiet ? null : (clear ? r.conf : 'ruido'));
+  // mientras espera, el rodillo también se queda quieto
+  st.earHold = r.why !== 'actual' && r.why !== 'siguiente';
+  if (st.startB) { st.beat0 = st.startB[st.i] + Math.max(0, r.beat); st.t0 = now; st.bpm = r.bpm; }
+  earMeter(r, f);
+  earSaveTune(ear.lis, now);
 }
 /* Tocar un acorde de la letra (o el pedal) le dice al seguidor dónde están. */
 function earJump(i) { if (ear && ear.fol) ear.fol.jump(i); }
-function earMeter(conf) {
-  var el = lid('lv-meter'), now = performance.now();
+function earChordName(q) {
+  var st = liveState; return q >= 0 && st && st.vo[q] ? C.transposeTok(st.vo[q].en, { shift: 0, keep: true, notation: prefs.notation }) : '';
+}
+function earHeard(f) {
+  var ps = []; for (var p = 0; p < 12; p++) if (f.pcs[p] >= 0.45) ps.push(p);
+  ps.sort(function (a, b) { return f.pcs[b] - f.pcs[a]; });
+  return ps.slice(0, 4).map(function (p) { return C.noteName(p, liveState && liveState.spell === 'flat' ? 'flat' : 'sharp', prefs.notation); }).join(', ');
+}
+function earMeter(r, f) {
+  var el = lid('lv-meter'), now = performance.now(), st = liveState;
   if (!el || now - ear.lastMeter < 180) return;
   ear.lastMeter = now;
-  var tempo = ear.bpm && liveState && liveState.startB ? ' · ' + Math.round(ear.bpm) + ' bpm' : '';
-  if (conf === null) { el.textContent = 'Escuchando… (silencio: la canción espera)' + tempo; return; }
-  if (conf === 'ruido') { el.textContent = 'Escuchando… (no distingo un acorde claro)' + tempo; return; }
-  el.innerHTML = 'Siguiendo a la banda: seguro <b>' + Math.round(Math.min(1, conf) * 100) + ' %</b>' + esc(tempo);
+  var tempo = ear.bpm && st && st.startB ? ' · ' + Math.round(ear.bpm) + ' bpm' : '', cur = earChordName(st.i);
+  var nxt = st.i + 1 < st.vo.length ? earChordName(st.i + 1) : '';
+  if (r.why === 'silencio') { el.textContent = 'Escuchando… silencio: la canción espera' + tempo; return; }
+  if (r.why === 'ruido') { el.textContent = 'Escuchando… no oigo notas claras: espero' + tempo; return; }
+  if (r.why === 'otro') {
+    var h = earHeard(f);
+    el.innerHTML = (h ? 'Oigo <b>' + esc(h) + '</b>: ' : 'Oigo otra cosa: ') + 'no es ' + esc(cur) + (nxt ? ' ni ' + esc(nxt) : '') + '. <b>Espero.</b>';
+    return;
+  }
+  el.innerHTML = 'Siguiendo a la banda: suena <b>' + esc(r.why === 'siguiente' && r.nextI >= 0 ? earChordName(r.nextI) : cur) + '</b>' + esc(tempo);
 }
 /* ---------- entrada de audio: micrófono del equipo o la interfaz con la guitarra ---------- */
 function openEarInputs() {
@@ -5631,67 +5977,6 @@ function openEarInputs() {
       });
     });
   }).catch(function () { toast('No se pudieron ver las entradas de audio.'); });
-}
-/* ---------- aprender el sonido de tu guitarra ---------- */
-function openEarLearn() {
-  var st = liveState; if (!st) return;
-  if (ear) { stopEar(); drawLive(); }
-  var list = [];
-  st.vo.forEach(function (x) { if (list.indexOf(x.en) < 0) list.push(x.en); });
-  var show = function (en) { return C.transposeTok(en, { shift: 0, keep: true, notation: prefs.notation }); };
-  var L = { k: 0, acc: null, got: 0, E: null, timer: 0, done: 0, on: false, switchAt: 0, onset: 0, fluxAvg: 0, warned: false };
-  var stop = function () { clearInterval(L.timer); L.timer = 0; earRelease(L.E); L.E = null; };
-  openSheet('Aprender el sonido', '<div id="el-b"></div>', function (el) {
-    var draw = function () {
-      var b = el.querySelector('#el-b'); if (!b) return;
-      var learned = earLearned();
-      if (!L.on) b.innerHTML = '<p class="help">Toca cada acorde de esta canción cuando aparezca y déjalo sonar unos 2 segundos. La app memoriza cómo suena tu guitarra en este equipo y lo usa al escuchar. Mejor con la guitarra conectada a la interfaz.</p>' +
-        '<p class="help">Acordes: ' + list.map(function (en) { return esc(show(en)) + (learned[en] ? ' (aprendido)' : ''); }).join(', ') + '</p>' +
-        '<div class="btnrow"><button type="button" class="btn primary" data-el="start">' + icon('mic') + 'Empezar</button>' +
-        (Object.keys(learned).length ? '<button type="button" class="btn" data-el="forget">Olvidar lo aprendido</button>' : '') + '</div>';
-      else if (L.k < list.length) b.innerHTML = '<p class="help">Acorde ' + (L.k + 1) + ' de ' + list.length + '</p><p class="tl-res"><b>' + esc(show(list[L.k])) + '</b></p>' +
-        '<p class="help">Rasguea este acorde y déjalo sonar.</p><div class="tl-meter"><i id="el-p" style="width:' + Math.round(100 * L.got / 1.5) + '%"></i></div><p class="help" id="el-w"></p>' +
-        '<div class="btnrow"><button type="button" class="btn" data-el="skip">Saltar</button></div>';
-      else b.innerHTML = '<p class="tl-res"><b>' + L.done + '</b> ' + (L.done === 1 ? 'acorde aprendido' : 'acordes aprendidos') + '</p>' +
-        '<p class="help">Se usan al escuchar en este equipo. Si cambias de guitarra, de afinación o de entrada, apréndelos de nuevo.</p><div class="btnrow"><button type="button" class="btn primary" data-close="1">Listo</button></div>';
-    };
-    var tick = function () {
-      if (!L.E || L.k >= list.length) return;
-      var now = performance.now(), f = earRead(L.E), mx = 0, mean = 0, p;
-      if (f.flux > Math.max(0.12, 2.2 * L.fluxAvg)) L.onset = now;             // golpe de rasgueo
-      L.fluxAvg = L.fluxAvg * 0.94 + f.flux * 0.06;
-      for (p = 0; p < 12; p++) { mx = Math.max(mx, f.ch[p]); mean += f.ch[p] / 12; }
-      if (!(f.peak > -60 && mx && (mx - mean) / mx > 0.3)) return;                // solo cuando suenan notas claras
-      // solo después de un rasgueo nuevo (no la cola del acorde anterior) y pasado el golpe
-      if (!(L.onset > L.switchAt + 100 && now - L.onset > 250)) return;
-      // y solo si se parece razonablemente al acorde pedido (evita aprender otro acorde o una guitarra desafinada)
-      if (cosSim(f.ch, C.chordTemplate(list[L.k])) < 0.55) {
-        if (!L.warned && now - L.switchAt > 6000) { L.warned = true; var w = el.querySelector('#el-w'); if (w) w.textContent = 'No reconozco ese acorde. ¿Está afinada la guitarra? Puedes tocarlo de nuevo o saltarlo.'; }
-        return;
-      }
-      if (!L.acc) L.acc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      for (p = 0; p < 12; p++) L.acc[p] += f.ch[p];
-      L.got += 0.05;
-      var pe = el.querySelector('#el-p'); if (pe) pe.style.width = Math.min(100, Math.round(100 * L.got / 1.5)) + '%';
-      if (L.got >= 1.5) {
-        var n = Math.sqrt(L.acc.reduce(function (a, x) { return a + x * x; }, 0)) || 1, all = earLearned();
-        all[list[L.k]] = L.acc.map(function (x) { return Math.round(x / n * 1000) / 1000; });
-        LS.set(EAR_LEARN, all);
-        L.done++; L.k++; L.acc = null; L.got = 0; L.switchAt = performance.now(); L.warned = false;
-        if (L.k >= list.length) stop();
-        draw();
-      }
-    };
-    el.addEventListener('click', function (e) {
-      var b = e.target.closest('[data-el]'); if (!b) return;
-      var a = b.getAttribute('data-el');
-      if (a === 'start') earGetStream().then(function (ms) { L.E = earNode(ms, true); if (!L.E) throw new Error('audio'); L.on = true; L.k = 0; L.done = 0; L.switchAt = performance.now(); L.timer = setInterval(tick, 50); draw(); })
-        .catch(function () { toast('No se pudo usar el micrófono.'); });
-      else if (a === 'skip') { L.k++; L.acc = null; L.got = 0; L.switchAt = performance.now(); L.warned = false; if (L.k >= list.length) stop(); draw(); }
-      else if (a === 'forget') { LS.set(EAR_LEARN, {}); toast('Listo: se usa el sonido teórico de los acordes.'); draw(); }
-    });
-    draw();
-  }, { onClose: stop });
 }
 
 /* parte 9: recorrido por compases — revisar y ajustar en una cuadrícula, escuchar con clic y acordes, guardar */
@@ -7956,7 +8241,8 @@ function oidoStart(onEv, stream) {
   var go = function (ms) {
     var E = earNode(ms, !stream); if (!E) throw new Error('Este equipo no permite usar el micrófono aquí.');
     // el oído sabe la frecuencia del micrófono: así arma el espectro tecla por tecla que usa con los acordes
-    oido = { E: E, det: C.hearCreate({ sr: AC.sampleRate, nfft: E.an.fftSize }), onEv: onEv || null };
+    // y la afinación del piano que ya midió antes en este equipo (la sigue midiendo y la guarda)
+    oido = { E: E, det: C.hearCreate({ sr: AC.sampleRate, nfft: E.an.fftSize, tune: earTune() }), onEv: onEv || null };
     oido.timer = setInterval(oidoTick, 50);
     return oido;
   };
@@ -7977,13 +8263,14 @@ function oidoRead(E, K) {
     mag = E.mag && E.mag.length === K + 2 ? E.mag : (E.mag = new Float64Array(K + 2));
     for (var k = 0; k < K + 2; k++) { var d = E.buf[k]; mag[k] = d > -160 ? Math.pow(10, d / 20) : 0; }
   }
-  return { raw: raw, peak: peak, t: performance.now(), mag: mag };
+  return { raw: raw, peak: peak, t: performance.now(), mag: mag, db: E.buf };
 }
 function oidoTick() {
   if (!oido) return;
   var f = oidoRead(oido.E, oido.det.kmax), ev = oido.det.frame(f), w = Math.max(0, Math.min(100, (f.peak + 90) * 1.6)).toFixed(0) + '%';
   Array.prototype.forEach.call(document.querySelectorAll('.oido-lvl i'), function (i) { i.style.width = w; });
   if (ev && oido.onEv) oido.onEv(ev);
+  earSaveTune(oido.det, f.t);
 }
 /* ---------- en el modo en vivo del alumno ---------- */
 function oidoTargetNow() {
@@ -8054,7 +8341,7 @@ function oidoMeterHTML() {
   var st = liveState, want = st && st.vo[st.i] ? st.vo[st.i].label || '' : '';
   return '<div class="lv-meter lv-oidom"><span class="lv-lvl oido-lvl"><i></i></span><span id="lv-oido">' +
     (st.mode === 'practice' ? 'Te escucho: toca el ' + esc(want) : 'Te escucho') + '</span>' +
-    '<button type="button" class="linkbtn" data-lv="oido">Apagar</button><span class="lv-good" id="lv-good"></span></div>';
+    '<button type="button" class="linkbtn" data-lv="miccheck">¿Qué oye?</button><button type="button" class="linkbtn" data-lv="oido">Apagar</button><span class="lv-good" id="lv-good"></span></div>';
 }
 /* Clic sin tono mientras el celular escucha (un clic con tono sonaría como una nota). */
 function noiseClick(when, accent) {
@@ -8554,7 +8841,95 @@ stuChipsHTML = function () {
   }).join('') + '<a class="chip more" href="#/a">' + icon('user') + 'Todos</a></nav>' + (g ? grSyncChipHTML() : '') + '</section>' + who;
 };
 
-var APP_VERSION = '2026-10-01 20:56';
+/* parte 20: «¿Qué oye el celular?»
+   Antes de tocar, o cuando algo no sale, muestra en vivo qué teclas oye el celular, si el volumen alcanza, si hay mucho
+   ruido y cuánto está desafinado el piano. Así se sabe al momento si el problema es el celular, el piano, el parlante o
+   la distancia. Usa el mismo oído del alumno y de «Escuchando» (C.listenCreate). Si el micrófono ya está prendido
+   (alumno o director), usa ese mismo; si no, lo prende solo mientras la pantalla está abierta. */
+var MC_LO = 36, MC_HI = 96;                      // Do2 a Do7: el bajo de Diego, los acordes y los agudos
+function micKeysSvg() {
+  var white = [], black = [], m, x = 0, W = 0;
+  for (m = MC_LO; m <= MC_HI; m++) if ([1, 3, 6, 8, 10].indexOf(C.mod12(m)) < 0) W++;
+  var kw = 100 / W;
+  for (m = MC_LO; m <= MC_HI; m++) {
+    var pc = C.mod12(m);
+    if ([1, 3, 6, 8, 10].indexOf(pc) < 0) { white.push('<rect class="mc-w" data-k="' + m + '" x="' + (x * kw).toFixed(3) + '" y="0" width="' + kw.toFixed(3) + '" height="60"/>'); x++; }
+    else black.push('<rect class="mc-b" data-k="' + m + '" x="' + (x * kw - kw * 0.32).toFixed(3) + '" y="0" width="' + (kw * 0.64).toFixed(3) + '" height="37"/>');
+  }
+  var labels = ''; x = 0;
+  for (m = MC_LO; m <= MC_HI; m++) {
+    if ([1, 3, 6, 8, 10].indexOf(C.mod12(m)) >= 0) continue;
+    if (C.mod12(m) === 0) labels += '<text x="' + (x * kw + kw / 2).toFixed(3) + '" y="57" class="mc-lab">' + esc(C.noteName(0, 'sharp', prefs.notation)) + (Math.floor(m / 12) - 1) + '</text>';
+    x++;
+  }
+  return '<svg class="mc-kb" viewBox="0 0 100 60" preserveAspectRatio="none" role="img" aria-label="Teclado: se encienden las teclas que oye el celular">' + white.join('') + black.join('') + labels + '</svg>';
+}
+function openMicCheck() {
+  var M = { E: null, own: false, lis: null, timer: 0, glow: {}, quietSince: performance.now(), lastTonal: 0, peaks: [], tuneSaved: 0, n: 0 };
+  var stop = function () { clearInterval(M.timer); M.timer = 0; if (M.own && M.E) earRelease(M.E); M.E = null; };
+  var html = '<p class="help">Toca unas notas o un acorde: se encienden las teclas que el celular oye. Así sabes si te escucha bien antes de empezar.</p>' +
+    '<div class="mc-wrap">' + micKeysSvg() + '</div>' +
+    '<p class="mc-heard" id="mc-heard" aria-live="polite">Esperando sonido…</p>' +
+    '<div class="mc-row"><span class="mc-k">Volumen</span><span class="tl-meter mc-lvl"><i id="mc-lvl"></i></span></div>' +
+    '<ul class="mc-st"><li id="mc-vol">—</li><li id="mc-noise">—</li><li id="mc-tune">Afinación del piano: toca unas notas para medirla.</li></ul>' +
+    '<details class="mc-tips"><summary>Consejos para que te oiga mejor</summary><ul>' +
+    '<li>Pon el celular frente al piano o frente al parlante, a uno o dos palmos. Encima del teclado oye más el ruido de las teclas que la música.</li>' +
+    '<li>Con un equipo de dos parlantes el sonido llega dos veces y algunas notas se apagan: mejor que suene un solo parlante, o pon el celular frente a uno.</li>' +
+    '<li>Si el sonido de piano tiene mucho eco (reverberación), bájalo un poco en el programa (Analog Lab, Ableton).</li>' +
+    '<li>Si cantas mientras tocas, el celular puede confundirse con tu voz.</li></ul></details>' +
+    '<div class="btnrow"><button type="button" class="btn primary" data-close="1">Listo</button></div>';
+  openSheet('¿Qué oye el celular?', html, function (el) {
+    var go = function (E, own) {
+      M.E = E; M.own = own;
+      M.lis = C.listenCreate({ sr: AC.sampleRate, nfft: E.an.fftSize, tune: earTune(), lo: MC_LO, hi: MC_HI, ring: 60 });
+      M.timer = setInterval(tick, 50);
+    };
+    var tick = function () {
+      if (!M.E || !el.isConnected) { stop(); return; }
+      var now = performance.now(), f = M.lis.frame(oidoRead(M.E, M.lis.kmax)), m, k;
+      var lv = el.querySelector('#mc-lvl'); if (lv) lv.style.width = Math.max(0, Math.min(100, (f.peak + 90) * 1.4)).toFixed(0) + '%';
+      M.peaks.push(f.peak); if (M.peaks.length > 60) M.peaks.shift();
+      // teclas que suenan: se encienden y se apagan de a poco (así se alcanzan a ver)
+      Object.keys(M.glow).forEach(function (q) { M.glow[q] *= 0.8; if (M.glow[q] < 0.05) delete M.glow[q]; });
+      if (f.tonal) { M.lastTonal = now; Object.keys(f.keys).forEach(function (q) { if (f.keys[q] >= 0.25 && +q >= MC_LO && +q <= MC_HI) M.glow[q] = Math.max(M.glow[q] || 0, f.keys[q]); }); }
+      if (++M.n % 2) return;                         // la pantalla, 10 veces por segundo
+      Array.prototype.forEach.call(el.querySelectorAll('.mc-kb rect'), function (r) {
+        var g = M.glow[r.getAttribute('data-k')] || 0;
+        r.style.fill = g ? 'var(--chord)' : ''; r.style.fillOpacity = g ? (0.35 + 0.65 * Math.min(1, g)).toFixed(2) : '';
+      });
+      var heard = el.querySelector('#mc-heard');
+      if (heard) {
+        if (f.tonal) {
+          var ps = []; for (k = 0; k < 12; k++) if (f.pcs[k] >= 0.45) ps.push(k);
+          ps.sort(function (a, b) { return f.pcs[b] - f.pcs[a]; });
+          heard.innerHTML = 'Oigo: <b>' + esc(ps.slice(0, 5).map(function (p) { return C.noteName(p, 'sharp', prefs.notation); }).join(', ')) + '</b>';
+        } else if (now - M.lastTonal > 1500) heard.textContent = f.peak > -70 ? 'Oigo sonido, pero no notas claras (ruido, voces).' : 'No oigo nada todavía: toca unas notas.';
+      }
+      // volumen y ruido de fondo (lo más bajo de los últimos 3 s)
+      var lo = Math.min.apply(null, M.peaks), hi = Math.max.apply(null, M.peaks), vol = el.querySelector('#mc-vol'), nz = el.querySelector('#mc-noise');
+      if (vol) vol.textContent = hi > -6 ? 'Muy fuerte: se satura. Aleja un poco el celular o baja el volumen.' :
+        (now - M.lastTonal < 3000 ? (hi < -50 ? 'Te oigo bajito: acerca el celular al piano o al parlante.' : 'Volumen: bien.') : 'Volumen: toca para medirlo.');
+      if (nz) nz.textContent = lo > -50 ? 'Hay bastante ruido de fondo (ventilador, calle, conversación): puede confundir notas.' : 'Ruido de fondo: poco.';
+      // afinación del piano (la usan el oído del alumno y «Escuchando»)
+      var g = M.lis.tuneInfo(), tn = el.querySelector('#mc-tune');
+      if (tn && g && g.w >= 30 && g.r >= 0.4) {
+        var c = Math.round(g.t), a = Math.abs(c);
+        tn.textContent = a < 8 ? 'Afinación del piano: bien.' : 'El piano suena ' + (a >= 25 ? 'bastante' : 'un poco') + ' más ' + (c > 0 ? 'alto' : 'bajo') + ' de lo normal (' + (c > 0 ? '+' : '') + c + ' centésimos de semitono). No importa: ya lo compenso.';
+      }
+      earSaveTune(M.lis, now);
+    };
+    // si ya hay micrófono prendido (alumno o «Escuchando»), se usa ese; si no, uno solo para esta pantalla
+    if (oido && oido.E) go(oido.E, false);
+    else if (ear) go(ear, false);
+    else earGetStream().then(function (ms) {
+      if (!el.isConnected) { ms.getTracks().forEach(function (t) { t.stop(); }); return; }
+      audio(); var E = earNode(ms, true); if (!E) throw new Error('Este equipo no permite usar el micrófono aquí.');
+      go(E, true);
+    }).catch(function (e) { var h = el.querySelector('#mc-heard'); if (h) h.textContent = micErrText(e); });
+  }, { onClose: stop });
+}
+
+var APP_VERSION = '2026-10-02 17:21';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
@@ -8772,7 +9147,7 @@ window.__cancionero = {
     grupo: function () { return { info: grupoInfo(), online: grOnline(), inbox: LS.get(INBOX_KEY, []), mine: LS.get(MINE_KEY, []), dec: LS.get(DEC_KEY, {}) }; }, who: function () { return whoGet(); }, oidoTarget: function () { return liveState ? { pcs: Object.keys(midiTarget()).map(Number), i: liveState.i, n: liveState.path.length, mode: liveState.mode } : null; },
     grupoInvite: function (sid) { var g = grupoInfo(), pr = getStudent(sid); return grInviteURL({ v: 1, g: g.secret, x: g.x, y: g.y, s: sid, n: pr.name, c: pr.color, d: g.dirName }); },
     stu: function (sid) { return getStudent(sid); }, kidSave: function (song) { return kidSongSave(cleanSong(song)); }, songById: function (id) { return getSong(id); },
-    dirSave: function (song) { var s2 = cleanSong(song); local.songs[s2.id] = s2; saveLocal(); delete infoCache[s2.id]; }, fixCollisions: fixCollisions, version: function () { return APP_VERSION; }, setPref: function (k, v) { prefs[k] = v; savePrefs(); applyPrefs(); render(); }, openVersion: function () { openVersionSheet(); }, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), startB: liveState.startB, bpm: liveState.bpm, tl: liveState.tl } : null; }, grid: function () { return gridState ? JSON.parse(JSON.stringify(gridState.tl)) : null; }, _setV1: function (marks, end) { var st = liveState, song = clone(st.song); song.timeline = { v: 1, video: '', start: 0, sig: seqSig(st.steps), steps: marks, end: end }; local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id]; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; },
+    dirSave: function (song) { var s2 = cleanSong(song); local.songs[s2.id] = s2; saveLocal(); delete infoCache[s2.id]; }, fixCollisions: fixCollisions, version: function () { return APP_VERSION; }, setPref: function (k, v) { prefs[k] = v; savePrefs(); applyPrefs(); render(); }, openVersion: function () { openVersionSheet(); }, listenWith: function (stream) { if (liveState) { setLiveMode('listen'); startEar(stream); } }, liveInfo: function () { return liveState ? { i: liveState.i, n: liveState.path.length, mode: liveState.mode, playing: liveState.playing, path: liveState.path.slice(), chords: liveState.vo.map(function (x) { return x.en; }), keys: liveState.vo.map(function (x) { return (x.v.right || []).concat(x.v.hideLeft || x.v.left == null ? [] : [x.v.left]); }), startB: liveState.startB, bpm: liveState.bpm, tl: liveState.tl } : null; }, grid: function () { return gridState ? JSON.parse(JSON.stringify(gridState.tl)) : null; }, _setV1: function (marks, end) { var st = liveState, song = clone(st.song); song.timeline = { v: 1, video: '', start: 0, sig: seqSig(st.steps), steps: marks, end: end }; local.songs[song.id] = cleanSong(song); saveLocal(); delete infoCache[song.id]; }, editorSrc: function () { return editorState ? C.modelToSrc(editorState.model) : null; },
   setTimeline: function (id, beats, bpm, bpb) { var song = clone(getSong(id)), st = liveSteps(song); song.timeline = { v: 2, bpm: bpm || 100, beats: bpb || 4, sig: seqSig(st.steps), steps: st.steps.map(function (x, k) { return [k, (beats && beats[k % beats.length]) || 4, null]; }), video: null }; local.songs[id] = cleanSong(song); saveLocal(); delete infoCache[id]; },
   students: function () { return stuData(); }, syncState: function () { return { role: sync.role, code: sync.code, online: syncOnline(), songId: sync.songId, gotAt: sync.gotAt }; },
   liveExtra: function () { var st = liveState; return st ? { level: st.level, mode: st.mode, stu: !!st.stu, part: st.easy ? st.easy.cfg.part : null, rhythm: st.easy ? st.easy.cfg.rhythm : null, home: st.easy ? st.easy.home : null, keyboard: st.easy ? st.easy.keyboard : null, labels: st.vo.map(function (x) { return x.label; }), keys: st.vo.map(function (x) { return x.key; }), right: st.vo.map(function (x) { return x.v.right; }), lo: st.lLo, hi: st.rHi, fade: st.fade || null, helpNow: !!st.helpNow, playing: st.playing, bpm: st.bpm } : null; },
