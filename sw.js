@@ -1,8 +1,12 @@
-/* Cancionero: guarda la app en el equipo para usarla sin internet.
-   - La app (index.html) y las canciones (canciones.json): primero internet, y si no hay, la copia guardada.
-   - Fuentes e íconos: primero la copia guardada (no cambian). */
-var VERSION = 'cfp-20261002-222119';
-var ARCHIVOS = ["./", "index.html", "canciones.json", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon-32.png", "balsamiq-sans-400.woff2", "balsamiq-sans-700.woff2", "balsamiq-sans-700i.woff2", "barlow-condensed-600.woff2", "barlow-condensed-700.woff2", "barlow-400.woff2", "barlow-600.woff2", "barlow-700.woff2"];
+/* Cancionero: guarda la app en el equipo para usarla sin internet y abrirla al instante.
+   - La app (index.html, app.js, core.js, app.css): se abre SIEMPRE con la copia guardada (al instante, con o sin internet).
+     Cuando hay una versión nueva en GitHub, el navegador baja este archivo (sw.js) cambiado, que guarda la versión nueva
+     completa en otra caja; al terminar, la app avisa «Hay una versión nueva» y al tocar «Actualizar» se usa la nueva.
+     Así nunca se mezclan archivos de dos versiones.
+   - Las canciones (canciones.json): primero internet (espera corta) y si no, la copia guardada.
+   - Fuentes e íconos: la copia guardada (no cambian). */
+var VERSION = 'cfp-20261005-150642';
+var ARCHIVOS = ["./", "index.html", "app.css", "core.js", "app.js", "canciones.json", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon-32.png", "balsamiq-sans-400.woff2", "balsamiq-sans-700.woff2", "balsamiq-sans-700i.woff2", "barlow-condensed-600.woff2", "barlow-condensed-700.woff2", "barlow-400.woff2", "barlow-600.woff2", "barlow-700.woff2"];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(VERSION).then(function (c) {
@@ -27,10 +31,10 @@ function guardar(clave, res) {
   var copia = res.clone();
   caches.open(VERSION).then(function (c) { c.put(clave, copia); });
 }
-function buscarCopia(clave) { return caches.match(clave, { ignoreSearch: true }); }
+function buscarCopia(clave) { return caches.open(VERSION).then(function (c) { return c.match(clave, { ignoreSearch: true }); }); }
 
 /* Primero internet (con espera máxima); si no responde a tiempo o falla, la copia guardada. */
-function primeroRed(req, clave) {
+function primeroRed(req, clave, espera) {
   return new Promise(function (resolve) {
     var listo = false;
     function conCopia(final) {
@@ -40,13 +44,19 @@ function primeroRed(req, clave) {
         else if (final) { listo = true; resolve(new Response('Sin conexión y sin copia guardada.', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } })); }
       });
     }
-    var espera = setTimeout(function () { conCopia(false); }, 4000);
+    var t = setTimeout(function () { conCopia(false); }, espera || 2500);
     // sin la caché del navegador: GitHub Pages la guarda 10 minutos y retrasaría las actualizaciones
     fetch(req.url, { cache: 'no-store', credentials: 'same-origin' }).then(function (res) {
-      clearTimeout(espera);
+      clearTimeout(t);
       guardar(clave, res);
       if (!listo) { listo = true; resolve(res); }
-    }).catch(function () { clearTimeout(espera); conCopia(true); });
+    }).catch(function () { clearTimeout(t); conCopia(true); });
+  });
+}
+/* Primero la copia guardada; si todavía no hay copia (la primera vez), internet. */
+function primeroCopia(req, clave) {
+  return buscarCopia(clave).then(function (r) {
+    return r || fetch(req).then(function (res) { guardar(clave, res); return res; });
   });
 }
 
@@ -55,10 +65,8 @@ self.addEventListener('fetch', function (e) {
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  if (req.mode === 'navigate') { e.respondWith(primeroRed(req, new URL('index.html', self.location).href)); return; }
   if (url.searchParams.has('v')) return;   // búsqueda de actualizaciones: siempre directo a internet
-  if (/\/canciones\.json$/.test(url.pathname)) { e.respondWith(primeroRed(req, new URL('canciones.json', self.location).href)); return; }
-  e.respondWith(buscarCopia(req).then(function (r) {
-    return r || fetch(req).then(function (res) { guardar(req, res); return res; });
-  }));
+  if (req.mode === 'navigate') { e.respondWith(primeroCopia(req, new URL('index.html', self.location).href)); return; }
+  if (/\/canciones\.json$/.test(url.pathname)) { e.respondWith(primeroRed(req, new URL('canciones.json', self.location).href, 2500)); return; }
+  e.respondWith(primeroCopia(req, req));
 });
