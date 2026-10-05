@@ -5,7 +5,7 @@
      Así nunca se mezclan archivos de dos versiones.
    - Las canciones (canciones.json): primero internet (espera corta) y si no, la copia guardada.
    - Fuentes e íconos: la copia guardada (no cambian). */
-var VERSION = 'cfp-20261005-150642';
+var VERSION = 'cfp-20261005-162213';
 var ARCHIVOS = ["./", "index.html", "app.css", "core.js", "app.js", "canciones.json", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon-32.png", "balsamiq-sans-400.woff2", "balsamiq-sans-700.woff2", "balsamiq-sans-700i.woff2", "barlow-condensed-600.woff2", "barlow-condensed-700.woff2", "barlow-400.woff2", "barlow-600.woff2", "barlow-700.woff2"];
 
 self.addEventListener('install', function (e) {

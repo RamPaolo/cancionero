@@ -978,3 +978,10 @@ body.live-open { overflow: hidden; }
 .btn.ez-cta svg.i { color: #2e9e5b; }
 .btn.sz-cta { background: var(--paper); border-color: #e08a1e; color: #9a5600; }
 .btn.sz-cta svg.i { color: #e08a1e; }
+/* publicar en GitHub */
+.gh-box { border: 1.5px solid var(--rule); border-radius: 12px; padding: .6rem .8rem; margin: .5rem 0 .8rem; background: var(--wash); }
+.gh-st { margin: .3rem 0; font-weight: 600; }
+.gh-err { color: #b3261e; }
+.gh-manual { margin: .4rem 0; }
+.gh-manual > summary, .gh-how > summary { cursor: pointer; font-weight: 700; color: var(--accent); padding: .3rem 0; }
+.gh-how code { font-size: .9em; background: var(--wash); padding: 0 .25rem; border-radius: 4px; }

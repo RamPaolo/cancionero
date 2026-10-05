@@ -141,6 +141,8 @@ function fetchRemote() {
     if (!x.d || !Array.isArray(x.d.songs)) throw new Error('formato');
     dataState = { fromCopy: x.copy, source: x.copy ? 'copia' : 'internet' };
     var changed = !DATA || x.d.version !== DATA.version;
+    // nunca volver solo a unas canciones más antiguas (por ejemplo, si en GitHub se subió un canciones.json viejo)
+    if (changed && DATA && DATA.version && x.d.version && String(x.d.version) < String(DATA.version)) { dataState.older = String(x.d.version); return 'viejo'; }
     LS.set(bk('cache'), x.d);
     if (changed) { setData(x.d); applyPublished(); }
     return changed ? 'nuevo' : 'igual';
@@ -1016,6 +1018,7 @@ function openHomeMenu() {
     { id: 'ver', icon: 'download', label: 'Versión y actualizaciones', sub: 'versión ' + APP_VERSION, run: openVersionSheet }
   ];
   if (!isStandalone()) items.splice(3, 0, { id: 'install', icon: 'install', label: 'Instalar en este equipo', sub: 'funciona sin internet', run: openInstall });
+  if (isGroup() && isDirDevice()) items.splice(n ? 0 : 5, 0, { id: 'gh', icon: 'publish', label: ghReady() ? 'GitHub' : 'Publicar en GitHub desde la app', sub: ghReady() ? ghStatusHTML().replace(/<[^>]+>/g, '') : 'conectas una vez y se sube solo', run: openGhSheet });
   if (n && isGroup()) items.unshift({ id: 'pub', icon: 'publish', label: 'Publicar para todos', sub: n + (n === 1 ? ' cambio' : ' cambios'), run: openPublishSheet });
   menuSheet('Cancionero', items);
 }
@@ -1209,7 +1212,7 @@ function effectiveData(newVersion) {
   return {
     app: 'cancionero-fdp', type: 'cancionero',
     name: isGroup() ? (DATA.name || '') : bookTitle(), subtitle: isGroup() ? (DATA.subtitle || '') : '',
-    version: newVersion ? new Date().toISOString() : (DATA.version || new Date().toISOString()),
+    version: newVersion ? nextDataVersion() : (DATA.version || new Date().toISOString()),
     groups: GROUPS.map(function (g) { return { id: g.id, name: g.name, color: g.color }; }),
     songs: allSongs().map(cleanSong),
     setlists: allSetlists().map(function (sl) { return { id: sl.id, name: sl.name, items: sl.items.map(function (it) { return { id: it.id, shift: it.shift == null ? null : it.shift }; }) }; })
@@ -1267,6 +1270,7 @@ function importPayload(text, fname) {
   if (t[0] === '{') {
     var o; try { o = JSON.parse(t); } catch (e) { toast('Ese archivo no es un cancionero válido.', 4000); return; }
     if (o.type === 'cambios') { mergeIntoCurrent(o); return; }
+    if (o.type === 'respaldo') { backupAsk(o); return; }
     if (!Array.isArray(o.songs)) { toast('Ese archivo no es un cancionero válido.', 4000); return; }
     var name = String(o.name || (fname ? fname.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ') : '') || 'Cancionero importado');
     openSheet('Abrir cancionero', '<p class="help">«' + esc(name) + '» trae ' + o.songs.length + (o.songs.length === 1 ? ' canción' : ' canciones') +
@@ -1307,6 +1311,7 @@ function openPasteImport() {
 function openBackupSheet() {
   var n = localChangeCount(), share = canShareFiles();
   var items = [
+    { id: 'all', icon: 'download', label: 'Copia de todo lo de este equipo', sub: 'canciones, compases, alumnos y su avance, ajustes y voz', run: function () { backupSave(); } },
     { id: 'book', icon: 'download', label: 'Guardar una copia de este cancionero', sub: bookTitle(), run: function () { exportBook(false); } }
   ];
   if (share) items.push({ id: 'bookshare', icon: 'share', label: 'Enviar este cancionero', sub: 'WhatsApp, correo…', run: function () { exportBook(true); } });
@@ -1464,20 +1469,30 @@ function preparePublish() {
 }
 function openPublishSheet() {
   var gh = githubInfo(), n = localChangeCount();
+  var ghBlock = ghReady()
+    ? '<div class="gh-box"><p class="gh-st" id="gh-st" aria-live="polite">' + ghStatusHTML() + '</p><div class="btnrow"><button type="button" class="btn primary" data-x="ghpub">' + icon('publish') + 'Publicar en GitHub ahora</button>' +
+      '<button type="button" class="btn" data-x="ghcfg">Ajustes de GitHub</button></div></div><details class="gh-manual"><summary>Hacerlo a mano (descargar y subir el archivo)</summary>'
+    : (isDirDevice() ? '<div class="gh-box"><p class="help"><b>Más fácil:</b> conecta tu GitHub una vez y se publica solo, sin descargar ni subir archivos.</p><div class="btnrow"><button type="button" class="btn primary" data-x="ghcfg">' + icon('publish') + 'Conectar con GitHub</button></div></div><details class="gh-manual" open><summary>O hacerlo a mano (descargar y subir el archivo)</summary>' : '<details class="gh-manual" open><summary>Publicar a mano</summary>');
   var body = '<p class="help">' + (n === 1 ? 'Tienes 1 cambio guardado' : 'Tienes ' + n + ' cambios guardados') +
-    ' solo en este equipo. Para que todos lo vean, se publica el cancionero completo en dos pasos.</p><ol class="steps">' +
+    ' en este equipo que todavía no están en GitHub. ' + (ghReady() ? '' : 'Para que todos lo vean, se publica el cancionero completo.') + '</p>' + ghBlock + '<ol class="steps">' +
     '<li><b>Descarga el cancionero actualizado.</b> Es el archivo canciones.json, con todas las canciones y tus cambios.' +
     '<div class="btnrow"><button type="button" class="btn primary" data-x="dl">' + icon('download') + 'Descargar canciones.json</button></div></li>' +
     '<li><b>Súbelo a GitHub</b> en lugar del anterior: arrastra el archivo a la página que se abre y toca «Commit changes».' +
     (gh ? '<div class="btnrow"><a class="btn" href="' + esc(gh.upload) + '" target="_blank" rel="noopener">' + icon('upload') + 'Abrir GitHub</a></div>'
         : '<div class="note-box">Abre tu repositorio en github.com y usa «Add file», luego «Upload files».</div>') + '</li></ol>' +
-    '<div class="note-box">El archivo tiene que llamarse exactamente <b>canciones.json</b>. Si tu equipo lo guarda como «canciones (1).json», cámbiale el nombre antes de subirlo.</div>' +
+    '<div class="note-box">El archivo tiene que llamarse exactamente <b>canciones.json</b>. Si tu equipo lo guarda como «canciones (1).json», cámbiale el nombre antes de subirlo.</div></details>' +
     '<p class="help">En uno o dos minutos, quien abra la app con internet verá la versión nueva. Tus cambios siguen guardados en este equipo hasta que esa versión llegue aquí.</p>' +
     '<p class="help">¿No administras el cancionero? Envía tus cambios a quien lo administra: ' +
     '<button type="button" class="btn" data-x="send">' + icon(canShareFiles() ? 'share' : 'download') + (canShareFiles() ? 'Enviar mis cambios' : 'Guardar mis cambios') + '</button></p>';
   openSheet('Publicar para todos', body, function (el) {
     el.addEventListener('click', function (e) {
       var b = e.target.closest('[data-x]'); if (!b || b.disabled) return;
+      if (b.getAttribute('data-x') === 'ghcfg') { closeSheet(true); openGhSheet(); return; }
+      if (b.getAttribute('data-x') === 'ghpub') {
+        b.disabled = true; ghPublish(true).then(function (r) { if (r === 'ok') { closeSheet(true); toast('Publicado en GitHub. En 1 o 2 minutos lo ve todo el que abra la app.', 4000); } else b.disabled = false; })
+          .catch(function () { b.disabled = false; });
+        return;
+      }
       if (b.getAttribute('data-x') === 'dl') {
         b.disabled = true; b.textContent = 'Preparando…';
         preparePublish().then(function () { b.disabled = false; b.innerHTML = icon('download') + 'Descargar otra vez'; });
@@ -1575,6 +1590,32 @@ function openInstall() {
       '<li>Si ya la tenías instalada y la desinstalaste, puede pedir recargar la página una vez antes de mostrar la opción.</li></ol>';
   openSheet('Instalar en este equipo', '<p class="help">Instalado, el cancionero aparece con su ícono, se abre a pantalla completa y funciona sin internet después de abrirlo una vez con conexión.</p>' + steps +
     (location.protocol === 'file:' ? '<div class="note-box">Estás abriendo un archivo guardado en el equipo. Para instalarlo, ábrelo desde su dirección web, por ejemplo la de GitHub Pages.</div>' : ''));
+}
+
+/* ---------- copia de todo (oct 2026) ----------
+   Todo lo que la app guarda en este equipo está en el navegador (localStorage, claves «cfp.»): los cambios y compases de
+   cada cancionero, el cancionero publicado que llegó, los alumnos y su avance, los ajustes, la voz y el grupo.
+   Actualizar la app (subir archivos nuevos a GitHub) NO lo borra. Sí se pierde si se borran los datos del sitio en el
+   navegador, si al desinstalar se marca «borrar datos», o en otro navegador o equipo. Esta copia sirve para eso. */
+function backupData() {
+  var o = { app: 'cancionero-fdp', type: 'respaldo', v: 1, fecha: new Date().toISOString(), version: APP_VERSION, datos: {} };
+  for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf('cfp.') === 0) o.datos[k] = localStorage.getItem(k); }
+  return o;
+}
+function backupSave() {
+  var d = new Date(), name = 'cancionero-copia-de-todo-' + d.toISOString().slice(0, 10) + '.json';
+  saveFile(name, JSON.stringify(backupData()), 'application/json').then(function () {
+    toast('Copia guardada. Guárdala tú (no la mandes al grupo: lleva tu clave de director).', 6000);
+  });
+}
+function backupRestore(o) {
+  Object.keys(o.datos || {}).forEach(function (k) { if (k.indexOf('cfp.') === 0 && typeof o.datos[k] === 'string') { try { localStorage.setItem(k, o.datos[k]); } catch (e) { /* lleno */ } } });
+}
+function backupAsk(o) {
+  var n = Object.keys(o.datos || {}).length, f = String(o.fecha || '').slice(0, 10);
+  confirmSheet('Recuperar la copia de todo', 'Se ponen en este equipo las canciones, compases, alumnos, ajustes y voz de la copia del ' + esc(f) + ' (' + n + ' partes). Lo que hoy tiene este equipo y también está en la copia se reemplaza. ¿Seguir?', 'Recuperar', function () {
+    backupRestore(o); toast('Copia recuperada. Abriendo de nuevo…', 2500); setTimeout(function () { location.reload(); }, 900);
+  });
 }
 
 /* parte 4b: editor de canciones (visual) */
@@ -6638,7 +6679,165 @@ function openVozTrain() {
   }, { onClose: stopAll });
 }
 
-var APP_VERSION = '2026-10-05 10:06';
+/* parte 23: publicar en GitHub desde la app (oct 2026)
+   El director conecta una vez su repositorio con una clave de GitHub de tipo «fine-grained» (solo ese repositorio, solo
+   «Contents: Read and write»). La clave queda SOLO en este equipo (localStorage 'ghpub.v1', fuera de «cfp.»: no viaja al
+   grupo ni va en la «Copia de todo»). Publicar = subir canciones.json con la API de GitHub (un commit), sin descargar ni
+   subir archivos a mano. Con «Publicar solo», se sube 2 minutos después del último cambio del director (canciones,
+   compases, repertorios) o de una propuesta aprobada, cuando hay internet.
+   Antes de subir se lee la versión que hay en GitHub: si es más nueva que la de este equipo y no la subió este equipo
+   (otro equipo publicó), no se pisa: hay que traerla primero. Si en GitHub hay una más vieja que la de este equipo
+   (por ejemplo, se subió un canciones.json antiguo), «Publicar ahora» la repone. */
+var GH_KEY = 'ghpub.v1', GH = { timer: 0, busy: false, delay: 120000 };
+function ghCfg() { try { return JSON.parse(localStorage.getItem(GH_KEY) || 'null'); } catch (e) { return null; } }
+function ghSave(c) { try { if (c) localStorage.setItem(GH_KEY, JSON.stringify(c)); else localStorage.removeItem(GH_KEY); } catch (e) { /* nada */ } }
+function ghReady() { var c = ghCfg(); return !!(c && c.token && c.owner && c.repo && c.ok); }
+function ghErrText(st) {
+  if (st === 401) return 'La clave no sirve (venció o se copió mal). Crea otra en GitHub y pégala aquí.';
+  if (st === 403) return 'La clave no tiene permiso para escribir. En GitHub, dale «Contents: Read and write» a este repositorio.';
+  if (st === 404) return 'No encuentro el repositorio. Revisa el usuario y el nombre, y que la clave tenga acceso a ese repositorio.';
+  if (st === 409 || st === 422) return 'GitHub cambió mientras se subía. Vuelve a intentar.';
+  return 'GitHub respondió con un error (' + st + '). Vuelve a intentar en un rato.';
+}
+function ghApi(c, path, opt) {
+  opt = opt || {};
+  return fetch('https://api.github.com' + path, {
+    method: opt.method || 'GET', cache: 'no-store',
+    headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + c.token, 'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json' },
+    body: opt.body ? JSON.stringify(opt.body) : undefined
+  }).then(function (r) {
+    return r.text().then(function (t) {
+      var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) { j = null; }
+      if (!r.ok) { var er = new Error(ghErrText(r.status)); er.status = r.status; throw er; }
+      return j;
+    });
+  }, function () { var er = new Error('Sin internet: se publica cuando vuelva la conexión.'); er.offline = true; throw er; });
+}
+function b64utf8(str) { var u = new TextEncoder().encode(str), s = ''; for (var i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); }
+function utf8b64(b) { var bin = atob(String(b).replace(/\s/g, '')), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); }
+function ghRepoPath(c) { return '/repos/' + encodeURIComponent(c.owner) + '/' + encodeURIComponent(c.repo); }
+function ghFilePath(c, p) { return ghRepoPath(c) + '/contents/' + String(p || c.path || 'canciones.json').split('/').map(encodeURIComponent).join('/'); }
+function ghFileVersion(f) { try { return f && f.content ? String(JSON.parse(utf8b64(f.content)).version || '') : ''; } catch (e) { return ''; } }
+/* probar la conexión: repositorio, rama y dónde está canciones.json (en la raíz o en docs/) */
+function ghCheck(c) {
+  return ghApi(c, ghRepoPath(c)).then(function (repo) {
+    c.branch = repo && repo.default_branch || c.branch || 'main';
+    var get = function (p) { return ghApi(c, ghFilePath(c, p) + '?ref=' + encodeURIComponent(c.branch)).then(function (f) { return { path: p, f: f }; }); };
+    return get('canciones.json').catch(function (e) {
+      if (e.status !== 404) throw e;
+      return get('docs/canciones.json').catch(function (e2) { if (e2.status !== 404) throw e2; return { path: 'canciones.json', f: null }; });
+    });
+  }).then(function (x) { c.path = x.path; c.ok = true; return { c: c, version: ghFileVersion(x.f), exists: !!x.f }; });
+}
+/* versión nueva: nunca anterior a la que ya hay (si el reloj del equipo va atrasado, los demás no la tomarían) */
+function nextDataVersion(minV) {
+  var t = Date.now(), a = Date.parse(DATA && DATA.version || '') || 0, b = Date.parse(minV || '') || 0;
+  return new Date(Math.max(t, a + 1000, b + 1000)).toISOString();
+}
+function ghPublish(force) {
+  var c = ghCfg();
+  if (!c || !c.token) return Promise.reject(new Error('Primero conecta tu GitHub.'));
+  if (!isGroup()) return Promise.reject(new Error('Se publica el cancionero del grupo: ábrelo primero.'));
+  if (GH.busy) return Promise.resolve('ocupado');
+  GH.busy = true; ghStatusSet('subiendo');
+  var url = ghFilePath(c) + '?ref=' + encodeURIComponent(c.branch || 'main');
+  return fetchRemote().then(function () { return ghApi(c, url).catch(function (e) { if (e.status === 404) return null; throw e; }); }).then(function (f) {
+    var rv = ghFileVersion(f), mine = rv && rv === c.lastV, dv = String(DATA.version || '');
+    if (rv && dv && rv > dv && !mine) { var er = new Error('En GitHub hay una versión más nueva que la de este equipo (la publicó otro equipo). Abre la app con internet un momento para traerla y luego publica.'); er.newer = true; throw er; }
+    var behind = !f || (rv && dv && rv < dv && !mine);
+    if (!localChangeCount() && !behind && !force) return 'nada';
+    var data = effectiveData(true); data.version = nextDataVersion(rv);
+    var n = localChangeCount();
+    return ghApi(c, ghFilePath(c), { method: 'PUT', body: {
+      message: 'Cancionero: ' + (n ? n + (n === 1 ? ' cambio' : ' cambios') : 'versión del equipo') + ' desde la app' + (dirName() ? ' (' + dirName() + ')' : ''),
+      content: b64utf8(JSON.stringify(data, null, 1)), sha: f ? f.sha : undefined, branch: c.branch || 'main' } }).then(function () {
+      markPublished(data.version);
+      var c2 = ghCfg() || c; c2.lastAt = Date.now(); c2.lastV = data.version; c2.err = ''; ghSave(c2);
+      return 'ok';
+    });
+  }).then(function (r) { GH.busy = false; ghStatusSet(r === 'ok' ? 'ok' : 'aldia'); return r; }, function (e) {
+    GH.busy = false;
+    var c3 = ghCfg(); if (c3) { c3.err = e.offline ? '' : e.message; ghSave(c3); }
+    ghStatusSet(e.offline ? 'espera' : 'error', e.message); throw e;
+  });
+}
+/* «Publicar solo»: 2 minutos después del último cambio del director (o de una propuesta aprobada) */
+function ghAutoKick(ms) {
+  var c = ghCfg(); if (!c || !c.token || !c.ok || !c.auto || !isDirDevice()) return;
+  clearTimeout(GH.timer); GH.timer = setTimeout(ghAutoRun, ms != null ? ms : GH.delay);
+}
+function ghAutoRun() {
+  if (!isGroup() || !localChangeCount()) return;
+  if (navigator.onLine === false) { ghAutoKick(); return; }
+  ghPublish().then(function (r) {
+    if (r === 'ok' && !liveState) toast('Publicado en GitHub. En 1 o 2 minutos lo ve todo el que abra la app.', 3500);
+  }).catch(function (e) { if (e && (e.newer || e.offline)) ghAutoKick(300000); });
+}
+var saveLocal0 = saveLocal;
+saveLocal = function () { saveLocal0(); ghAutoKick(); };
+window.addEventListener('online', function () { ghAutoKick(5000); });
+setTimeout(function () { ghAutoKick(20000); }, 0);      // si quedó algo sin publicar al cerrar la app
+/* estado para mostrar */
+function ghStatusSet(s, msg) { GH.st = s; GH.msg = msg || ''; var el = document.getElementById('gh-st'); if (el) el.innerHTML = ghStatusHTML(); }
+function ghAgo(t) { var m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'hace un momento' : m < 60 ? 'hace ' + m + ' min' : m < 1440 ? 'hace ' + Math.round(m / 60) + ' h' : 'hace ' + Math.round(m / 1440) + ' días'; }
+function ghStatusHTML() {
+  var c = ghCfg(); if (!c || !c.ok) return 'Sin conectar.';
+  if (GH.st === 'subiendo') return 'Subiendo a GitHub…';
+  if (GH.st === 'error' || c.err) return '<b class="gh-err">No se pudo publicar:</b> ' + esc(GH.msg || c.err);
+  if (GH.st === 'espera') return 'Sin internet: se publica solo cuando vuelva la conexión.';
+  var n = localChangeCount();
+  if (n) return n + (n === 1 ? ' cambio' : ' cambios') + ' sin publicar' + (c.auto ? ': se publican solos en unos minutos.' : '.');
+  return c.lastAt ? 'Al día. Última publicación ' + ghAgo(c.lastAt) + '.' : 'Conectado. Todo al día.';
+}
+/* ---------- pantalla: conectar GitHub ---------- */
+function openGhSheet() {
+  var c = ghCfg() || {}, gi = githubInfo() || {};
+  var owner = c.owner || gi.owner || '', repo = c.repo || gi.repo || '';
+  var body = '<p class="help">Así las canciones, los compases y los cambios que apruebes se suben solos a GitHub, sin descargar ni subir archivos. Se hace en el equipo del director.</p>' +
+    '<details' + (c.ok ? '' : ' open') + ' class="gh-how"><summary>Cómo crear la clave (una vez, unos 2 minutos)</summary><ol class="steps">' +
+    '<li>En <b>github.com</b>, con tu cuenta: tu foto (arriba a la derecha) → <b>Settings</b> → al final, <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b>.</li>' +
+    '<li>Nombre: <b>cancionero</b>. Vencimiento: el que quieras (por ejemplo, 1 año).</li>' +
+    '<li><b>Repository access</b>: «Only select repositories» y elige <b>' + esc(repo || 'tu repositorio') + '</b>.</li>' +
+    '<li><b>Permissions</b> → Repository permissions → <b>Contents</b>: «Read and write». Nada más.</li>' +
+    '<li><b>Generate token</b>, copia la clave (empieza con <code>github_pat_</code>) y pégala aquí abajo.</li></ol></details>' +
+    '<div class="field"><label for="gh-o">Usuario de GitHub</label><input id="gh-o" autocomplete="off" autocapitalize="off" spellcheck="false" value="' + esc(owner) + '"></div>' +
+    '<div class="field"><label for="gh-r">Repositorio</label><input id="gh-r" autocomplete="off" autocapitalize="off" spellcheck="false" value="' + esc(repo) + '"></div>' +
+    '<div class="field"><label for="gh-t">Clave</label><input id="gh-t" type="password" autocomplete="off" spellcheck="false" placeholder="' + (c.token ? 'guardada (escribe otra para cambiarla)' : 'github_pat_…') + '"></div>' +
+    '<label class="chk"><input type="checkbox" id="gh-auto"' + (c.auto === false ? '' : ' checked') + '> <span>Publicar solo: unos minutos después de cada cambio tuyo o de cada propuesta que apruebes</span></label>' +
+    '<p class="gh-st" id="gh-st" aria-live="polite">' + ghStatusHTML() + '</p>' +
+    '<div class="btnrow"><button type="button" class="btn primary" data-x="save">Probar y guardar</button>' +
+    (c.ok ? '<button type="button" class="btn" data-x="pub">' + icon('publish') + 'Publicar ahora</button>' : '') +
+    (c.token ? '<button type="button" class="btn danger" data-x="forget">Olvidar la clave</button>' : '') + '</div>' +
+    '<p class="help">La clave queda solo en este equipo: no va al grupo ni a la «Copia de todo». Si pierdes el equipo, bórrala en GitHub (Settings → Developer settings → Fine-grained tokens) y crea otra.</p>';
+  openSheet('Publicar en GitHub', body, function (el) {
+    var st = function (h) { var s2 = el.querySelector('#gh-st'); if (s2) s2.innerHTML = h; };
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-x]'); if (!b || b.disabled) return;
+      var a = b.getAttribute('data-x');
+      if (a === 'forget') { ghSave(null); closeSheet(true); toast('Clave borrada de este equipo.', 2500); return; }
+      if (a === 'pub') {
+        b.disabled = true; st('Subiendo a GitHub…');
+        ghPublish(true).then(function (r) { st(r === 'ok' ? 'Listo: publicado. En 1 o 2 minutos lo ve todo el que abra la app.' : ghStatusHTML()); })
+          .catch(function (er) { st('<b class="gh-err">No se pudo publicar:</b> ' + esc(er.message)); }).then(function () { b.disabled = false; });
+        return;
+      }
+      if (a === 'save') {
+        var tok = el.querySelector('#gh-t').value.trim() || c.token || '';
+        var nc = { owner: el.querySelector('#gh-o').value.trim(), repo: el.querySelector('#gh-r').value.trim(), token: tok, auto: el.querySelector('#gh-auto').checked, lastAt: c.lastAt, lastV: c.lastV };
+        if (!nc.owner || !nc.repo || !nc.token) { st('Falta el usuario, el repositorio o la clave.'); return; }
+        b.disabled = true; st('Probando…');
+        ghCheck(nc).then(function (r) {
+          ghSave(r.c);
+          st('Conectado a <b>' + esc(r.c.owner + '/' + r.c.repo) + '</b> (rama ' + esc(r.c.branch) + ', archivo ' + esc(r.c.path) + '). ' +
+            (r.exists ? 'En GitHub está la versión del ' + esc(String(r.version).slice(0, 10)) + '.' : 'Todavía no hay canciones.json: se crea al publicar.'));
+          ghAutoKick(30000);
+        }).catch(function (er) { st('<b class="gh-err">No se pudo conectar:</b> ' + esc(er.message)); }).then(function () { b.disabled = false; });
+      }
+    });
+  });
+}
+
+var APP_VERSION = '2026-10-05 11:22';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
@@ -6861,10 +7060,12 @@ window.__cancionero = {
   setTimeline: function (id, beats, bpm, bpb) { var song = clone(getSong(id)), st = liveSteps(song); song.timeline = { v: 2, bpm: bpm || 100, beats: bpb || 4, sig: seqSig(st.steps), steps: st.steps.map(function (x, k) { return [k, (beats && beats[k % beats.length]) || 4, null]; }), video: null }; local.songs[id] = cleanSong(song); saveLocal(); delete infoCache[id]; },
   students: function () { return stuData(); }, syncState: function () { return { role: sync.role, code: sync.code, online: syncOnline(), songId: sync.songId, gotAt: sync.gotAt }; },
   liveExtra: function () { var st = liveState; return st ? { level: st.level, mode: st.mode, stu: !!st.stu, part: st.easy ? st.easy.cfg.part : null, rhythm: st.easy ? st.easy.cfg.rhythm : null, home: st.easy ? st.easy.home : null, keyboard: st.easy ? st.easy.keyboard : null, labels: st.vo.map(function (x) { return x.label; }), keys: st.vo.map(function (x) { return x.key; }), right: st.vo.map(function (x) { return x.v.right; }), lo: st.lLo, hi: st.rHi, fade: st.fade || null, helpNow: !!st.helpNow, playing: st.playing, bpm: st.bpm } : null; },
+  ghOpen: function () { openGhSheet(); }, ghPublish: function (f) { return ghPublish(f).then(function (r) { return r; }, function (e) { return 'error: ' + e.message; }); }, ghDelay: function (ms) { GH.delay = ms; }, ghState: function () { var c = ghCfg(); return c ? { ok: !!c.ok, branch: c.branch, path: c.path, lastV: c.lastV || '', err: c.err || '', auto: !!c.auto, token: c.token ? 'sí' : 'no' } : null; },
+  backupData: function () { return backupData(); }, backupRestore: function (o) { backupRestore(o); }, dataInfo: function () { return { version: DATA.version, older: dataState.older || null, source: dataState.source }; },
   audioInfo: function () { return { n: TAP.n, clip: TAP.clipN, log: TAP.log.length }; }, audioWavSize: function () { var w = tapWavBlob(); return w ? w.size : 0; },
   midiIn: function (bytes) { midiMsg({ data: bytes }); }, midiFake: function (name) { midi.inp = { name: name || 'Teclado de prueba' }; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
 })();
 
 
 window.__appOk = true;
-if (window.__BUILD && window.__BUILD !== '20261005150642') { try { showUpdateBanner(''); } catch (e) { /* nada */ } }
+if (window.__BUILD && window.__BUILD !== '20261005162213') { try { showUpdateBanner(''); } catch (e) { /* nada */ } }
