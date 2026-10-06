@@ -3349,10 +3349,11 @@ function setVideoVolume(v, quiet) {
 
 /* parte 8: modo «escuchando» (director)
    Oye a la banda (micrófono o interfaz con la guitarra) y decide si ya suena el acorde siguiente del recorrido.
-   Oído 3 (oct 2026): mira tecla por tecla (C.listenCreate, el mismo oído del alumno, con la afinación del piano y sin
-   roces ni golpes) y ESPERA: el tiempo del recorrido solo corre si lo que suena es el acorde actual o uno de los que
-   pueden venir. Una tecla equivocada, otro acorde, ruido o gente hablando: la canción no avanza (antes avanzaba sola).
-   Si la banda se queda más tiempo en un acorde, también espera. El tempo se sigue ajustando a la banda. */
+   Oído 4 (6 oct 2026): la red neuronal del motor (C.listenCreate) dice qué teclas suenan; C.chordScoreAny compara con
+   cada acorde exigiendo TODAS sus notas y nada claro de afuera (un acorde que comparte dos notas ya no se confunde).
+   ESPERA: el tiempo del recorrido solo corre si lo que suena es el acorde actual o uno de los que pueden venir. Una
+   tecla equivocada, otro acorde, uno parecido, ruido o gente hablando: la canción no avanza. Si la banda se queda más
+   tiempo en un acorde, también espera. El tempo se sigue ajustando a la banda. */
 var ear = null, EAR_INPUT = 'cfp.earInput', OIDO_TUNE = 'cfp.oidoAfina';
 function earConstraints(id) {
   var a = { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
@@ -3437,7 +3438,7 @@ function earFrame() {
   ear.quietFor = quiet ? ear.quietFor + 1 : 0;
   var tonal = f.tonal && !quiet;
   var r = ear.fol.step({ silent: ear.quietFor >= 3, tonal: tonal, onset: f.onset && !quiet,
-    scores: tonal ? ear.pcs.map(function (c) { return C.chordScoreKeys(f.all, c); }) : [] });
+    scores: tonal ? ear.pcs.map(function (c) { return C.chordScoreAny(f, c); }) : [] });
   if (r.why !== ear.lastWhy) { ear.lastWhy = r.why; tapLog('escucha', { why: r.why, i: r.i }); }
   tapClipShow();
   if (r.changed && r.i !== st.i) {
@@ -6837,7 +6838,7 @@ function openGhSheet() {
   });
 }
 
-var APP_VERSION = '2026-10-05 11:22';
+var APP_VERSION = '2026-10-06 14:59';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
@@ -7068,4 +7069,4 @@ window.__cancionero = {
 
 
 window.__appOk = true;
-if (window.__BUILD && window.__BUILD !== '20261005162213') { try { showUpdateBanner(''); } catch (e) { /* nada */ } }
+if (window.__BUILD && window.__BUILD !== '20261006195909') { try { showUpdateBanner(''); } catch (e) { /* nada */ } }
