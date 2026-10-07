@@ -6431,7 +6431,7 @@ function micKeysSvg() {
   return '<svg class="mc-kb" viewBox="0 0 100 60" preserveAspectRatio="none" role="img" aria-label="Teclado: se encienden las teclas que oye el celular">' + white.join('') + black.join('') + labels + '</svg>';
 }
 function openMicCheck() {
-  var M = { E: null, own: false, lis: null, timer: 0, glow: {}, quietSince: performance.now(), lastTonal: 0, peaks: [], tuneSaved: 0, n: 0 };
+  var M = { E: null, own: false, lis: null, timer: 0, glow: {}, prevK: {}, quietSince: performance.now(), lastTonal: 0, peaks: [], tuneSaved: 0, n: 0 };
   var stop = function () { clearInterval(M.timer); M.timer = 0; if (M.own && M.E) earRelease(M.E); M.E = null; };
   var html = '<p class="help">Toca unas notas o un acorde: se encienden las teclas que el celular oye. Así sabes si te escucha bien antes de empezar.</p>' +
     '<div class="mc-wrap">' + micKeysSvg() + '</div>' +
@@ -6457,9 +6457,20 @@ function openMicCheck() {
       var now = performance.now(), f = M.lis.frame(oidoRead(M.E, M.lis.kmax)), m, k;
       var lv = el.querySelector('#mc-lvl'); if (lv) lv.style.width = Math.max(0, Math.min(100, (f.peak + 90) * 1.4)).toFixed(0) + '%';
       M.peaks.push(f.peak); if (M.peaks.length > 60) M.peaks.shift();
-      // teclas que suenan: se encienden y se apagan de a poco (así se alcanzan a ver)
+      // teclas que suenan: se encienden y se apagan de a poco (así se alcanzan a ver). Solo las que el oído de verdad
+      // cuenta (claras, 0,5 o más) y que siguen sonando al cuadro siguiente: un golpe o un ruidito de un instante no
+      // enciende nada (antes se veían teclas «fantasma» que la práctica igual no contaba)
       Object.keys(M.glow).forEach(function (q) { M.glow[q] *= 0.8; if (M.glow[q] < 0.05) delete M.glow[q]; });
-      if (f.tonal) { M.lastTonal = now; Object.keys(f.keys).forEach(function (q) { if (f.keys[q] >= 0.25 && +q >= MC_LO && +q <= MC_HI) M.glow[q] = Math.max(M.glow[q] || 0, f.keys[q]); }); }
+      var held = {};
+      if (f.tonal) {
+        M.lastTonal = now;
+        Object.keys(f.keys).forEach(function (q) {
+          if (f.keys[q] < 0.5 || +q < MC_LO || +q > MC_HI) return;
+          held[q] = 1;
+          if (M.prevK[q]) M.glow[q] = Math.max(M.glow[q] || 0, f.keys[q]);
+        });
+      }
+      M.prevK = held;
       if (++M.n % 2) return;                         // la pantalla, 10 veces por segundo
       Array.prototype.forEach.call(el.querySelectorAll('.mc-kb rect'), function (r) {
         var g = M.glow[r.getAttribute('data-k')] || 0;
@@ -6467,9 +6478,10 @@ function openMicCheck() {
       });
       var heard = el.querySelector('#mc-heard');
       if (heard) {
-        if (f.tonal) {
-          var ps = []; for (k = 0; k < 12; k++) if (f.pcs[k] >= 0.45) ps.push(k);
-          ps.sort(function (a, b) { return f.pcs[b] - f.pcs[a]; });
+        // «Oigo:» dice las notas de las teclas encendidas (las que de verdad cuenta), de la más clara a la menos
+        var pv = {}; Object.keys(M.glow).forEach(function (q) { var p = C.mod12(+q); if (M.glow[q] >= 0.4 && M.glow[q] > (pv[p] || 0)) pv[p] = M.glow[q]; });
+        var ps = Object.keys(pv).map(Number).sort(function (a, b) { return pv[b] - pv[a]; });
+        if (ps.length) {
           heard.innerHTML = 'Oigo: <b>' + esc(ps.slice(0, 5).map(function (p) { return C.noteName(p, 'sharp', prefs.notation); }).join(', ')) + '</b>';
         } else if (now - M.lastTonal > 1500) heard.textContent = f.peak > -70 ? 'Oigo sonido, pero no notas claras (ruido, voces).' : 'No oigo nada todavía: toca unas notas.';
       }
@@ -6565,11 +6577,36 @@ function tapWavBlob() {
   wr(44 + n * 2, 'cfpl'); dv.setUint32(48 + n * 2, js.length, true); new Uint8Array(buf, 52 + n * 2, js.length).set(js);
   return new Blob([buf], { type: 'audio/wav' });
 }
+/* Un .zip sin comprimir con un solo archivo adentro. WhatsApp convierte los audios (.wav → .aac) y en el camino se
+   pierde el registro de lo que la app esperaba y decidió; un .zip lo manda tal cual, como documento. */
+var CRC_T = null;
+function crc32(u8) {
+  if (!CRC_T) { CRC_T = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; CRC_T[n] = c >>> 0; } }
+  var x = 0xFFFFFFFF; for (var i = 0; i < u8.length; i++) x = CRC_T[(x ^ u8[i]) & 255] ^ (x >>> 8);
+  return (x ^ 0xFFFFFFFF) >>> 0;
+}
+function zipOne(name, u8) {
+  var nm = new TextEncoder().encode(name), crc = crc32(u8), n = u8.length, L = nm.length;
+  var head = new DataView(new ArrayBuffer(30 + L)), cen = new DataView(new ArrayBuffer(46 + L)), end = new DataView(new ArrayBuffer(22));
+  [[head, 0x04034b50, 30], [cen, 0x02014b50, 46]].forEach(function (h) {
+    var v = h[0], c = h[2] === 46 ? 2 : 0; v.setUint32(0, h[1], true);
+    if (c) v.setUint16(4, 20, true);
+    v.setUint16(4 + c, 20, true); v.setUint16(6 + c, 0x0800, true); v.setUint16(8 + c, 0, true);   // versión, UTF-8, sin comprimir
+    v.setUint16(10 + c, 0, true); v.setUint16(12 + c, ((new Date().getFullYear() - 1980) << 9) | ((new Date().getMonth() + 1) << 5) | new Date().getDate(), true);
+    v.setUint32(14 + c, crc, true); v.setUint32(18 + c, n, true); v.setUint32(22 + c, n, true); v.setUint16(26 + c, L, true);
+    new Uint8Array(v.buffer, h[2], L).set(nm);
+  });
+  end.setUint32(0, 0x06054b50, true); end.setUint16(8, 1, true); end.setUint16(10, 1, true);
+  end.setUint32(12, 46 + L, true); end.setUint32(16, 30 + L + n, true);
+  return new Blob([head.buffer, u8, cen.buffer, end.buffer], { type: 'application/zip' });
+}
 function tapSaveShare() {
   var b = tapWavBlob();
   if (!b) { toast('Todavía no hay audio: prende el micrófono («Escuchar» o «Que el celular me escuche») y toca un rato.', 5000); return; }
-  var d = new Date(), name = 'cancionero-oido-' + d.toISOString().slice(0, 16).replace(/[-:T]/g, '') + '.wav';
-  shareFile(name, b, 'audio/wav').then(function () { toast('Listo: manda ese archivo en el chat donde mejoran la app, y cuenta qué tocaste.', 6000); });
+  var d = new Date(), base = 'cancionero-oido-' + d.toISOString().slice(0, 16).replace(/[-:T]/g, '');
+  b.arrayBuffer().then(function (ab) {
+    return shareFile(base + '.zip', zipOne(base + '.wav', new Uint8Array(ab)), 'application/zip');
+  }).then(function () { toast('Listo: manda ese archivo (.zip) en el chat donde mejoran la app, y cuenta qué tocaste.', 6000); });
 }
 /* el micrófono de «Escuchando», «Que me escuche» y «¿Qué oye?» pasa por aquí */
 var earNode0 = earNode;
@@ -6838,7 +6875,7 @@ function openGhSheet() {
   });
 }
 
-var APP_VERSION = '2026-10-06 14:59';
+var APP_VERSION = '2026-10-07 13:35';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
@@ -7069,4 +7106,4 @@ window.__cancionero = {
 
 
 window.__appOk = true;
-if (window.__BUILD && window.__BUILD !== '20261006195909') { try { showUpdateBanner(''); } catch (e) { /* nada */ } }
+if (window.__BUILD && window.__BUILD !== '20261007183559') { try { showUpdateBanner(''); } catch (e) { /* nada */ } }

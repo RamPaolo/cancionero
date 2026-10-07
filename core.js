@@ -2027,17 +2027,58 @@
     for (var d = -1; d <= 1; d++) { var b = bc + d; if (b >= 3 && b < O4_NB - 3 && g[b] > best) { best = g[b]; bb = b; } }
     return bb < 0 ? -99 : g[bb] - (both ? Math.max(g[bb - 3], g[bb + 3]) : Math.min(g[bb - 3], g[bb + 3]));
   }
+  /* el «valle» de un espectro por tercios de semitono: en cada lugar, el percentil 30 de ±2 semitonos (13 tercios).
+     Se queda con el fondo y deja afuera los picos de las notas (cada nota ocupa uno a tres tercios) */
+  function o4Valley(g) {
+    var out = new Float32Array(O4_NB), w = [];
+    for (var b = 0; b < O4_NB; b++) {
+      w.length = 0;
+      for (var q = b - 6; q <= b + 6; q++) if (q >= 0 && q < O4_NB) w.push(g[q]);
+      w.sort(function (x, y) { return x - y; });
+      out[b] = w[Math.floor(w.length * 0.3)];
+    }
+    return out;
+  }
   function o4Create(opt) {
     var SR0 = opt.sr, NF = opt.nfft || 8192, T0 = Math.max(-50, Math.min(50, +opt.tune || 0)), L4 = o4Layout(SR0, NF, T0);
     var TT = opt.autotune === false ? null : tuneCreate(T0, opt.tune ? 30 : 0), tuneN = 0, tuned = !!opt.tune;
     var THA = opt.tha || 0.5, NK = O4_NK, ring = [], RISE = opt.rise != null ? opt.rise : 2, UPN = opt.upn || 2, PK = opt.pk != null ? opt.pk : 6;
-    var S = { noise: null, pk: null, d0: -1, d1: -1, lastOn: -1e9, epT: new Float64Array(NK).fill(-1e9), epLast: new Float64Array(NK).fill(-1e9), prevA: new Float32Array(NK), n: 0 };
+    var S = { noise: null, pk: null, d0: -1, d1: -1, lastOn: -1e9, epT: new Float64Array(NK).fill(-1e9), epLast: new Float64Array(NK).fill(-1e9), prevA: new Float32Array(NK), n: 0, conf: new Int16Array(NK), lplay: null };
+    /* «Mapa del silencio» (7 oct): cuánto suena el fondo —ventilador, calle, el zumbido del parlante o de la laptop—
+       en cada tercio de semitono. La red mira el espectro relativo a lo más fuerte del cuadro: en silencio, el ruido
+       queda «estirado» y lo lee como notas (las notas fantasma que vio Ram). Con el mapa, una tecla solo cuenta si
+       alguno de sus armónicos propios sobresale de su fondo SNR dB. El mapa se aprende solo: sigue al fondo donde no
+       suena nada, baja enseguida si el fondo baja, y casi no se mueve donde suena una nota (así no «aprende» la música);
+       si todo el espectro sube junto y se queda (un ventilador que se prende), lo sigue. */
+    var PUERTA = opt.puerta !== false, NFON = PUERTA && opt.nf !== false, SNR = opt.snr != null ? opt.snr : 15, SNRF = opt.snrf != null ? opt.snrf : SNR, RLEV = opt.rlev != null ? opt.rlev : 35, NP = null, npN = 0, skip = 0, wideN = 0;
+    var NPWARM = 10, NFLO = 3 * (36 - O4_P0), ZK = new Float32Array(NK);
+    function nothing(f) {
+      S.prevA.fill(0);
+      return { t: f.t, s: new Float32Array(NK), a: new Float32Array(NK), rise: ZK, trend: 0, loud: false, peak: f.peak, onset: false, news: [], clip: !!f.clip, drift: S.d1, drift0: S.d0, tune: L4.tune, noise: S.noise, ex: ZK, warm: true };
+    }
     function step(f) {
       var g = o4Grid(L4, f.db, new Float32Array(O4_NB));
       ring.push(g); if (ring.length > 4) ring.shift();
-      var g1 = ring[Math.max(0, ring.length - 2)], g3 = ring[0];
+      // el micrófono recién prendido entrega ceros, y el análisis (0,17 s de sonido) tarda en llenarse: con eso no se
+      // oye nada ni se aprende el fondo (antes el fondo quedaba en −160 dB y por minutos cualquier ruido «sonaba»).
+      // Lo mismo si a medio camino llegan ceros (otra app tomó el micrófono): no se oye nada y el fondo no se toca
+      if (PUERTA && !(f.peak > -150)) { if (!S.seen) skip = 4; return nothing(f); }
+      if (PUERTA && skip > 0) { skip--; return nothing(f); }
+      S.seen = true;
+      var g1 = ring[Math.max(0, ring.length - 2)], g3 = ring[0], b;
+      // cuánto sobresale cada tercio de semitono de su fondo (con el mapa de antes de este cuadro)
+      var ex = null, exMax = 99;
+      if (NFON) {
+        // el mapa empieza con el «valle» del primer cuadro (lo más bajo de cada zona de ±2 semitonos): así, aunque ya
+        // estén tocando cuando se prende el micrófono, no toma las notas como si fueran el fondo
+        if (!NP) NP = o4Valley(g);
+        ex = new Float32Array(O4_NB); exMax = -99;
+        for (b = 0; b < O4_NB; b++) { ex[b] = g[b] - NP[b]; if (b >= NFLO && ex[b] > exMax) exMax = ex[b]; }
+      }
       if (S.noise == null) S.noise = f.peak;
-      var loud = f.peak > S.noise + 9;
+      // ¿suena algo? Con el mapa: si algo sobresale SNR dB de su fondo (o suena cerca del nivel al que se toca). Ya no se usa
+      // el «piso» de antes (el mínimo del volumen): si se prendía con música sonando, quedaba alto y dejaba sordo al oído
+      var loud = NFON ? npN >= NPWARM && (exMax >= SNRF || (S.lplay != null && f.peak >= S.lplay - RLEV)) : f.peak > S.noise + 9;
       S.noise = f.peak < S.noise ? S.noise * 0.6 + f.peak * 0.4 : S.noise + Math.min(0.03, (f.peak - S.noise) * 0.002);
       // afinación: de los picos quietos de lo que suena (un piano), no de una voz ni del silencio
       var pk = spPeaks(f.db, SR0 / NF); S.d0 = S.d1; S.d1 = spDrift(pk, S.pk); S.pk = pk;
@@ -2083,6 +2124,56 @@
         for (var hh = low ? 1 : 0; hh < (low ? 4 : 2) && !okp; hh++) if (o4Peak(g, c0 + O4_RISEH[hh], k + O4_M0 >= 60) >= PK) okp = true;
         if (!okp) { a[k] = 0; s[k] = Math.min(s[k], 0.2); }
       }
+      // y ese pico tiene que sobresalir del FONDO de su frecuencia (el mapa del silencio): si no, es ruido que la red
+      // «leyó» como nota. Se mira lo mismo que para el pico propio: la fundamental o el 2.º (en los graves, 2.º a 4.º)
+      // Y además, una vez que se oyó tocar de verdad (notas claras varios cuadros seguidos), lo que suena MUCHO más bajo
+      // que eso (RLEV dB) no es tocar: es el fondo, un eco lejano o un ruidito. Si el mapa del fondo quedó alto porque ya
+      // estaban tocando cuando se prendió el micrófono (el fondo nunca se oyó), en esas frecuencias manda esto otro
+      var kx = ZK;
+      if (NFON) {
+        kx = new Float32Array(NK);
+        var lev = new Float32Array(NK), lnb = new Int16Array(NK);
+        for (k = 0; k < NK; k++) {
+          var c1 = 3 * (k + O4_M0 - O4_P0), low1 = k + O4_M0 < 48, best = -99, lv = -999, nb = c1;
+          for (var h1 = low1 ? 1 : 0; h1 < (low1 ? 4 : 2); h1++) for (var d1 = -1; d1 <= 1; d1++) {
+            b = c1 + O4_RISEH[h1] + d1; if (b < 0 || b >= O4_NB) continue;
+            if (ex[b] > best) best = ex[b];
+            if (g[b] > lv) { lv = g[b]; nb = b; }
+          }
+          kx[k] = best; lev[k] = lv; lnb[k] = nb;
+          // ¿se está tocando de verdad? (la red segura tres cuadros seguidos, con pico propio)
+          S.conf[k] = loud && s[k] >= 0.9 ? S.conf[k] + 1 : 0;
+          if (S.conf[k] >= 3) S.lplay = S.lplay == null ? lv : Math.max(S.lplay, lv);
+        }
+        // (la regla del nivel vale solo en las pausas: mientras suena un acorde, una de sus notas puede quedar muy baja
+        // por el eco de dos parlantes —en la casa de Ram— y no por eso deja de estar)
+        var musica = S.lplay != null && f.peak > S.lplay - 30;
+        for (k = 0; k < NK; k++) {
+          if (!(a[k] > 0 || s[k] > 0.15)) continue;
+          var fondoOk = S.lplay == null || NP[lnb[k]] < S.lplay - 40;
+          if ((fondoOk && kx[k] < SNR) || (S.lplay != null && !musica && lev[k] < S.lplay - RLEV)) { a[k] = 0; s[k] = Math.min(s[k], 0.15); }
+        }
+        if (S.lplay != null) S.lplay -= 0.025;                          // lo de «tocar fuerte» se olvida de a poco (0,5 dB/s)
+        // aprender el fondo con este cuadro. Donde suena algo (más de 6 dB sobre el fondo) casi no se mueve; si casi
+        // todo el espectro subió junto durante medio segundo, es el fondo el que cambió (o el celular se movió): se sigue
+        var up = [], med = 0;
+        for (b = NFLO; b < O4_NB; b += 2) up.push(ex[b]);
+        up.sort(function (x, y) { return x - y; }); med = up[up.length >> 1];
+        wideN = med > 6 ? wideN + 1 : 0;
+        // Mientras suena música (cerca del nivel al que se toca) el mapa solo puede BAJAR: con eco y una canción entera
+        // seguida, los «valles» entre notas suben y el mapa se iba subiendo con ellos hasta no oír las teclas más suaves
+        var warm = npN < NPWARM;
+        for (b = 0; b < O4_NB; b++) {
+          var dd = ex[b];
+          if (warm) { if (dd < 6) NP[b] += 0.3 * dd; }                    // el primer medio segundo: rápido (sin tomar notas)
+          else if (dd < -6) NP[b] += 0.15 * dd;                           // el fondo bajó: se baja enseguida
+          else if (musica) { if (dd < 0) NP[b] += 0.05 * dd; }            // suena música: solo baja
+          else if (dd < 6) NP[b] += 0.05 * dd;                            // donde no suena nada: sigue al fondo
+          else if (wideN >= 10) NP[b] += 0.1 * Math.min(dd, med);         // todo subió y se quedó: es el fondo
+          else NP[b] += Math.min(0.02, 0.002 * dd);                       // suena una nota: casi quieto
+        }
+        npN++;
+      }
       var news = [];
       for (k = 0; k < NK; k++) {
         if (a[k] >= THA) {
@@ -2094,7 +2185,7 @@
       var onset = news.length > 0 && f.t - S.lastOn > 120;
       if (onset) S.lastOn = f.t;
       S.n++;
-      return { t: f.t, s: s, a: a, rise: rs, trend: trend, loud: loud, peak: f.peak, onset: onset, news: news, clip: !!f.clip, drift: S.d1, drift0: S.d0, tune: L4.tune, noise: S.noise };
+      return { t: f.t, s: s, a: a, rise: rs, trend: trend, loud: loud, peak: f.peak, onset: onset, news: news, clip: !!f.clip, drift: S.d1, drift0: S.d0, tune: L4.tune, noise: S.noise, ex: kx, warm: NFON && npN <= NPWARM, exMax: exMax, g: g };
     }
     return { step: step, tune: function () { return L4.tune; }, tuneInfo: function () { return TT ? TT.get() : null; }, noise: function () { return S.noise; } };
   }
@@ -2110,7 +2201,9 @@
        del cambio y se quedan sonando claras, con todas las demás y sin teclas de más. */
   function hearCreate4(opt) {
     opt = opt || {};
-    var E = o4Create(opt), NK = O4_NK, M0 = O4_M0;
+    // (la «puerta del ruido» del 7 oct todavía no va en la práctica: en el navegador la escena del alumno de t_oido3 no
+    // acepta los acordes con ella; se prende con opt.puerta = true para seguir probando)
+    var E = o4Create(Object.assign({ puerta: false }, opt)), NK = O4_NK, M0 = O4_M0;
     var THA = opt.tha || 0.5, THW = opt.thw || 0.6, THS = opt.ths || 0.35, THSUS = opt.thsus || 0.6;
     var JUNTAR = opt.join || 1600, GRACE = 350, SETTLE = opt.settle || 150, PARTIAL = 400, BADSET = opt.badset || 250, NW = opt.nw || 4, TREND = opt.trend != null ? opt.trend : -2;
     var ADJA = opt.adja != null ? opt.adja : 0.9, PREVRISE = opt.prevrise != null ? opt.prevrise : 6, ADJ2 = opt.adj2 || 60;
@@ -2322,7 +2415,7 @@
     tlRound: tlRound, tlQuantize: tlQuantize, tlEstimateBpm: tlEstimateBpm, tlTapBpm: tlTapBpm, tlStarts: tlStarts, tlVideoTimes: tlVideoTimes,
     tempoFromSamples: tempoFromSamples, onsetEnvelope: onsetEnvelope, fftRadix2: fftRadix2, _tempoCfg: tempoFromEnvelope,
     simpleChord: simpleChord, numLabel: numLabel, EZ_NUMS: EZ_NUMS, followerCreate: followerCreate,
-    chordTemplate: chordTemplate, chordPcs: chordPcs, chordScore: chordScore, chordScoreKeys: chordScoreKeys, listenCreate: listenCreate, vozCreate: vozCreate, vozDtw: vozDtw, vozThresholds: vozThresholds, vozClassify: vozClassify, pianoTpl: pianoTpl, hearCreate: hearCreate, spLayout: spLayout, spPool: spPool, spNotes: spNotes, spFit: spFit, tuneCreate: tuneCreate, spPeaks: spPeaks, spDrift: spDrift, featureStream: featureStream, o4Layout: o4Layout, o4Grid: o4Grid, o4Net: o4Net, o4SetWeights: o4SetWeights, chordScore4: chordScore4, chordScoreAny: chordScoreAny, hearCreate3: hearCreate3, hearCreate4: hearCreate4, listenCreate3: listenCreate3, listenCreate4: listenCreate4, O4: { P0: O4_P0, NB: O4_NB, M0: O4_M0, NK: O4_NK }, beatTrack: beatTrack, beatFeatures: beatFeatures, alignSteps: alignSteps, suggestTimeline: suggestTimeline
+    chordTemplate: chordTemplate, chordPcs: chordPcs, chordScore: chordScore, chordScoreKeys: chordScoreKeys, listenCreate: listenCreate, vozCreate: vozCreate, vozDtw: vozDtw, vozThresholds: vozThresholds, vozClassify: vozClassify, pianoTpl: pianoTpl, hearCreate: hearCreate, spLayout: spLayout, spPool: spPool, spNotes: spNotes, spFit: spFit, tuneCreate: tuneCreate, spPeaks: spPeaks, spDrift: spDrift, featureStream: featureStream, o4Layout: o4Layout, o4Grid: o4Grid, o4Net: o4Net, o4SetWeights: o4SetWeights, o4Create: o4Create, chordScore4: chordScore4, chordScoreAny: chordScoreAny, hearCreate3: hearCreate3, hearCreate4: hearCreate4, listenCreate3: listenCreate3, listenCreate4: listenCreate4, O4: { P0: O4_P0, NB: O4_NB, M0: O4_M0, NK: O4_NK }, beatTrack: beatTrack, beatFeatures: beatFeatures, alignSteps: alignSteps, suggestTimeline: suggestTimeline
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Core = api;
