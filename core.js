@@ -2208,6 +2208,7 @@
     var JUNTAR = opt.join || 1600, GRACE = 350, SETTLE = opt.settle || 150, PARTIAL = 400, BADSET = opt.badset || 250, NW = opt.nw || 4, TREND = opt.trend != null ? opt.trend : -2;
     var ADJA = opt.adja != null ? opt.adja : 0.9, PREVRISE = opt.prevrise != null ? opt.prevrise : 6, ADJ2 = opt.adj2 || 60;
     var SBAD = opt.sbad != null ? opt.sbad : 0.85, PRES = opt.pres != null ? opt.pres : 0.6;
+    var NEWT = opt.newt != null ? opt.newt : 250, RETA = opt.reta !== false;
     var T = { tg: [], al: {}, acc: {}, exp: [], expK: {}, mask: {}, t0: -1e9, prev: {}, on: false };
     var A = null, S = { heard: null, hit: false, last: -1e9, sus: null, dbg: null, lastS: null };
     function keyOk(k) { return k >= 0 && k < NK; }
@@ -2246,10 +2247,16 @@
     function pcMax(s, p) { var m = 0; for (var k = mod12(p - M0); k < NK; k += 12) if (s[k] > m) m = s[k]; return m; }
     function judge(r, now) {
       var out = null, tg = T.tg, age = now - A.start, have = [], miss = [], wrong = [], cand = 0, i;
+      // acorde «parecido» al anterior (comparten dos notas o más, como Sim y Sol): las notas que siguen sonando del
+      // anterior ya casi lo forman, así que la nota NUEVA tiene que SEGUIR sonando: 250 ms después de tocarla y clara
+      // ahora (7 oct, noche, grabación de Ram: tocando Sim, un golpe grave más el Re que seguía sonando le hicieron imaginar
+      // un Sol grave que duró 0,2 s y aceptó el Sol; una tecla de verdad sigue sonando)
+      var parecido = NEWT > 0 && tg.filter(function (p) { return T.prev[p]; }).length >= 2;
       tg.forEach(function (p) {
         // (y que siga sonando clara ahora: la red a veces «completa» un acorde por costumbre —Do y Mi le hacen
         // imaginar el Sol— y esa nota imaginada suena débil o se le cae enseguida)
-        var ok = (T.acc[p] || []).some(function (k) { var x = A.keys[k]; return x && x.a >= THA && x.n >= 2 && (r.s[k] >= PRES || (x.s >= 0.9 && x.n >= 3)); });
+        var nueva = parecido && !T.prev[p];
+        var ok = (T.acc[p] || []).some(function (k) { var x = A.keys[k]; return x && x.a >= THA && x.n >= 2 && (r.s[k] >= PRES || (x.s >= 0.9 && x.n >= 3)) && (!nueva || (now - x.t >= NEWT && r.s[k] >= PRES)); });
         // la tecla se mantiene apretada desde el acorde anterior (nota en común) y sigue sonando clara
         if (!ok && T.prev[p]) ok = (T.acc[p] || []).some(function (k) { return r.s[k] >= 0.55 && A.held && A.held[k]; });
         // armónico exacto de otra tecla del acorde que sí se tocó: basta un rastro
@@ -2259,8 +2266,13 @@
       Object.keys(A.keys).forEach(function (k) {
         k = +k; var x = A.keys[k], p = mod12(k + M0);
         if (T.al[p] || x.a < THW) return;
-        // (lo del acorde anterior que todavía suena justo al cambiar no es error: la red a veces lo nota un cuadro tarde)
-        if (T.prev[p] && x.t < T.t0 + 250) return;
+        // (lo del acorde anterior que todavía suena justo al cambiar no es error: la red a veces lo nota un cuadro tarde;
+        // pero si se VUELVE a tocar después del cambio, con un golpe de verdad —salto de volumen claro—, sí: 7 oct, noche: Ram
+        // seguía tocando Sim con el Sol en pantalla y el Fa# contaba como «lo de antes» porque se miraba solo su primer
+        // golpe; el eco o un parpadeo de la red no cuentan como golpe nuevo, y un golpe cuenta desde su primer cuadro:
+        // con el último, un acorde bueno en un piano desafinado quedaba justo fuera de los 250 ms y se acusaba; y la
+        // tecla tuvo que apagarse un poco antes —no cuenta el «latido» de una nota desafinada que sigue sonando—)
+        if (T.prev[p] && (x.ta || x.t) < T.t0 + 250) return;
         // (una nota del acorde anterior que seguía sonando, con pedal o eco: para acusarla tiene que haberse tocado de
         // nuevo de verdad, con un salto claro de volumen)
         if (T.prev[p] && A.held && A.held[k] && x.rise < PREVRISE) return;
@@ -2344,8 +2356,9 @@
       if (A && !A.verdict && !A.closed) {
         for (k = 0; k < NK; k++) {
           var x = A.keys[k];
-          if (r.a[k] >= THA && (!falling || x || strong(k))) { if (!x) x = A.keys[k] = { t: now, a: 0, n: 0, s: 0, rise: -99 }; if (r.a[k] > x.a) x.a = r.a[k]; if (r.rise[k] > x.rise) x.rise = r.rise[k]; }
+          if (r.a[k] >= THA && (!falling || x || strong(k))) { if (!x) x = A.keys[k] = { t: now, a: 0, n: 0, s: 0, rise: -99 }; if (r.a[k] > x.a) x.a = r.a[k]; if (r.rise[k] > x.rise) x.rise = r.rise[k]; if (RETA && r.rise[k] >= PREVRISE && !(S.lastA && S.lastA[k] >= THA) && (x.ta == null || x.low)) { x.ta = now; x.low = false; } }
           if (x && r.s[k] >= THS && now > x.t) x.n++;
+          if (x && r.s[k] < 0.5) x.low = true;             // (para contar un golpe nuevo, la tecla tuvo que bajar antes)
           if (x && r.s[k] > x.s) x.s = r.s[k];
         }
         var ev = T.on ? judge(r, now) : find(r, now);
@@ -2353,7 +2366,7 @@
         else if (now - A.last > JUNTAR) A.closed = true;
       }
       if (!out || out.type === 'onset') { var sv = sustain(r, now); if (sv) out = sv; }
-      S.lastS = r.s;
+      S.lastS = r.s; S.lastA = r.a;
       return out;
     }
     return { target: target, frame: frame, heard: function () { return S.heard; }, noise: function () { return E.noise(); }, dbg: function () { return S.dbg; },

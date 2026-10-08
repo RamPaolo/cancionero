@@ -2505,7 +2505,8 @@ function setLiveIndex(i, fromTimer) {
   var prev = st.i;
   st.i = i; st.chordT = performance.now(); st.helpNow = false;
   if (ear) ear.since = performance.now();
-  if (st.stu) stuStep(prev);
+  // el oído de la práctica espera el acorde nuevo (el alumno lo hace en stuStep; el director, aquí)
+  if (st.stu) stuStep(prev); else if (oidoActive()) oidoTargetNow();
   drawLive(); soundNow();
   syncTick();
   if (!fromTimer) announce('Ahora ' + C.splitTok(fmtFor(info(st.song).key, songShift(st.song))(st.steps[st.path[i]].c)).core);
@@ -4073,10 +4074,13 @@ function partHits(cfg, v, a, z, bpb) {
 }
 function relive() {
   var st = liveState; if (!st) return;
-  var i = st.i, mode = st.mode, pushed = st.pushed, lvl = st.level;
+  var i = st.i, mode = st.mode, pushed = st.pushed, lvl = st.level, wasEar = !!ear;
   pauseLive(); stopEar();
   liveState = buildLive(current.song, pushed, mode); liveState.i = Math.min(i, liveState.path.length - 1); liveState.level = lvl;
   drawLive();
+  // si estaba escuchando a la banda, sigue escuchando (ya con los acordes nuevos); el micrófono de la práctica se apunta
+  // solo al acorde nuevo (oidoTick)
+  if (wasEar && liveState.mode === 'listen') startEar();
 }
 /* ---------- editor de la configuración de toque (modo fácil de este equipo o un alumno) ---------- */
 function cfgEditorHTML(e) {
@@ -4472,7 +4476,7 @@ function stuHidden(i) {
   return !(i === st.i && st.helpNow);
 }
 function stuOnIndex() {
-  if (oidoActive()) oidoTargetNow();
+  if (oidoActive()) oidoTargetNow(true);
   var st = liveState; if (!st || !st.stu) return;
   clearTimeout(stuHelpTimer);
   st.firstTry = true; st.helpNow = false;
@@ -5790,6 +5794,8 @@ function oidoRead(E, K) {
 }
 function oidoTick() {
   if (!oido) return;
+  // el oído tiene que esperar siempre el acorde que muestra la pantalla: si algo cambió y nadie le avisó, se le avisa aquí
+  if (liveState && !drill) oidoTargetNow();
   var f = oidoRead(oido.E, oido.det.kmax), ev = oido.det.frame(f), w = Math.max(0, Math.min(100, (f.peak + 90) * 1.6)).toFixed(0) + '%';
   Array.prototype.forEach.call(document.querySelectorAll('.oido-lvl i'), function (i) { i.style.width = w; });
   if (ev && oido.onEv) oido.onEv(ev);
@@ -5797,13 +5803,22 @@ function oidoTick() {
   earSaveTune(oido.det, f.t);
 }
 /* ---------- en el modo en vivo del alumno ---------- */
-function oidoTargetNow() {
-  var st = liveState; if (!oidoActive() || !st || drill) return;
+/* Le dice al oído qué acorde esperar: el que muestra la pantalla. Se llama al cambiar de acorde (para todos: alumno o
+   director) y, por seguridad, en cada vuelta de oidoTick: si la pantalla y el oído no coinciden, se vuelve a apuntar.
+   (7 oct, noche: el director practicando sin perfil quedaba con el acorde del momento en que prendió el micrófono; tocando ese
+   acorde avanzaba toda la canción y los demás nunca.) Si ya apunta a ese mismo acorde no se repite (repetirlo borraría
+   cuál era el acorde anterior, que el oído usa para no confundirse con lo que sigue sonando); force lo repite igual. */
+function oidoTargetNow(force) {
+  var st = liveState; if (!oidoActive() || !st || drill || !st.vo[st.i]) return;
   var v = st.vo[st.i].v, reg = 127, keys = (v.right || []).concat(v.hideLeft ? [] : [v.left]).filter(function (m) { return m != null; });
   keys.forEach(function (m) { if (m < reg) reg = m; });
+  var pcs = Object.keys(midiTarget()).map(Number), al = Object.keys(midiAllowed()).map(Number);
+  var sig = st.i + '|' + pcs.join(',') + '|' + al.join(',') + '|' + keys.join(',');
+  if (!force && oido.tgSt === st && oido.tgSig === sig) return;
+  oido.tgSt = st; oido.tgSig = sig;
   // las teclas exactas que muestra la pantalla: con acordes, el oído mira cada una (y la misma una octava más arriba o abajo)
-  oido.det.target(Object.keys(midiTarget()).map(Number), Object.keys(midiAllowed()).map(Number), reg === 127 ? 60 : reg, performance.now(), keys);
-  tapLog('objetivo', { i: st.i, acorde: st.vo[st.i].en, pcs: Object.keys(midiTarget()).map(Number), teclas: keys });
+  oido.det.target(pcs, al, reg === 127 ? 60 : reg, performance.now(), keys);
+  tapLog('objetivo', { i: st.i, acorde: st.vo[st.i].en, pcs: pcs, teclas: keys });
   oidoMarkMiss([]);
 }
 /* Teclas que faltan del acorde: brillan en la pantalla para que el alumno vea cuál le faltó. */
@@ -5941,7 +5956,7 @@ function drillMic() {
   oidoStart(drillMicEv).then(function () {
     if (drill !== d) { oidoStop(); return; }
     LS.set(OIDO_AUTO, true);
-    if (d.kind !== 'finder' && d.pcs.length) oido.det.target(d.pcs, [], d.lo, performance.now(), d.lit);
+    if (d.kind !== 'finder' && d.pcs.length) { oido.tgSt = oido.tgSig = null; oido.det.target(d.pcs, [], d.lo, performance.now(), d.lit); }
     drillDraw();
   }).catch(function (er) { toast(micErrText(er), 6000); });
 }
@@ -5953,7 +5968,7 @@ function drillNext() {
   d.cur = it; d.n++; d.tries = 0; d.helpNow = d.help;
   d.pcs = rel.map(function (x) { return C.mod12(x + d.home); });
   d.lit = rel.map(function (x) { return d.lo + C.mod12(d.home - (d.lo % 12)) + (x < rel[0] ? x + 12 : x); });
-  if (oidoActive()) oido.det.target(d.pcs, [], d.lo, performance.now(), d.lit);
+  if (oidoActive()) { oido.tgSt = oido.tgSig = null; oido.det.target(d.pcs, [], d.lo, performance.now(), d.lit); }
   clearTimeout(d.ht);
   var n0 = d.n;
   if (!d.help) d.ht = setTimeout(function () { if (drill === d && d.n === n0 && !d.lock) { d.helpNow = true; drillDraw('Mira: aquí está.'); } }, 5000);
@@ -6875,7 +6890,7 @@ function openGhSheet() {
   });
 }
 
-var APP_VERSION = '2026-10-07 13:35';
+var APP_VERSION = '2026-10-07 21:51';
 /* parte 5: rutas, eventos y arranque */
 function parseHash() {
   var raw = location.hash, live = /\/vivo$/.test(raw);
@@ -7100,10 +7115,10 @@ window.__cancionero = {
   liveExtra: function () { var st = liveState; return st ? { level: st.level, mode: st.mode, stu: !!st.stu, part: st.easy ? st.easy.cfg.part : null, rhythm: st.easy ? st.easy.cfg.rhythm : null, home: st.easy ? st.easy.home : null, keyboard: st.easy ? st.easy.keyboard : null, labels: st.vo.map(function (x) { return x.label; }), keys: st.vo.map(function (x) { return x.key; }), right: st.vo.map(function (x) { return x.v.right; }), lo: st.lLo, hi: st.rHi, fade: st.fade || null, helpNow: !!st.helpNow, playing: st.playing, bpm: st.bpm } : null; },
   ghOpen: function () { openGhSheet(); }, ghPublish: function (f) { return ghPublish(f).then(function (r) { return r; }, function (e) { return 'error: ' + e.message; }); }, ghDelay: function (ms) { GH.delay = ms; }, ghState: function () { var c = ghCfg(); return c ? { ok: !!c.ok, branch: c.branch, path: c.path, lastV: c.lastV || '', err: c.err || '', auto: !!c.auto, token: c.token ? 'sí' : 'no' } : null; },
   backupData: function () { return backupData(); }, backupRestore: function (o) { backupRestore(o); }, dataInfo: function () { return { version: DATA.version, older: dataState.older || null, source: dataState.source }; },
-  audioInfo: function () { return { n: TAP.n, clip: TAP.clipN, log: TAP.log.length }; }, audioWavSize: function () { var w = tapWavBlob(); return w ? w.size : 0; },
+  tapLog: function () { return TAP.log.slice(); }, audioInfo: function () { return { n: TAP.n, clip: TAP.clipN, log: TAP.log.length }; }, audioWavSize: function () { var w = tapWavBlob(); return w ? w.size : 0; },
   midiIn: function (bytes) { midiMsg({ data: bytes }); }, midiFake: function (name) { midi.inp = { name: name || 'Teclado de prueba' }; }, state: function () { return { book: BOOKS.active, version: DATA.version, source: dataState.source, songs: allSongs().length, changes: localChangeCount() }; } };
 })();
 
 
 window.__appOk = true;
-if (window.__BUILD && window.__BUILD !== '20261007183559') { try { showUpdateBanner(''); } catch (e) { /* nada */ } }
+if (window.__BUILD && window.__BUILD !== '20261008025137') { try { showUpdateBanner(''); } catch (e) { /* nada */ } }
