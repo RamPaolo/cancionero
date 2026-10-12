@@ -3,7 +3,7 @@
  "type": "cancionero",
  "name": "Fuego de Pentecostés",
  "subtitle": "Renovación Carismática Católica",
- "version": "2026-09-25T21:11:31.000Z",
+ "version": "2026-10-12T16:16:46.953Z",
  "groups": [
   {
    "id": "aviv",
@@ -940,5 +940,24 @@
    "refText": "A cancionerocatolico.cl/Leccionales/Tu%20palabra%20me%20da%20vida.html E"
   }
  ],
- "setlists": []
+ "setlists": [
+  {
+   "id": "rmv5gd610qy75",
+   "name": "Sábado 17/10",
+   "items": [
+    {
+     "id": "s01",
+     "shift": null
+    },
+    {
+     "id": "s02",
+     "shift": null
+    },
+    {
+     "id": "s03",
+     "shift": null
+    }
+   ]
+  }
+ ]
 }
