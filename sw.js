@@ -5,7 +5,7 @@
      Así nunca se mezclan archivos de dos versiones.
    - Las canciones (canciones.json): primero internet (espera corta) y si no, la copia guardada.
    - Fuentes e íconos: la copia guardada (no cambian). */
-var VERSION = 'cfp-20261008-025137';
+var VERSION = 'cfp-20261018-223557';
 var ARCHIVOS = ["./", "index.html", "app.css", "core.js", "app.js", "canciones.json", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "favicon-32.png", "balsamiq-sans-400.woff2", "balsamiq-sans-700.woff2", "balsamiq-sans-700i.woff2", "barlow-condensed-600.woff2", "barlow-condensed-700.woff2", "barlow-400.woff2", "barlow-600.woff2", "barlow-700.woff2"];
 
 self.addEventListener('install', function (e) {
@@ -60,11 +60,24 @@ function primeroCopia(req, clave) {
   });
 }
 
+/* El lector de PDF de «Practicar» (pdf.js) se baja de internet la primera vez y queda guardado aparte
+   (no se borra al actualizar la app): después los PDF se abren sin internet. */
+var LIBS = 'libs-pdfjs';
+function libreria(req) {
+  return caches.open(LIBS).then(function (c) {
+    return c.match(req.url).then(function (r) {
+      return r || fetch(req).then(function (res) { if (res && res.ok && res.type !== 'opaque') c.put(req.url, res.clone()); return res; });
+    });
+  });
+}
 self.addEventListener('fetch', function (e) {
   var req = e.request;
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
-  if (url.origin !== self.location.origin) return;
+  if (url.origin !== self.location.origin) {
+    if (url.hostname === 'cdnjs.cloudflare.com' && url.pathname.indexOf('/ajax/libs/pdf.js/') === 0) e.respondWith(libreria(req));
+    return;
+  }
   if (url.searchParams.has('v')) return;   // búsqueda de actualizaciones: siempre directo a internet
   if (req.mode === 'navigate') { e.respondWith(primeroCopia(req, new URL('index.html', self.location).href)); return; }
   if (/\/canciones\.json$/.test(url.pathname)) { e.respondWith(primeroRed(req, new URL('canciones.json', self.location).href, 2500)); return; }

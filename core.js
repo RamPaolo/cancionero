@@ -314,7 +314,9 @@
   function importText(text) {
     var raw = String(text || '').replace(/\r/g, '').replace(/\t/g, '    ').split('\n');
     var meta = { title: '', author: '', key: '' };
-    var hasBrackets = /\[[A-G][#b]?[^\]\s]{0,8}\]/.test(text);
+    // ¿acordes entre corchetes ([G]Hola)? Solo si lo de adentro es un acorde: «[Coro]» o «[Chorus]» son nombres de partes
+    var hasBrackets = false, reB = /\[([^\]\s]{1,12})\]/g, mB;
+    while ((mB = reB.exec(String(text || '')))) { if (isChordTok(mB[1])) { hasBrackets = true; break; } }
     var out = [];
     for (var i = 0; i < raw.length; i++) {
       var line = raw[i].replace(/\s+$/, '');
@@ -2415,6 +2417,63 @@
   function hearCreate(opt) { return O4W && opt && opt.sr && !opt.v3 ? hearCreate4(opt) : hearCreate3(opt); }
   function listenCreate(opt) { return O4W && opt && opt.sr && !opt.v3 ? listenCreate4(opt) : listenCreate3(opt); }
 
+  /* ---------- Huella corta de un texto (FNV-1a de 32 bits): para saber si una canción sigue igual ---------- */
+  function hash32(s) {
+    s = String(s == null ? '' : s);
+    var h = 0x811c9dc5;
+    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return ('0000000' + h.toString(16)).slice(-8);
+  }
+  /* ---------- Recorrido después de cambiar los acordes de la canción ----------
+     El recorrido guarda el número de cada acorde de la canción. Si la canción cambia (se agrega o se quita un acorde),
+     se conserva lo que coincide (mismo acorde, en el mismo orden) y lo nuevo entra partiendo el tiempo del acorde de
+     antes. Devuelve el recorrido nuevo y cuáles pasos conviene revisar, o null si cambió demasiado. */
+  function tlRemap(tl, oldSeq, newSeq) {
+    if (!tl || !Array.isArray(tl.steps) || !tl.steps.length || !newSeq.length) return null;
+    var core = function (t) { return splitTok(String(t)).core; };
+    var a = oldSeq.map(core), b = newSeq.map(core), n = a.length, m = b.length, i, j;
+    var L = []; for (i = 0; i <= n; i++) L.push(new Int32Array(m + 1));
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    var map = []; for (i = 0; i < n; i++) map.push(-1);
+    i = 0; j = 0;
+    while (i < n && j < m) { if (a[i] === b[j]) { map[i] = j; i++; j++; } else if (L[i + 1][j] >= L[i][j + 1]) i++; else j++; }
+    var matched = 0; map.forEach(function (x) { if (x >= 0) matched++; });
+    if (!n || matched < Math.max(1, Math.round(0.6 * Math.min(n, m)))) return null;
+    var used = {}; map.forEach(function (x) { if (x >= 0) used[x] = 1; });
+    var out = [], doubt = [];
+    tl.steps.forEach(function (s) {
+      var k = s[0], nk = k >= 0 && k < n ? map[k] : -1;
+      if (nk >= 0) out.push([nk, s[1], typeof s[2] === 'number' ? s[2] : null]);
+      else if (out.length) out[out.length - 1][1] += s[1];          // el acorde que ya no está: su tiempo queda en el de antes
+      else out.push([-1, s[1], typeof s[2] === 'number' ? s[2] : null]);
+    });
+    if (out.length && out[0][0] < 0) { if (out.length > 1) { out[1][1] += out[0][1]; out.shift(); } else return null; }
+    // acordes nuevos: van justo después del acorde que los precede en la canción (la primera vez que aparece en el recorrido)
+    for (var q = 0; q < m; q++) {
+      if (used[q]) continue;
+      var pred = -1; for (var p2 = q - 1; p2 >= 0; p2--) if (used[p2]) { pred = p2; break; }
+      var at = -1;
+      for (var z = 0; z < out.length; z++) if (out[z][0] === pred) { at = z; break; }
+      var take;
+      if (at < 0) {                                                  // antes de todo: le quita la mitad al primero
+        take = Math.max(0.5, Math.floor(out[0][1]) / 2);
+        if (out[0][1] - take >= 0.5) out[0][1] -= take;
+        out.unshift([q, take, null]); at = 0;
+      } else {
+        take = Math.max(0.5, Math.floor(out[at][1]) / 2);
+        if (out[at][1] - take >= 0.5) out[at][1] -= take;
+        out.splice(at + 1, 0, [q, take, null]); at = at + 1;
+      }
+      used[q] = 1;
+      doubt.push(q);
+    }
+    var steps2 = out.map(function (s) { return [s[0], Math.round(s[1] * 2) / 2 || 0.5, s[2]]; });
+    var dz = []; steps2.forEach(function (s, k) { if (doubt.indexOf(s[0]) >= 0) { if (dz.indexOf(k) < 0) dz.push(k); var nb = k > 0 ? k - 1 : k + 1; if (nb < steps2.length && dz.indexOf(nb) < 0) dz.push(nb); } });
+    var r = {}; Object.keys(tl).forEach(function (k2) { r[k2] = tl[k2]; });
+    r.steps = steps2; r.sig = newSeq.join('|'); r.doubt = dz.sort(function (x, y) { return x - y; }); r.remapped = true;
+    return r;
+  }
+
   var api = {
     SHARP: SHARP, FLAT: FLAT, LATIN: LATIN, mod12: mod12, splitTok: splitTok, isChordTok: isChordTok, isChordCore: isChordCore,
     parseChord: parseChord, isMinorQual: isMinorQual, noteName: noteName, spellForKey: spellForKey, transposeTok: transposeTok,
@@ -2425,11 +2484,478 @@
     modelToLetra: modelToLetra, parseLetra: parseLetra, reconcile: reconcile, transferChords: transferChords, lineKey: lineKey,
     syllableStarts: syllableStarts, copyChordsBySyllable: copyChordsBySyllable, diatonic: diatonic, chordLineInfo: chordLineInfo,
     closeVoicing: closeVoicing, splitMulti: splitMulti, ytId: ytId, ytStart: ytStart, parseClock: parseClock, fmtClock: fmtClock,
-    tlRound: tlRound, tlQuantize: tlQuantize, tlEstimateBpm: tlEstimateBpm, tlTapBpm: tlTapBpm, tlStarts: tlStarts, tlVideoTimes: tlVideoTimes,
+    tlRound: tlRound, tlQuantize: tlQuantize, tlEstimateBpm: tlEstimateBpm, tlTapBpm: tlTapBpm, tlStarts: tlStarts, tlVideoTimes: tlVideoTimes, tlRemap: tlRemap, hash32: hash32,
     tempoFromSamples: tempoFromSamples, onsetEnvelope: onsetEnvelope, fftRadix2: fftRadix2, _tempoCfg: tempoFromEnvelope,
     simpleChord: simpleChord, numLabel: numLabel, EZ_NUMS: EZ_NUMS, followerCreate: followerCreate,
     chordTemplate: chordTemplate, chordPcs: chordPcs, chordScore: chordScore, chordScoreKeys: chordScoreKeys, listenCreate: listenCreate, vozCreate: vozCreate, vozDtw: vozDtw, vozThresholds: vozThresholds, vozClassify: vozClassify, pianoTpl: pianoTpl, hearCreate: hearCreate, spLayout: spLayout, spPool: spPool, spNotes: spNotes, spFit: spFit, tuneCreate: tuneCreate, spPeaks: spPeaks, spDrift: spDrift, featureStream: featureStream, o4Layout: o4Layout, o4Grid: o4Grid, o4Net: o4Net, o4SetWeights: o4SetWeights, o4Create: o4Create, chordScore4: chordScore4, chordScoreAny: chordScoreAny, hearCreate3: hearCreate3, hearCreate4: hearCreate4, listenCreate3: listenCreate3, listenCreate4: listenCreate4, O4: { P0: O4_P0, NB: O4_NB, M0: O4_M0, NK: O4_NK }, beatTrack: beatTrack, beatFeatures: beatFeatures, alignSteps: alignSteps, suggestTimeline: suggestTimeline
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Core = api;
+})(this);
+
+/* Motor de la biblioteca de práctica (oct 2026) — sin DOM, probado con Node.
+   Lee partituras de otros programas y las deja en una forma común para practicar notas:
+   - MIDI (.mid): Ableton, MuseScore, Finale, teclados, casi cualquier programa lo exporta.
+   - MusicXML (.musicxml, .xml) y MusicXML comprimido (.mxl): MuseScore, Finale, Sibelius, Dorico, Flat, Noteflight.
+   Partitura común: { title, author, sig: [n, d], tempos: [[pulso, bpm]], measures: [pulso donde empieza cada compás],
+                      notes: [[inicio, duración, midi, mano, fuerza, parte]], parts: [{ name, n, staves, drums }] }
+   El tiempo va en pulsos de negra. Mano: 0 derecha, 1 izquierda, -1 sin saber (se decide después con pracHands).
+   También: la dificultad (1 Muy fácil … 5 Muy difícil) para notas y para acordes, y las piezas que trae la app. */
+(function (root) {
+  'use strict';
+  var STEP_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+  var LEVELS = ['', 'Muy fácil', 'Fácil', 'Intermedio', 'Difícil', 'Muy difícil'];
+
+  /* ---------- texto de un archivo (UTF-8 o UTF-16) ---------- */
+  function textOf(u8) {
+    if (typeof TextDecoder === 'undefined') { var s = ''; for (var i = 0; i < u8.length; i++) s += String.fromCharCode(u8[i]); return s; }
+    if (u8.length >= 2 && u8[0] === 0xFF && u8[1] === 0xFE) return new TextDecoder('utf-16le').decode(u8.subarray(2));
+    if (u8.length >= 2 && u8[0] === 0xFE && u8[1] === 0xFF) return new TextDecoder('utf-16be').decode(u8.subarray(2));
+    if (u8.length >= 4 && u8[0] === 0x3C && u8[1] === 0 && u8[2] === 0x3F && u8[3] === 0) return new TextDecoder('utf-16le').decode(u8);
+    if (u8.length >= 4 && u8[0] === 0 && u8[1] === 0x3C && u8[2] === 0 && u8[3] === 0x3F) return new TextDecoder('utf-16be').decode(u8);
+    var t = new TextDecoder('utf-8').decode(u8);
+    return t.charCodeAt(0) === 0xFEFF ? t.slice(1) : t;
+  }
+
+  /* ---------- XML mínimo (lo que usa MusicXML) ---------- */
+  function xmlUnesc(s) {
+    if (s.indexOf('&') < 0) return s;
+    return s.replace(/&(#x[0-9a-f]+|#\d+|lt|gt|amp|quot|apos);/gi, function (all, e) {
+      if (e[0] === '#') { var c = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10); try { return String.fromCodePoint(c); } catch (x) { return ''; } }
+      return { lt: '<', gt: '>', amp: '&', quot: '"', apos: "'" }[e.toLowerCase()] || all;
+    });
+  }
+  function xmlParse(str) {
+    var docRoot = { n: '#root', a: {}, c: [], t: '' }, stack = [docRoot], i = 0, L = str.length;
+    function top() { return stack[stack.length - 1]; }
+    function addText(t, raw) { if (!t) return; var n = top(); n.t += raw ? t : xmlUnesc(t); }
+    while (i < L) {
+      var lt = str.indexOf('<', i);
+      if (lt < 0) { addText(str.slice(i)); break; }
+      if (lt > i) addText(str.slice(i, lt));
+      if (str.substr(lt, 4) === '<!--') { var e1 = str.indexOf('-->', lt + 4); i = e1 < 0 ? L : e1 + 3; continue; }
+      if (str.substr(lt, 9) === '<![CDATA[') { var e2 = str.indexOf(']]>', lt + 9); addText(str.slice(lt + 9, e2 < 0 ? L : e2), true); i = e2 < 0 ? L : e2 + 3; continue; }
+      if (str[lt + 1] === '?') { var e3 = str.indexOf('?>', lt + 2); i = e3 < 0 ? L : e3 + 2; continue; }
+      if (str[lt + 1] === '!') { var d = 0, j = lt + 2; for (; j < L; j++) { var ch = str[j]; if (ch === '[') d++; else if (ch === ']') d--; else if (ch === '>' && d <= 0) break; } i = j + 1; continue; }
+      var q = null, k = lt + 1;
+      for (; k < L; k++) { var c2 = str[k]; if (q) { if (c2 === q) q = null; } else if (c2 === '"' || c2 === "'") q = c2; else if (c2 === '>') break; }
+      var tag = str.slice(lt + 1, k); i = k + 1;
+      if (tag[0] === '/') {
+        var nm = tag.slice(1).trim();
+        for (var s = stack.length - 1; s > 0; s--) if (stack[s].n === nm) { stack.length = s; break; }
+        continue;
+      }
+      var self = /\/\s*$/.test(tag); if (self) tag = tag.replace(/\/\s*$/, '');
+      var m = /^([^\s\/>]+)/.exec(tag); if (!m) continue;
+      var node = { n: m[1], a: {}, c: [], t: '' }, re = /([^\s=]+)\s*=\s*("([^"]*)"|'([^']*)')/g, am, rest = tag.slice(m[1].length);
+      while ((am = re.exec(rest))) node.a[am[1]] = xmlUnesc(am[3] !== undefined ? am[3] : am[4]);
+      top().c.push(node);
+      if (!self) stack.push(node);
+    }
+    return docRoot;
+  }
+  function xc(n, name) { if (!n) return null; for (var i = 0; i < n.c.length; i++) if (n.c[i].n === name) return n.c[i]; return null; }
+  function xcs(n, name) { var o = []; if (!n) return o; for (var i = 0; i < n.c.length; i++) if (n.c[i].n === name) o.push(n.c[i]); return o; }
+  function xt(n, name) { var c = name ? xc(n, name) : n; return c ? c.t.trim() : ''; }
+  function xfind(n, name) { if (!n) return null; if (n.n === name) return n; for (var i = 0; i < n.c.length; i++) { var r = xfind(n.c[i], name); if (r) return r; } return null; }
+
+  /* ---------- MusicXML ---------- */
+  /* El orden en que se tocan los compases, con repeticiones y casillas 1.ª y 2.ª (D.C. y D.S. no: se avisa). */
+  function mxlOrder(ms, warn) {
+    var info = ms.map(function (m) {
+      var o = { fwd: false, back: 0, ending: null, endStop: false };
+      xcs(m, 'barline').forEach(function (b) {
+        var r = xc(b, 'repeat'), e = xc(b, 'ending');
+        if (r && r.a.direction === 'forward') o.fwd = true;
+        if (r && r.a.direction === 'backward') o.back = Math.max(2, +r.a.times || 2);
+        if (e && e.a.type === 'start') o.ending = String(e.a.number || '1').split(/[\s,]+/).map(Number).filter(function (x) { return x > 0; });
+        if (e && (e.a.type === 'stop' || e.a.type === 'discontinue')) o.endStop = true;
+      });
+      xcs(m, 'direction').forEach(function (d) { var snd = xc(d, 'sound'); if (snd && (snd.a.dacapo || snd.a.dalsegno || snd.a.tocoda)) warn.dc = true; });
+      var snd2 = xc(m, 'sound'); if (snd2 && (snd2.a.dacapo || snd2.a.dalsegno)) warn.dc = true;
+      return o;
+    });
+    var order = [], i = 0, start = 0, pass = 1, inEnd = null, guard = 0, limit = ms.length * 8 + 20;
+    while (i < ms.length && guard++ < limit) {
+      var f = info[i];
+      if (f.fwd && start !== i) { start = i; pass = 1; }              // empieza una parte que se repite (al volver no se reinicia)
+      if (f.ending) inEnd = f.ending;
+      var skip = !!(inEnd && inEnd.indexOf(pass) < 0);                 // casilla de otra vuelta
+      if (!skip) order.push(i);
+      if (f.back && !skip && pass < f.back) { pass++; inEnd = null; i = start; continue; }
+      if (f.back && !skip) { pass = 1; start = i + 1; inEnd = null; i++; continue; }
+      if (f.endStop || (inEnd && f.back)) {
+        if (!skip && inEnd) { pass = 1; start = i + 1; }               // terminó la última casilla
+        inEnd = null;
+      }
+      i++;
+    }
+    return order;
+  }
+  function mxlScore(str) {
+    var doc = xmlParse(str), sp = xfind(doc, 'score-partwise');
+    if (!sp) throw new Error(xfind(doc, 'score-timewise') ? 'timewise' : 'no-musicxml');
+    var work = xc(sp, 'work'), title = xt(work, 'work-title') || xt(sp, 'movement-title'), author = '';
+    var ident = xc(sp, 'identification');
+    xcs(ident, 'creator').forEach(function (c) { if (!author && (!c.a.type || c.a.type === 'composer')) author = c.t.trim(); });
+    if (!title) { var cr = xfind(sp, 'credit-words'); if (cr) title = cr.t.trim(); }
+    var names = {}, plist = xc(sp, 'part-list');
+    xcs(plist, 'score-part').forEach(function (p) { names[p.a.id] = xt(p, 'part-name') || xt(p, 'part-abbreviation') || p.a.id; });
+    var out = { title: title, author: author, sig: null, tempos: [], measures: [], notes: [], parts: [], warn: [] }, warnObj = {};
+    xcs(sp, 'part').forEach(function (part, pi) {
+      var ms = xcs(part, 'measure'), order = mxlOrder(ms, warnObj);
+      var div = 1, trans = 0, staves = 1, clefs = {}, mt = 0, open = {}, cnt = 0, pinfo = { name: names[part.a.id] || ('Parte ' + (pi + 1)), n: 0, staves: 1, drums: false };
+      order.forEach(function (mi) {
+        var m = ms[mi], cur = 0, mx = 0, last = 0;
+        if (pi === 0) out.measures.push(mt);
+        m.c.forEach(function (el) {
+          if (el.n === 'attributes') {
+            var dv = +xt(el, 'divisions'); if (dv > 0) div = dv;
+            var tm = xc(el, 'time'); if (tm && !out.sig) { var bt = +xt(tm, 'beats'), bty = +xt(tm, 'beat-type'); if (bt > 0 && bty > 0) out.sig = [bt, bty]; }
+            var sv = +xt(el, 'staves'); if (sv > 0) { staves = sv; pinfo.staves = Math.max(pinfo.staves, sv); }
+            xcs(el, 'clef').forEach(function (cf) { clefs[+(cf.a.number || 1)] = xt(cf, 'sign'); if (xt(cf, 'sign') === 'percussion') pinfo.drums = true; });
+            var tr = xc(el, 'transpose'); if (tr) trans = (+xt(tr, 'chromatic') || 0) + 12 * (+xt(tr, 'octave-change') || 0);
+          } else if (el.n === 'note') {
+            if (xc(el, 'grace')) return;                                   // adorno: no ocupa tiempo
+            var dur = +xt(el, 'duration') || 0, isChord = !!xc(el, 'chord'), st = isChord ? last : cur;
+            if (!isChord) last = cur;
+            var p = xc(el, 'pitch');
+            if (p && !xc(el, 'rest') && !xc(el, 'cue')) {                 // las notas guía (cue) no se tocan, pero ocupan su tiempo
+              var stp = STEP_PC[xt(p, 'step').toUpperCase()], alt = parseFloat(xt(p, 'alter')) || 0, oct = +xt(p, 'octave');
+              if (stp !== undefined && isFinite(oct)) {
+                var midi = 12 * (oct + 1) + stp + Math.round(alt) + trans, staff = +xt(el, 'staff') || 1;
+                var hand = staves >= 2 ? (staff >= 2 ? 1 : 0) : (clefs[staff] === 'F' ? 1 : 0);
+                var b0 = mt + st / div, bd = dur / div, ties = xcs(el, 'tie').map(function (t) { return t.a.type; });
+                var tk = pi + ':' + midi + ':' + staff;
+                if (ties.indexOf('stop') >= 0 && open[tk] && Math.abs(open[tk][0] + open[tk][1] - b0) < 0.05) {
+                  open[tk][1] += bd;                                        // nota ligada: se alarga la de antes
+                  if (ties.indexOf('start') < 0) delete open[tk];
+                } else if (bd > 0) {
+                  var nt = [b0, bd, midi, hand, 80, pi]; out.notes.push(nt); cnt++;
+                  if (ties.indexOf('start') >= 0) open[tk] = nt; else delete open[tk];
+                }
+              }
+            }
+            if (!isChord) cur += dur;
+            if (cur > mx) mx = cur;
+          } else if (el.n === 'backup') { cur -= +xt(el, 'duration') || 0; if (cur < 0) cur = 0; }
+          else if (el.n === 'forward') { cur += +xt(el, 'duration') || 0; if (cur > mx) mx = cur; }
+          else if (el.n === 'direction' || el.n === 'sound') {
+            var snd = el.n === 'sound' ? el : xc(el, 'sound');
+            if (snd && +snd.a.tempo > 0 && pi === 0) {
+              var off = el.n === 'direction' ? (+xt(el, 'offset') || 0) : 0;
+              out.tempos.push([mt + (cur + off) / div, +snd.a.tempo]);
+            }
+          }
+        });
+        mt += (mx || 0) / div;
+      });
+      pinfo.n = cnt; out.parts.push(pinfo);
+      if (pi === 0) out.measures.push(mt);                    // el final de la última
+    });
+    if (warnObj.dc) out.warn.push('dc');
+    finish(out);
+    return out;
+  }
+
+  /* ---------- MusicXML comprimido (.mxl): un zip ---------- */
+  function zipList(u8) {
+    var dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength), n = u8.length, e = -1;
+    for (var i = n - 22; i >= Math.max(0, n - 22 - 65535); i--) if (dv.getUint32(i, true) === 0x06054b50) { e = i; break; }
+    if (e < 0) throw new Error('no-zip');
+    var cnt = dv.getUint16(e + 10, true), off = dv.getUint32(e + 16, true), out = [];
+    for (var k = 0; k < cnt && off + 46 <= n; k++) {
+      if (dv.getUint32(off, true) !== 0x02014b50) break;
+      var method = dv.getUint16(off + 10, true), csize = dv.getUint32(off + 20, true), usize = dv.getUint32(off + 24, true);
+      var nl = dv.getUint16(off + 28, true), xl = dv.getUint16(off + 30, true), cl = dv.getUint16(off + 32, true), lho = dv.getUint32(off + 42, true);
+      var name = textOf(u8.subarray(off + 46, off + 46 + nl));
+      if (lho + 30 <= n && dv.getUint32(lho, true) === 0x04034b50) {
+        var ds = lho + 30 + dv.getUint16(lho + 26, true) + dv.getUint16(lho + 28, true);
+        out.push({ name: name, method: method, size: usize, data: u8.subarray(ds, ds + csize) });
+      }
+      off += 46 + nl + xl + cl;
+    }
+    return out;
+  }
+  /* cuál archivo del zip es la partitura (lo dice META-INF/container.xml) */
+  function mxlRootName(entries, containerText) {
+    if (containerText) { var m = /full-path\s*=\s*"([^"]+)"/.exec(containerText); if (m) return m[1]; }
+    for (var i = 0; i < entries.length; i++) { var nm = entries[i].name; if (!/^META-INF\//i.test(nm) && /\.(musicxml|xml)$/i.test(nm)) return nm; }
+    return null;
+  }
+
+  /* ---------- MIDI ---------- */
+  function midiScore(u8) {
+    var n = u8.length, dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+    var tag = function (p) { return String.fromCharCode(u8[p], u8[p + 1], u8[p + 2], u8[p + 3]); };
+    var p0 = 0;
+    if (tag(0) === 'RIFF' && n > 20) { for (var r = 12; r + 8 < n; r += 8 + dv.getUint32(r + 4, true)) if (tag(r) === 'data') { p0 = r + 8; break; } }   // .rmi
+    if (tag(p0) !== 'MThd') throw new Error('no-midi');
+    var hl = dv.getUint32(p0 + 4), ntr = dv.getUint16(p0 + 10), div = dv.getInt16(p0 + 12);
+    if (div <= 0) div = 480;
+    var p = p0 + 8 + hl, tempos = [], sig = null, title = '', parts = [], all = [];
+    for (var t = 0; t < ntr && p + 8 <= n; ) {
+      var len = dv.getUint32(p + 4), q = p + 8, end = Math.min(n, q + len);
+      if (tag(p) !== 'MTrk') { p = end; continue; }
+      p = end; t++;
+      var tick = 0, run = 0, name = '', on = {}, notes = [], prog = {}, chs = {};
+      var vl = function () { var v = 0, b; do { b = u8[q++]; v = (v << 7) | (b & 0x7f); } while (b & 0x80 && q < end); return v; };
+      while (q < end) {
+        tick += vl();
+        var st = u8[q];
+        if (st < 0x80) { if (!run) break; st = run; } else { q++; if (st < 0xF0) run = st; else run = 0; }
+        if (st === 0xFF) {
+          var ty = u8[q++], l = vl(), d = u8.subarray(q, q + l); q += l;
+          if (ty === 0x51 && l >= 3) tempos.push([tick, 60000000 / ((d[0] << 16) | (d[1] << 8) | d[2])]);
+          else if (ty === 0x58 && l >= 2 && !sig) sig = [d[0], Math.pow(2, d[1])];
+          else if (ty === 0x03 && !name) name = textOf(d).trim();
+          else if (ty === 0x2F) break;
+        } else if (st === 0xF0 || st === 0xF7) { q += vl(); }
+        else {
+          var hi = st & 0xF0, ch = st & 0x0F;
+          if (hi === 0xC0 || hi === 0xD0) { var pg = u8[q++]; if (hi === 0xC0) prog[ch] = pg; }
+          else {
+            var d1 = u8[q++], d2 = u8[q++], key = ch * 128 + d1;
+            if (hi === 0x90 && d2 > 0) { (on[key] = on[key] || []).push([tick, d2]); chs[ch] = 1; }
+            else if (hi === 0x80 || hi === 0x90) { var a = on[key]; if (a && a.length) { var s0 = a.shift(); if (tick > s0[0]) notes.push([s0[0], tick - s0[0], d1, ch, s0[1]]); } }
+          }
+        }
+      }
+      Object.keys(on).forEach(function (k) { on[k].forEach(function (s1) { if (tick > s1[0]) notes.push([s1[0], tick - s1[0], +k % 128, Math.floor(+k / 128), s1[1]]); }); });
+      if (!title && name && t === 1 && !notes.length) title = name;
+      // cada canal de la pista es una parte (en los MIDI de una sola pista vienen todos juntos)
+      var byCh = {};
+      notes.forEach(function (x) { (byCh[x[3]] = byCh[x[3]] || []).push(x); });
+      Object.keys(byCh).sort(function (a2, b2) { return a2 - b2; }).forEach(function (c) {
+        var pi = parts.length, list = byCh[c];
+        parts.push({ name: name ? (Object.keys(byCh).length > 1 ? name + ' · canal ' + (+c + 1) : name) : (+c === 9 ? 'Batería' : 'Pista ' + (pi + 1)), n: list.length, staves: 1, drums: +c === 9, prog: prog[c] != null ? prog[c] : null });
+        list.forEach(function (x) { all.push([x[0] / div, x[1] / div, x[2], -1, x[4], pi]); });
+      });
+    }
+    var out = { title: title, author: '', sig: sig, tempos: tempos.map(function (x) { return [x[0] / div, Math.round(x[1] * 100) / 100]; }), measures: [], notes: all, parts: parts, warn: [] };
+    finish(out);
+    return out;
+  }
+
+  /* ---------- después de leer: orden, tempo, compases y partes ---------- */
+  function finish(sc) {
+    sc.notes.sort(function (a, b) { return a[0] - b[0] || a[2] - b[2]; });
+    sc.tempos.sort(function (a, b) { return a[0] - b[0]; });
+    var tm = []; sc.tempos.forEach(function (x) { if (tm.length && Math.abs(tm[tm.length - 1][0] - x[0]) < 1e-6) tm[tm.length - 1] = x; else if (!tm.length || tm[tm.length - 1][1] !== x[1]) tm.push(x); });
+    if (!tm.length || tm[0][0] > 0) tm.unshift([0, tm.length ? tm[0][1] : 120]);
+    sc.tempos = tm;
+    if (!sc.sig) sc.sig = [4, 4];
+    var end = 0; sc.notes.forEach(function (x) { end = Math.max(end, x[0] + x[1]); });
+    sc.end = end;
+    if (!sc.measures.length || sc.measures[sc.measures.length - 1] < end - 1e-6) {          // MIDI: compases según el compás de arriba
+      var bar = sc.sig[0] * 4 / sc.sig[1], ms = [];
+      for (var b = 0; b < end + 1e-6; b += bar) ms.push(b);
+      ms.push(ms[ms.length - 1] + bar);
+      if (!sc.measures.length) sc.measures = ms;
+    }
+    sc.bpm = sc.tempos[0][1];
+    sc.def = defaultParts(sc);
+    return sc;
+  }
+  /* qué partes se practican al abrir: el piano si hay, si no la melodía (nunca la batería) */
+  function defaultParts(sc) {
+    var cand = sc.parts.map(function (p, i) { return { p: p, i: i }; }).filter(function (x) { return x.p.n > 0 && !x.p.drums; });
+    if (!cand.length) return [];
+    var piano = cand.filter(function (x) { return x.p.staves >= 2 || /piano|teclado|keyboard|klavier|órgano|organ|pno|mano|hand|derecha|izquierda|right|left|\b[rl]h\b/i.test(x.p.name) || x.p.prog != null && x.p.prog <= 7; });
+    if (piano.length) {
+      var two = piano.filter(function (x) { return x.p.staves >= 2; });
+      if (two.length) return [two[0].i];
+      if (piano.length >= 2) { piano.sort(function (a, b) { return b.p.n - a.p.n; }); return [piano[0].i, piano[1].i].sort(function (a, b) { return a - b; }); }   // una pista por mano
+      return [piano[0].i];
+    }
+    var mel = cand.filter(function (x) { return /melod|voz|voice|vocal|lead|soprano|canto|flaut|flute|violin/i.test(x.p.name); });
+    if (mel.length) return [mel[0].i];
+    if (cand.length <= 2) return cand.map(function (x) { return x.i; });
+    cand.sort(function (a, b) { return b.p.n - a.p.n; });
+    return [cand[0].i];
+  }
+  /* Las notas a practicar, con su mano: por pentagrama (MusicXML), por pistas (dos pistas: la más aguda es la derecha)
+     o partiendo en el Do central si una sola pista trae las dos manos. */
+  function pracHands(sc, sel) {
+    sel = sel && sel.length ? sel : sc.def;
+    var ns = sc.notes.filter(function (x) { return sel.indexOf(x[5]) >= 0; }).map(function (x) { return x.slice(); });
+    if (!ns.length) return ns;
+    if (ns.every(function (x) { return x[3] >= 0; })) return ns;
+    if (sel.length === 2) {
+      var avg = sel.map(function (pi) { var s = 0, c = 0; ns.forEach(function (x) { if (x[5] === pi) { s += x[2]; c++; } }); return c ? s / c : 0; });
+      var rp = avg[0] >= avg[1] ? sel[0] : sel[1];
+      ns.forEach(function (x) { if (x[3] < 0) x[3] = x[5] === rp ? 0 : 1; });
+      return ns;
+    }
+    var lo = ns.filter(function (x) { return x[2] < 60; }).length, hi = ns.length - lo;
+    var split = lo >= ns.length * 0.15 && hi >= ns.length * 0.15;
+    ns.forEach(function (x) { if (x[3] < 0) x[3] = split && x[2] < 60 ? 1 : 0; });
+    return ns;
+  }
+
+  /* ---------- tiempo: pulsos ↔ segundos con los cambios de tempo ---------- */
+  function tempoMap(tempos, mul) {
+    mul = mul || 1;
+    var segs = [], sec = 0;
+    for (var i = 0; i < tempos.length; i++) {
+      var b0 = tempos[i][0], bpm = tempos[i][1] * mul, b1 = i + 1 < tempos.length ? tempos[i + 1][0] : Infinity;
+      segs.push({ b0: b0, s0: sec, spb: 60 / bpm, b1: b1 });
+      if (b1 < Infinity) sec += (b1 - b0) * 60 / bpm;
+    }
+    return {
+      sec: function (b) { var s = segs[0]; for (var k = segs.length - 1; k >= 0; k--) if (b >= segs[k].b0) { s = segs[k]; break; } return s.s0 + (b - s.b0) * s.spb; },
+      beat: function (t) { var s = segs[0]; for (var k = segs.length - 1; k >= 0; k--) if (t >= segs[k].s0) { s = segs[k]; break; } return s.b0 + (t - s.s0) / s.spb; },
+      spbAt: function (b) { var s = segs[0]; for (var k = segs.length - 1; k >= 0; k--) if (b >= segs[k].b0) { s = segs[k]; break; } return s.spb; }
+    };
+  }
+
+  /* ---------- dificultad ---------- */
+  var BLACK = { 1: 1, 3: 1, 6: 1, 8: 1, 10: 1 };
+  function levelNotes(notes, tempos) {
+    if (!notes.length) return { level: 1, why: [] };
+    var tmap = tempoMap(tempos || [[0, 120]]), why = [];
+    var t0 = tmap.sec(notes[0][0]), t1 = tmap.sec(notes[notes.length - 1][0] + notes[notes.length - 1][1]);
+    var hands = [0, 0], onsets = [[], []], poly = 0, black = 0, lo = 127, hi = 0, jumps = 0, steps = 0, last = [null, null];
+    notes.forEach(function (x) { hands[x[3] ? 1 : 0]++; if (BLACK[x[2] % 12]) black++; lo = Math.min(lo, x[2]); hi = Math.max(hi, x[2]); });
+    var byHand = [notes.filter(function (x) { return !x[3]; }), notes.filter(function (x) { return x[3]; })];
+    byHand.forEach(function (list, h) {
+      var i = 0;
+      while (i < list.length) {
+        var j = i, top = list[i][2];
+        while (j + 1 < list.length && list[j + 1][0] - list[i][0] < 0.04) { j++; top = Math.max(top, list[j][2]); }
+        poly = Math.max(poly, j - i + 1);
+        onsets[h].push(tmap.sec(list[i][0]));
+        if (last[h] !== null) { steps++; if (Math.abs(top - last[h]) > 7) jumps++; }
+        last[h] = top; i = j + 1;
+      }
+    });
+    var dur = Math.max(1, t1 - t0), ons = onsets[0].length + onsets[1].length, nps = ons / dur;
+    var fast = 0;                                       // cuántos ataques llegan muy seguidos (menos de 0,2 s) en una misma mano
+    onsets.forEach(function (o) { for (var k = 1; k < o.length; k++) if (o[k] - o[k - 1] < 0.2) fast++; });
+    var both = hands[0] > notes.length * 0.1 && hands[1] > notes.length * 0.1;
+    var pts = 0;
+    pts += nps < 1.5 ? 0 : nps < 2.5 ? 0.7 : nps < 3.5 ? 1.4 : nps < 5 ? 2.1 : nps < 7 ? 2.8 : 3.5;
+    var durs = {}; notes.forEach(function (x) { durs[Math.round(x[1] * 8)] = 1; });
+    if (Object.keys(durs).length >= 3) { pts += 0.5; why.push('figuras de varias duraciones'); }
+    if (both) { pts += 1; why.push('las dos manos'); } else why.push(hands[1] > hands[0] ? 'solo mano izquierda' : 'solo mano derecha');
+    if (poly >= 3) { pts += 1; why.push('acordes de ' + poly + ' notas'); } else if (poly === 2) pts += 0.4;
+    var br = black / notes.length;
+    if (br > 0.4) { pts += 1; why.push('muchas teclas negras'); } else if (br > 0.2) { pts += 0.5; why.push('algunas teclas negras'); }
+    var span = hi - lo;
+    if (span > 36) { pts += 1; why.push('mucho recorrido del teclado'); } else if (span > 24) pts += 0.5;
+    if (steps && jumps / steps > 0.2) { pts += 0.6; why.push('saltos grandes'); }
+    if (fast > ons * 0.25) { pts += 0.8; why.push('pasajes rápidos'); }
+    why.unshift(String(Math.round(nps * 10) / 10).replace('.', ',') + ' notas por segundo');
+    var level = pts <= 1 ? 1 : pts <= 2.3 ? 2 : pts <= 3.8 ? 3 : pts <= 6 ? 4 : 5;
+    return { level: level, pts: Math.round(pts * 10) / 10, why: why, nps: nps, both: both, poly: poly, span: span, dur: dur };
+  }
+  /* Acordes: cuántos distintos, de qué tipo y, en guitarra, si hay cejilla. */
+  var OPEN_GTR = { C: 1, D: 1, E: 1, G: 1, A: 1, Am: 1, Dm: 1, Em: 1, D7: 1, E7: 1, A7: 1, G7: 1, C7: 1, B7: 1, Cmaj7: 1, Fmaj7: 1, Am7: 1, Em7: 1, Dm7: 1, Asus2: 1, Asus4: 1, Dsus2: 1, Dsus4: 1, Esus4: 1, Cadd9: 1, Gsus4: 1, E5: 1, A5: 1, D5: 1 };
+  function levelChords(cores, C, changesFast) {
+    var uniq = {}, list = [];
+    cores.forEach(function (c) { if (!uniq[c]) { uniq[c] = 1; list.push(c); } });
+    var n = list.length, ext = 0, slash = 0, barre = 0, blackHeavy = 0;
+    list.forEach(function (c) {
+      var pc = C.parseChord(c); if (!pc) return;
+      var q = pc.qual || '';
+      if (/7|9|11|13|sus|dim|aug|add|\+|°|ø|6/.test(q.replace(/^m$/, ''))) ext++;
+      if (c.indexOf('/') > 0) slash++;
+      var base = c.split('/')[0];
+      if (!OPEN_GTR[base]) barre++;
+      var v = C.pianoVoicing(c); if (v) { var nb = 0; v.right.forEach(function (m) { if (BLACK[C.mod12(m)]) nb++; }); if (nb >= 2) blackHeavy++; }
+    });
+    var common = (n <= 3 ? 0 : n <= 5 ? 0.8 : n <= 8 ? 1.6 : 2.4) + (n ? (ext / n) * 1.8 : 0) + (n ? (slash / n) * 1.0 : 0) + (changesFast ? 0.8 : 0);
+    var gp = common + (n ? Math.min(1.6, (barre / n) * 2.4) : 0), pp = common + (n ? Math.min(1, (blackHeavy / n) * 1.5) : 0);
+    var lv = function (x) { return x <= 0.6 ? 1 : x <= 1.5 ? 2 : x <= 2.6 ? 3 : x <= 3.6 ? 4 : 5; };
+    var why = [n + (n === 1 ? ' acorde' : ' acordes distintos')];
+    if (ext) why.push(ext + ' con séptima, sus u otros'); if (slash) why.push(slash + ' con bajo distinto');
+    return { piano: lv(pp), guitar: lv(gp), barre: barre, why: why, gwhy: barre ? barre + (barre === 1 ? ' con cejilla' : ' con cejilla o difíciles') : 'todos al aire' };
+  }
+
+  /* ---------- piezas que trae la app (dominio público o tradicionales) ---------- */
+  /* Notación corta: «C4:1 D4:1 E4:2 r:1 [C3,E3,G3]:2» (nota y octava : pulsos; r = silencio; [..] = juntas). */
+  function seqParse(s, hand, b0) {
+    var out = [], b = b0 || 0;
+    String(s).trim().split(/\s+/).forEach(function (tok) {
+      if (!tok || tok === '|') return;
+      var m = /^(.*):([\d.\/]+)$/.exec(tok); if (!m) return;
+      var d = m[2].indexOf('/') > 0 ? (+m[2].split('/')[0] / +m[2].split('/')[1]) : +m[2];
+      if (m[1] !== 'r') {
+        m[1].replace(/^\[|\]$/g, '').split(',').forEach(function (nm) {
+          var x = /^([A-G])([#b]?)(-?\d)$/.exec(nm); if (!x) return;
+          var midi = 12 * (+x[3] + 1) + STEP_PC[x[1]] + (x[2] === '#' ? 1 : x[2] === 'b' ? -1 : 0);
+          out.push([b, d, midi, hand, 80, hand]);
+        });
+      }
+      b += d;
+    });
+    return { notes: out, end: b };
+  }
+  function piece(o) {
+    var notes = [], end = 0;
+    (o.rh ? [[o.rh, 0]] : []).concat(o.lh ? [[o.lh, 1]] : []).forEach(function (h) { var r = seqParse(h[0], h[1], 0); notes = notes.concat(r.notes); end = Math.max(end, r.end); });
+    var sc = { title: o.title, author: o.author || 'Tradicional', sig: o.sig || [4, 4], tempos: [[0, o.bpm]], measures: [], notes: notes,
+      parts: [{ name: 'Mano derecha', n: 0, staves: 1 }, { name: 'Mano izquierda', n: 0, staves: 1 }], warn: [] };
+    sc.parts[0].n = notes.filter(function (x) { return x[5] === 0; }).length; sc.parts[1].n = notes.length - sc.parts[0].n;
+    if (o.pick) { var bar = sc.sig[0] * 4 / sc.sig[1]; sc.measures = [0]; for (var b = o.pick; b < end + 1e-6; b += bar) sc.measures.push(b); }
+    finish(sc);
+    sc.def = sc.parts[1].n ? [0, 1] : [0];
+    return sc;
+  }
+  var R = function (s, n) { var o = []; for (var i = 0; i < n; i++) o.push(s); return o.join(' '); };
+  var BUILTIN = [
+    { id: 'p_in_escala', level: 1, o: { title: 'Escala de Do', author: 'Ejercicio', bpm: 80,
+      rh: 'C4:1 D4:1 E4:1 F4:1 G4:1 A4:1 B4:1 C5:1 B4:1 A4:1 G4:1 F4:1 E4:1 D4:1 C4:2' }, tip: 'Dedos: 1 2 3, pasa el pulgar por debajo, 1 2 3 4 5. De bajada, el 3 pasa por encima del pulgar.' },
+    { id: 'p_in_cinco', level: 1, o: { title: 'Cinco dedos: Do Re Mi Fa Sol', author: 'Ejercicio', bpm: 72,
+      rh: 'C4:1 D4:1 E4:1 F4:1 G4:2 F4:1 E4:1 D4:1 C4:1 D4:1 E4:1 C4:4' }, tip: 'Cada dedo en su tecla: el pulgar en Do y el meñique en Sol. Sin mirar las manos.' },
+    { id: 'p_in_estrellita', level: 1, o: { title: 'Estrellita', author: 'Tradicional', bpm: 90,
+      rh: 'C4:1 C4:1 G4:1 G4:1 A4:1 A4:1 G4:2 F4:1 F4:1 E4:1 E4:1 D4:1 D4:1 C4:2 ' + R('G4:1 G4:1 F4:1 F4:1 E4:1 E4:1 D4:2', 2) + ' C4:1 C4:1 G4:1 G4:1 A4:1 A4:1 G4:2 F4:1 F4:1 E4:1 E4:1 D4:1 D4:1 C4:2' } },
+    { id: 'p_in_bajo', level: 1, o: { title: 'Mano izquierda: Do, Fa, Sol, Do', author: 'Ejercicio', bpm: 72,
+      lh: R('C3:4 F3:4 G3:4 C3:4', 2) }, tip: 'El bajo de casi todas las canciones: 1, 4, 5 y vuelta al 1.' },
+    { id: 'p_in_alegria', level: 2, o: { title: 'Himno de la alegría', author: 'L. van Beethoven', bpm: 100,
+      rh: 'E4:1 E4:1 F4:1 G4:1 G4:1 F4:1 E4:1 D4:1 C4:1 C4:1 D4:1 E4:1 E4:1.5 D4:0.5 D4:2 E4:1 E4:1 F4:1 G4:1 G4:1 F4:1 E4:1 D4:1 C4:1 C4:1 D4:1 E4:1 D4:1.5 C4:0.5 C4:2' } },
+    { id: 'p_in_cumple', level: 2, o: { title: 'Cumpleaños feliz', author: 'Tradicional', bpm: 100, sig: [3, 4], pick: 1,
+      rh: 'G4:0.75 G4:0.25 A4:1 G4:1 C5:1 B4:2 G4:0.75 G4:0.25 A4:1 G4:1 D5:1 C5:2 G4:0.75 G4:0.25 G5:1 E5:1 C5:1 B4:1 A4:1 F5:0.75 F5:0.25 E5:1 C5:1 D5:1 C5:3' } },
+    { id: 'p_in_estrellita2', level: 2, o: { title: 'Estrellita con las dos manos', author: 'Tradicional', bpm: 84,
+      rh: 'C4:1 C4:1 G4:1 G4:1 A4:1 A4:1 G4:2 F4:1 F4:1 E4:1 E4:1 D4:1 D4:1 C4:2',
+      lh: 'C3:4 F3:2 C3:2 F3:2 C3:2 G3:2 C3:2' } },
+    { id: 'p_in_jingle', level: 2, o: { title: 'Navidad, Navidad (Jingle Bells)', author: 'J. L. Pierpont', bpm: 112,
+      rh: 'E4:1 E4:1 E4:2 E4:1 E4:1 E4:2 E4:1 G4:1 C4:1.5 D4:0.5 E4:4 F4:1 F4:1 F4:1.5 F4:0.5 F4:1 E4:1 E4:1 E4:0.5 E4:0.5 E4:1 D4:1 D4:1 E4:1 D4:2 G4:2 ' +
+          'E4:1 E4:1 E4:2 E4:1 E4:1 E4:2 E4:1 G4:1 C4:1.5 D4:0.5 E4:4 F4:1 F4:1 F4:1.5 F4:0.5 F4:1 E4:1 E4:1 E4:0.5 E4:0.5 G4:1 G4:1 F4:1 D4:1 C4:4',
+      lh: 'C3:4 C3:4 C3:4 C3:4 F3:4 C3:4 G3:4 G3:4 C3:4 C3:4 C3:4 C3:4 F3:4 C3:4 G3:4 C3:4' } },
+    { id: 'p_in_noche', level: 3, o: { title: 'Noche de paz', author: 'F. X. Gruber', bpm: 84, sig: [3, 4],
+      rh: 'G4:1.5 A4:0.5 G4:1 E4:3 G4:1.5 A4:0.5 G4:1 E4:3 D5:2 D5:1 B4:3 C5:2 C5:1 G4:3 A4:2 A4:1 C5:1.5 B4:0.5 A4:1 G4:1.5 A4:0.5 G4:1 E4:3 ' +
+          'A4:2 A4:1 C5:1.5 B4:0.5 A4:1 G4:1.5 A4:0.5 G4:1 E4:3 D5:2 D5:1 F5:1.5 D5:0.5 B4:1 C5:3 E5:3 C5:1.5 G4:0.5 E4:1 G4:1.5 F4:0.5 D4:1 C4:6',
+      lh: '[C3,G3]:3 [C3,G3]:3 [C3,G3]:3 [C3,G3]:3 [G2,F3]:3 [G2,F3]:3 [C3,E3]:3 [C3,E3]:3 [F2,C3]:3 [F2,C3]:3 [C3,G3]:3 [C3,G3]:3 ' +
+          '[F2,C3]:3 [F2,C3]:3 [C3,G3]:3 [C3,G3]:3 [G2,F3]:3 [G2,F3]:3 [C3,E3]:3 [C3,E3]:3 [C3,G3]:3 [G2,F3]:3 [C3,E3]:6' } },
+    { id: 'p_in_elisa', level: 4, o: { title: 'Para Elisa (comienzo)', author: 'L. van Beethoven', bpm: 72, sig: [3, 8], pick: 0.5,
+      rh: 'E5:0.25 D#5:0.25 ' + R('E5:0.25 D#5:0.25 E5:0.25 B4:0.25 D5:0.25 C5:0.25 A4:0.5 r:0.25 C4:0.25 E4:0.25 A4:0.25 B4:0.5 r:0.25 E4:0.25 G#4:0.25 B4:0.25 C5:0.5 r:0.25 E4:0.25 E5:0.25 D#5:0.25 ' +
+          'E5:0.25 D#5:0.25 E5:0.25 B4:0.25 D5:0.25 C5:0.25 A4:0.5 r:0.25 C4:0.25 E4:0.25 A4:0.25 B4:0.5 r:0.25 E4:0.25 C5:0.25 B4:0.25 A4:0.75', 1),
+      lh: 'r:0.5 ' + 'r:1.5 A2:0.25 E3:0.25 A3:0.25 r:0.75 E2:0.25 E3:0.25 G#3:0.25 r:0.75 A2:0.25 E3:0.25 A3:0.25 r:0.75 r:1.5 A2:0.25 E3:0.25 A3:0.25 r:0.75 E2:0.25 E3:0.25 G#3:0.25 r:0.75 A2:0.25 E3:0.25 A3:0.25' } },
+    { id: 'p_in_boogie', level: 4, o: { title: 'Blues en La con bajo boogie', author: 'Ejercicio', bpm: 96,
+      lh: R('A2:0.5 C#3:0.5 E3:0.5 F#3:0.5 G3:0.5 F#3:0.5 E3:0.5 C#3:0.5', 4) + ' ' + R('D3:0.5 F#3:0.5 A3:0.5 B3:0.5 C4:0.5 B3:0.5 A3:0.5 F#3:0.5', 2) + ' ' + R('A2:0.5 C#3:0.5 E3:0.5 F#3:0.5 G3:0.5 F#3:0.5 E3:0.5 C#3:0.5', 2) + ' ' +
+          'E3:0.5 G#3:0.5 B3:0.5 C#4:0.5 D4:0.5 C#4:0.5 B3:0.5 G#3:0.5 D3:0.5 F#3:0.5 A3:0.5 B3:0.5 C4:0.5 B3:0.5 A3:0.5 F#3:0.5 ' + R('A2:0.5 C#3:0.5 E3:0.5 F#3:0.5 G3:0.5 F#3:0.5 E3:0.5 C#3:0.5', 2),
+      rh: R('r:1 [C#4,E4,G4]:1 r:1 [C#4,E4,G4]:1', 4) + ' ' + R('r:1 [D4,F#4,C5]:1 r:1 [D4,F#4,C5]:1', 2) + ' ' + R('r:1 [C#4,E4,G4]:1 r:1 [C#4,E4,G4]:1', 2) + ' ' +
+          'r:1 [D4,G#4,B4]:1 r:1 [D4,G#4,B4]:1 r:1 [D4,F#4,C5]:1 r:1 [D4,F#4,C5]:1 ' + R('r:1 [C#4,E4,G4]:1 r:1 [C#4,E4,G4]:1', 2) }, tip: 'Primero la mano izquierda sola, lento. El patrón es el mismo en La, Re y Mi.' }
+  ];
+  /* acordes para practicar (tocan con «Automático»: cada acorde 4 tiempos) */
+  var BUILTIN_CHORDS = [
+    { id: 'p_ac_dofasol', title: 'Primeros acordes: Do, Fa y Sol', bpm: 72, lines: ['# Ida y vuelta', '! [C] [F] [G] [C]', '! [C] [F] [G] [C]', '# Ahora más seguido', '! [C] [G] [C] [F]', '! [C] [F] [G] [C]'], tip: 'En piano: Do (Do-Mi-Sol), Fa (Do-Fa-La), Sol (Si-Re-Sol): la mano casi no se mueve.' },
+    { id: 'p_ac_pop', title: 'La progresión de las canciones: Sol, Re, Mim, Do', bpm: 84, lines: ['# Cuatro acordes (I–V–vi–IV)', '! [G] [D] [Em] [C]', '! [G] [D] [Em] [C]', '! [G] [D] [Em] [C]', '! [G] [D] [C] [G]'], tip: 'Con estos cuatro se tocan cientos de canciones. En guitarra, los cuatro son al aire.' },
+    { id: 'p_ac_menor', title: 'En menor: Lam, Rem y Mi', bpm: 76, lines: ['# Lam, Rem, Mi', '! [Am] [Dm] [E] [Am]', '! [Am] [Dm] [E] [Am]', '! [Am] [E7] [Am] [Dm]', '! [Am] [E] [Am] [Am]'], tip: 'El Mi (mayor) en tono menor le da el sabor: fíjate en el Sol# del piano.' },
+    { id: 'p_ac_blues', title: 'Blues de 12 compases en La', bpm: 90, lines: ['# Blues (La, Re, Mi con séptima)', '! [A7] [A7] [A7] [A7]', '! [D7] [D7] [A7] [A7]', '! [E7] [D7] [A7] [E7]'], tip: 'Tres acordes con séptima. Cuenta los compases: 4 + 2 + 2 + 4.' },
+    { id: 'p_ac_cejilla', title: 'Con cejilla: Fa, Sib, Do y Rem', bpm: 70, lines: ['# En Fa', '! [F] [Bb] [C] [F]', '! [Dm] [Bb] [C] [F]', '! [F] [Dm] [Gm] [C]', '! [Bb] [C] [F] [F]'], tip: 'En guitarra, Fa y Sib llevan cejilla. Practica primero el cambio Fa → Sib, lento.' },
+    { id: 'p_ac_jazz', title: 'Séptimas en cadena: Rem7, Sol7, Domaj7', bpm: 80, lines: ['# II–V–I', '! [Dm7] [G7] [Cmaj7] [Cmaj7]', '! [Em7] [A7] [Dm7] [G7]', '! [Fmaj7] [Bm7b5] [E7] [Am7]', '! [Dm7] [G7] [Cmaj7] [Cmaj7]'], tip: 'Con séptimas la mano derecha se mueve muy poco: busca la nota que se queda.' }
+  ];
+  function builtin() {
+    return BUILTIN.map(function (b) { var sc = piece(b.o); return { id: b.id, kind: 'notas', title: b.o.title, author: b.o.author, tip: b.tip || '', score: sc, levelHint: b.level }; });
+  }
+
+  var api = {
+    LEVELS: LEVELS, textOf: textOf, xmlParse: xmlParse, mxlScore: mxlScore, mxlOrder: mxlOrder, zipList: zipList, mxlRootName: mxlRootName,
+    midiScore: midiScore, finish: finish, pracHands: pracHands, tempoMap: tempoMap, levelNotes: levelNotes, levelChords: levelChords,
+    seqParse: seqParse, piece: piece, builtin: builtin, BUILTIN_CHORDS: BUILTIN_CHORDS
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.Prac = api;
 })(this);
