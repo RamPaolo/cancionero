@@ -3,7 +3,7 @@
  "type": "cancionero",
  "name": "Fuego de Pentecostés",
  "subtitle": "Renovación Carismática Católica",
- "version": "2026-11-07T23:21:06.142Z",
+ "version": "2026-11-07T23:25:28.618Z",
  "groups": [
   {
    "id": "aviv",
@@ -865,11 +865,11 @@
    "name": "Sábado 7/11",
    "items": [
     {
-     "id": "s05",
+     "id": "s04",
      "shift": 0
     },
     {
-     "id": "s04",
+     "id": "s05",
      "shift": 0
     },
     {
@@ -878,6 +878,10 @@
     },
     {
      "id": "s13",
+     "shift": null
+    },
+    {
+     "id": "s16",
      "shift": null
     },
     {
